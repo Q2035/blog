@@ -451,3 +451,14 @@
 2020-03-10 20:50:23.388 DEBUG 1436 --- [http-nio-8081-exec-2] c.t.b.m.BlogMapper.listRecommmendBlogs   : <==      Total: 3
 2020-03-10 20:50:23.389  INFO 1436 --- [http-nio-8081-exec-2] com.test.blog.aspect.LogAspect           : -----doAfter-------
 2020-03-10 20:50:23.389  INFO 1436 --- [http-nio-8081-exec-2] com.test.blog.aspect.LogAspect           : Result: _fragments :: newblogList
+2020-03-10 20:52:58.172  INFO 1436 --- [http-nio-8081-exec-7] com.test.blog.aspect.LogAspect           : Request IP:0:0:0:0:0:0:0:1
+2020-03-10 20:52:58.172  INFO 1436 --- [http-nio-8081-exec-7] com.test.blog.aspect.LogAspect           : Request : RequestLog{url='http://localhost:8081/about', ip='0:0:0:0:0:0:0:1', classMethod='com.test.blog.controller.IndexController.about', args=[]}
+2020-03-10 20:52:58.172  INFO 1436 --- [http-nio-8081-exec-7] com.test.blog.aspect.LogAspect           : -----doAfter-------
+2020-03-10 20:52:58.172  INFO 1436 --- [http-nio-8081-exec-7] com.test.blog.aspect.LogAspect           : Result: about
+2020-03-10 20:52:58.707  INFO 1436 --- [http-nio-8081-exec-9] com.test.blog.aspect.LogAspect           : Request IP:0:0:0:0:0:0:0:1
+2020-03-10 20:52:58.707  INFO 1436 --- [http-nio-8081-exec-9] com.test.blog.aspect.LogAspect           : Request : RequestLog{url='http://localhost:8081/footer/newblog', ip='0:0:0:0:0:0:0:1', classMethod='com.test.blog.controller.IndexController.newblogs', args=[{}]}
+2020-03-10 20:52:58.717 DEBUG 1436 --- [http-nio-8081-exec-9] c.t.b.m.BlogMapper.listRecommmendBlogs   : ==>  Preparing: select * from t_blog where recommend=true order by update_time DESC limit 3 
+2020-03-10 20:52:58.718 DEBUG 1436 --- [http-nio-8081-exec-9] c.t.b.m.BlogMapper.listRecommmendBlogs   : ==> Parameters: 
+2020-03-10 20:52:58.900 DEBUG 1436 --- [http-nio-8081-exec-9] c.t.b.m.BlogMapper.listRecommmendBlogs   : <==      Total: 3
+2020-03-10 20:52:58.900  INFO 1436 --- [http-nio-8081-exec-9] com.test.blog.aspect.LogAspect           : -----doAfter-------
+2020-03-10 20:52:58.900  INFO 1436 --- [http-nio-8081-exec-9] com.test.blog.aspect.LogAspect           : Result: _fragments :: newblogList

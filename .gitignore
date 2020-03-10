@@ -29,3 +29,12 @@ build/
 
 ### VS Code ###
 .vscode/
+
+/out/
+/.mvn/
+/blog.iml
+/HELP.md
+*.gz
+*.log
+/mvnw
+/mvnw.cmd
