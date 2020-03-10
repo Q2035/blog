@@ -1,26 +1,19 @@
 spring:
+  thymeleaf:
+    mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://114.55.147.153:3306/blog?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://192.168.17.132:3306/blog?useUnicode=true&characterEncoding=UTF-8
     username: root
-    password: 123456
+    password: 666666
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
-#  jpa:
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: create
 logging:
   level:
-    root: info
-    com.test: debug
+    root: warm
+    com.test: info
   file:
-    path: /root/blog
-    name: spring.log
-mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.test.blog.pojo
+    path: D:/tmp/blog/
+    name: log/blog-pro.lgo
 server:
   port: 8081

@@ -38,3 +38,4 @@ build/
 *.log
 /mvnw
 /mvnw.cmd
+/src/test/
