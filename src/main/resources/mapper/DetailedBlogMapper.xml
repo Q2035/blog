@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.blog.mapper.DetailedBlogMapper">
+
+    <select id="queryUserById" parameterType="long" resultType="User">
+        select * from t_user where id=#{id}
+    </select>
+    <select id="queryTypeById" parameterType="long" resultType="Type">
+        select * from t_type where id=#{id}
+    </select>
+
+    <resultMap id="blogMap" type="Blog">
+        <id property="id" column="id" />
+        <result property="appreciation" column="appreciation"/>
+        <result property="commentabled" column="commentabled"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time"/>
+        <result property="description" column="description"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="flag" column="flag"/>
+        <result property="published" column="published"/>
+        <result property="recommend" column="recommend"/>
+        <result property="shareStatement" column="share_statement"/>
+        <result property="title" column="title"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="user" column="user_id" select="queryUserById"/>
+        <association property="type" column="type_id" select="queryTypeById"/>
+    </resultMap>
+    <select id="selectDetailsOfAllBlog" resultMap="blogMap">
+        SELECT * from t_blog
+    </select>
+
+    <select id="getBlogById" parameterType="long" resultMap="blogMap">
+        select * from t_blog where id=#{id}
+    </select>
+
+    <select id="selectBlogWithString" parameterType="string" resultMap="blogMap">
+        select * from t_blog where content like #{query} or title like #{query}
+    </select>
+
+</mapper>

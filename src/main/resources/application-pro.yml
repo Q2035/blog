@@ -1,0 +1,19 @@
+spring:
+  thymeleaf:
+    mode: HTML
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.17.132:3306/blog?useUnicode=true&characterEncoding=UTF-8
+    username: root
+    password: 123456
+    initialization-mode: always
+    type: com.zaxxer.hikari.HikariDataSource
+logging:
+  level:
+    root: warm
+    com.test: info
+  file:
+    path: D:/tmp/blog/
+    name: log/blog-pro.lgo
+server:
+  port: 8081

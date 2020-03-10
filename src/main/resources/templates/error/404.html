@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+    <title>404</title>
+</head>
+<body>
+<nav th:replace="_fragments :: menu(1)"></nav>
+<br><br><br><br>
+<div class="m-container-small m-padded-tb-massive">
+    <div class="ui error message m-padded-tb-huge">
+        <div class="ui container">
+            <h2>404</h2>
+            <p>The resource is not exist</p>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+<footer th:replace="_fragments :: footer"></footer>
+</body>
+</html>

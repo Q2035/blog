@@ -1,0 +1,51 @@
+package com.test.blog.controller.admin;
+
+import com.test.blog.pojo.User;
+import com.test.blog.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+@Controller
+@RequestMapping("/admin")
+public class LoginController {
+
+    @Autowired
+    private UserService userService;
+
+    @GetMapping({"","login"})
+    public String loginPage(){
+        return "admin/login";
+    }
+
+    @PostMapping("authentication")
+    public String login(@RequestParam("username")String usernmae,
+                        @RequestParam("password")String password,
+                        HttpServletRequest request,
+                        RedirectAttributes attributes){
+        HttpSession session = request.getSession();
+        User user = userService.checkUser(usernmae, password);
+        if (user !=null){
+            user.setPassword("");
+            session.setAttribute("user",user);
+            return "admin/index";
+        }else {
+//            如果使用Model，重定向之后页面无法取数据
+            attributes.addFlashAttribute("message","password fail to authenticate");
+            return "redirect:/admin";
+        }
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("user");
+        return "redirect:/admin";
+    }
+}

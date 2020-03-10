@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.blog.mapper.CommentMapper">
+    <resultMap id="commentMap" type="Comment">
+        <result property="parentId" column="parent_comment_id"/>
+        <association property="blog" column="blog_id" select="com.test.blog.mapper.DetailedBlogMapper.getBlogById"/>
+        <association property="parentComment" column="parent_comment_id" select="selectCommentById"/>
+    </resultMap>
+
+    <select id="selectCommentsByParentId" parameterType="long"  resultType="Comment">
+        select * from t_comment where parent_comment_id=#{pid} order by create_time desc
+    </select>
+
+    <select id="selectCommentById" parameterType="long" resultType="Comment">
+        select * from t_comment where id=#{id} order by create_time desc
+    </select>
+    <select id="listCommentByBlogId" parameterType="long" resultMap="commentMap">
+        select * from t_comment where blog_id=#{blogId} order by create_time desc
+    </select>
+    <insert id="saveComment" parameterType="Comment">
+        insert into t_comment(avatar, content, create_time, email, nickname, blog_id, parent_comment_id,admin_comment)
+        values (#{avatar}, #{content}, #{createTime}, #{email}, #{nickname}, #{blog.id}, #{parentComment.id} ,#{adminComment})
+    </insert>
+
+    <select id="findByBlogIdAndParentCommentNull" resultMap="commentMap">
+        select * from  t_comment where blog_id =#{blogId} and isnull(parent_comment_id) order by create_time desc
+    </select>
+
+    <delete id="deleteCommentsByBlogId" parameterType="long" >
+        delete from t_comment where blog_id=#{id}
+    </delete>
+
+</mapper>
