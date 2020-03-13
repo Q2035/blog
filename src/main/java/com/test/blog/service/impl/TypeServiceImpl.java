@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -72,7 +73,16 @@ public class TypeServiceImpl implements TypeService {
         for (Type type : top) {
             BlogQuery q = new BlogQuery();
             q.setTypeId(type.getId());
-            type.setBlogs(blogMapper.listBlog(q));
+            List<Blog> blogs = blogMapper.listBlog(q);
+            Iterator<Blog> iterator = blogs.iterator();
+            Blog temp;
+            while (iterator.hasNext()){
+                temp = iterator.next();
+                if (!temp.isPublished()){
+                    iterator.remove();
+                }
+            }
+            type.setBlogs(blogs);
         }
         return top;
     }
