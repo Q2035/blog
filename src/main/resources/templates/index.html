@@ -454,8 +454,18 @@
             </div>
           </div>
 
+<!--          此处可以存放编写的实用工具-->
+          <div class="ui segments m-margin-top-large" th:if="${tools ==null}">
+            <div class="ui secondary segment">
+              <i class="location arrow icon"></i>小工具
+            </div>
+            <div class="ui segment" th:each="link : ${tools}">
+              <a href="#" target="_blank" th:href="@{${tools.link}}" th:text="${link.websiteName}" class="m-black m-text-thin">友情</a>
+            </div>
+          </div>
+
           <!--二维码-->
-          <h4 class="ui horizontal divider header m-margin-top-large">扫码关注我</h4>
+          <h4 class="ui horizontal divider header m-margin-top-large">扫码支付我</h4>
           <div class="ui centered card" style="width: 11em">
             <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}" alt="" class="ui rounded image" >
           </div>
