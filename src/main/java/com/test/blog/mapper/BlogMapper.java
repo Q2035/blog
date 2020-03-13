@@ -13,7 +13,7 @@ public interface BlogMapper {
     @SelectProvider(type = BlogProvider.class, method = "listBlog")
     List<Blog> listBlog(BlogQuery blog);
 
-    @Select("select * from t_blog")
+    @Select("select * from t_blog where published = 1 order by update_time desc")
     List<Blog> listAllBlogs();
 
     @Insert("insert into t_blog values(default,#{blog.appreciation}, #{blog.commentabled}," +
@@ -51,7 +51,7 @@ public interface BlogMapper {
     @Select("select * from t_blog where title=#{title}")
     Blog findByTitle(String title);
 
-    @Select("select * from t_blog where recommend=true order by update_time DESC limit ${size}")
+    @Select("select * from t_blog where recommend=true and published =1 order by update_time DESC limit ${size}")
     List<Blog> listRecommmendBlogs(Integer size);
 
     @Select("select * from t_blog where content like #{query}" +
@@ -62,16 +62,16 @@ public interface BlogMapper {
     void updateViews(Long id);
 
     @Select(" select * from t_blog WHERE id " +
-            "in (select bt.blogs_id from t_blog_tags bt where bt.tags_id =#{id})")
+            "in (select bt.blogs_id from t_blog_tags bt where bt.tags_id =#{id}) and published =1")
     List<Blog> listBlogByTagId(Long id);
 
-    @Select("select DATE_FORMAT(b.update_time,'%Y') as year from t_blog b GROUP BY YEAR ORDER BY" +
+    @Select("select DATE_FORMAT(b.update_time,'%Y') as year from t_blog b where published =1 GROUP BY YEAR ORDER BY" +
             " year DESC")
     List<String> findGroupYear();
 
-    @Select("select * from t_blog b where date_format(b.update_time,'%Y')=#{year}")
+    @Select("select * from t_blog b where date_format(b.update_time,'%Y')=#{year} and published = 1")
     List<Blog> findByYear(String year);
 
-    @Select("select count(*) from t_blog")
+    @Select("select count(*) from t_blog where published = 1")
     Long countBlog();
 }

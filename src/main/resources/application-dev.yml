@@ -8,6 +8,10 @@ spring:
     password: 666666
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
+#  jpa:
+#    show-sql: true
+#    hibernate:
+#      ddl-auto: create
 logging:
   level:
     root: warm

@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
   <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+  <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
 </head>
 <body>
 
@@ -17,7 +18,7 @@
 <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
   <div class="ui container">
     <div class="ui inverted secondary stackable menu">
-      <h2 class="ui teal header item">Blog</h2>
+      <h2 class="ui teal header item"><a href="#" th:href="@{/}">Blog</a></h2>
       <a href="#" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i class="home icon"></i>index</a>
       <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide" th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>classify</a>
       <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide" th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>tags</a>

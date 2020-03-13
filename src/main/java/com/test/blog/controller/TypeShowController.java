@@ -6,6 +6,7 @@ import com.test.blog.pojo.Type;
 import com.test.blog.service.BlogService;
 import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -39,6 +41,14 @@ public class TypeShowController {
         BlogQuery blogQuery = new BlogQuery();
         blogQuery.setTypeId(id);
         List<Blog> blogs = blogService.listBlog(blogQuery);
+        Iterator<Blog> iterator = blogs.iterator();
+        Blog temp;
+        while (iterator.hasNext()){
+            temp = iterator.next();
+            if (!temp.isPublished()){
+                iterator.remove();
+            }
+        }
         Page<Blog> p = PageUtils.listConvertToPage(blogs, pageable);
         model.addAttribute("types",types);
         model.addAttribute("page",p);

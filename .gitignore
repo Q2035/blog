@@ -38,4 +38,4 @@ build/
 *.log
 /mvnw
 /mvnw.cmd
-/src/test/
+/src/main/resources/META-INF/

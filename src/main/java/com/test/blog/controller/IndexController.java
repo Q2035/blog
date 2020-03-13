@@ -43,6 +43,12 @@ public class IndexController {
     @Autowired
     private FriendLinksMapper friendLinksMapper;
 
+    /**
+     * 需要注意，不应该出现为草稿的博客
+     * @param pageable
+     * @param model
+     * @return
+     */
     @RequestMapping({"/index","/"})
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                         Model model){
@@ -95,6 +101,7 @@ public class IndexController {
 
     @GetMapping("/about")
     public String about(){
+
         return "about";
     }
 

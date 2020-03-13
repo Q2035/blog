@@ -31,6 +31,10 @@ public interface BlogService {
 
     List<String> selectTagsWithBlogId(Long id);
 
+    /**
+     * 返回所有的博客，不应该包含草稿的博客
+     * @return
+     */
     List<Blog> listAllBlogs();
 
     List<Blog> listRecommmendBlogs(Integer size);

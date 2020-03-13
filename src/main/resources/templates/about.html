@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="_fragments::head(~{::title})">
-  <title>ABOUT</title>
+  <title>About</title>
 </head>
 <body>
 
@@ -15,7 +15,7 @@
       <div class="ui stackable grid">
         <div class="eleven wide column">
           <div class="ui segment">
-            <img src="https://unsplash.it/800/600?image=1005" alt="" class="ui rounded image">
+            <img src="http://114.55.147.153/image/blog/2020/03/130-800x450.jpg" alt="" class="ui rounded image">
           </div>
         </div>
         <div class="five wide column">
@@ -42,13 +42,13 @@
             <div class="ui teal basic left pointing label m-margin-tb-tiny">...</div>
           </div>
           <div class="ui bottom attached segment">
-            <a href="#" class="ui circular icon button" data-content="还没有"><i class="github icon"></i></a>
-            <a href="#" class="ui wechat circular icon button" data-content="没有" ><i class="weixin icon"></i></a>
-            <a href="#" class="ui qq circular icon button" data-content="也没有" data-position="bottom center"><i class="qq icon"></i></a>
+            <a href="#" class="ui qq circular icon button" data-content="没有" data-position="bottom center"><i class="qq icon"></i></a>
+            <a href="#" class="ui weixin circular icon button" data-content="也没有" data-position="bottom center"><i class="weixin icon"></i></a>
+            <a href="#" class="ui github circular icon button" data-content="还没有" data-position="bottom center"><i class="github icon"></i></a>
           </div>
 
           <div class="ui wechat-qr flowing popup transition hidden">
-            <img src="../static/images/wechat.jpg" alt="" class="ui rounded image" style="width: 110px">
+            <img src="../static/images/wechat.png" th:src="@{/static/images/wechat.png}" alt="" class="ui rounded image" style="width: 110px">
           </div>
           </div>
       </div>
@@ -75,6 +75,8 @@
       position: 'bottom center'
     });
     $('.qq').popup();
+    $('.github').popup();
+    $('.weixin').popup();
 
   </script>
 </body>
