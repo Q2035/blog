@@ -455,7 +455,7 @@
           </div>
 
 <!--          此处可以存放编写的实用工具-->
-          <div class="ui segments m-margin-top-large" th:if="${tools ==null}">
+          <div class="ui segments m-margin-top-large" th:if="${tools !=null && #arrays.length(tools)!=0}">
             <div class="ui secondary segment">
               <i class="location arrow icon"></i>小工具
             </div>

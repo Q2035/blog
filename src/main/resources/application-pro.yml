@@ -3,7 +3,7 @@ spring:
     mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx:3306/blog?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://xxx:3306/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
     password: xxx
     initialization-mode: always

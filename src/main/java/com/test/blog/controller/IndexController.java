@@ -3,10 +3,8 @@ package com.test.blog.controller;
 import com.test.blog.exception.BlogNotFoundException;
 import com.test.blog.mapper.DetailedBlogMapper;
 import com.test.blog.mapper.FriendLinksMapper;
-import com.test.blog.pojo.Blog;
-import com.test.blog.pojo.FriendLinks;
-import com.test.blog.pojo.Tag;
-import com.test.blog.pojo.Type;
+import com.test.blog.mapper.UsefulToolsMapper;
+import com.test.blog.pojo.*;
 import com.test.blog.service.BlogService;
 import com.test.blog.service.TagService;
 import com.test.blog.service.TypeService;
@@ -43,6 +41,9 @@ public class IndexController {
     @Autowired
     private FriendLinksMapper friendLinksMapper;
 
+    @Autowired
+    private UsefulToolsMapper usefulToolsMapper;
+
     /**
      * 需要注意，不应该出现为草稿的博客
      * @param pageable
@@ -57,6 +58,8 @@ public class IndexController {
         List<Tag> tags = tagService.listTagTop(10);
         List<Blog> recommmendBlogs = blogService.listRecommmendBlogs(8);
         List<FriendLinks> links = friendLinksMapper.listAllLinks();
+        List<UsefulTool> usefulTools = usefulToolsMapper.listAllLinks();
+        model.addAttribute("tools",usefulTools);
         model.addAttribute("links",links);
         model.addAttribute("types",top);
         model.addAttribute("tags", tags);

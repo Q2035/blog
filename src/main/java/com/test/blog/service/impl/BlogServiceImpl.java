@@ -10,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 注释的方法有误
@@ -40,7 +37,7 @@ public class BlogServiceImpl implements BlogService {
     public List<Blog> listBlogByTagId(Long id) {
         List<Blog> blogs = blogMapper.listBlogByTagId(id);
         if (blogs.isEmpty()){
-            return null;
+            return new ArrayList<>();
         }
         User user = userService.getUserById(blogs.get(0).getUserId());
         blogs.forEach(b-> {
