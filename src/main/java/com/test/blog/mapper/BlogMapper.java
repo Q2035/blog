@@ -7,7 +7,15 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 public interface BlogMapper {
-    @Select("select * from t_blog where id=#{id}")
+    /**
+     * 一个完整的博客应该包括博客内容（Blog）、作者信息（Auther）、评论信息（Comment）、类型信息（Type）、标签信息（Tag）
+     * @param id
+     * @return
+     */
+    @Select("select DISTINCT * from t_blog blog,t_blog_tags blog_tags,t_comment comment" +
+            ",t_tag tag,t_type type,t_user user where blog.id=#{id} and blog.published=1 " +
+            "and blog_tags.blogs_id=#{id} and comment.blog_id=#{id} and tag.id=blog_tags.tags_id " +
+            "and type.id=blog.type_id and blog.user_id=user.id")
     Blog getBlog(Long id);
 
     @SelectProvider(type = BlogProvider.class, method = "listBlog")

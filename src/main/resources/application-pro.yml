@@ -3,9 +3,9 @@ spring:
     mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx:3306/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://xx/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
-    password: xxx
+    password: xx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
   mvc:

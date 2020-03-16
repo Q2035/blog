@@ -9,6 +9,8 @@ import java.util.Map;
 
 public interface BlogService {
 
+    Blog testGetBlog(Long id);
+
     List<Blog> listBlogByTagId(Long id);
 
     void updateViews(Long id);

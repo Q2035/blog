@@ -34,6 +34,11 @@ public class BlogServiceImpl implements BlogService {
     private CommentService commentService;
 
     @Override
+    public Blog testGetBlog(Long id) {
+        return blogMapper.getBlog(id);
+    }
+
+    @Override
     public List<Blog> listBlogByTagId(Long id) {
         List<Blog> blogs = blogMapper.listBlogByTagId(id);
         if (blogs.isEmpty()){
