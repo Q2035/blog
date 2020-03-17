@@ -14,8 +14,8 @@ spring:
 #      ddl-auto: create
 logging:
   level:
-    root: warm
-    com.test: info
+    root: warn
+    com.test: debug
   file:
     path: D:/tmp/blog/
     name: log/blog-pro.lgo

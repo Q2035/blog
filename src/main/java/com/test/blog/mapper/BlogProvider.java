@@ -25,7 +25,7 @@ public class BlogProvider {
             sql.append(blogQuery.getTypeId()+"=type.id and ");
         }
         sql.append(" 1 =1");
-        System.out.println(sql);
+        System.out.println(System.currentTimeMillis()+":"+sql);
         return sql.toString();
     }
 }

@@ -57,6 +57,7 @@ public class IndexController {
         List<Type> top = typeService.findTop(6);
         List<Tag> tags = tagService.listTagTop(10);
         List<Blog> recommmendBlogs = blogService.listRecommmendBlogs(8);
+//        这两个查询肯定不会很耗时间
         List<FriendLinks> links = friendLinksMapper.listAllLinks();
         List<UsefulTool> usefulTools = usefulToolsMapper.listAllLinks();
         model.addAttribute("tools",usefulTools);

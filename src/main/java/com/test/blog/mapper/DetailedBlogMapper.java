@@ -1,8 +1,6 @@
 package com.test.blog.mapper;
 
-import com.test.blog.pojo.Blog;
-import com.test.blog.pojo.Type;
-import com.test.blog.pojo.User;
+import com.test.blog.pojo.*;
 
 import java.util.List;
 
@@ -17,4 +15,10 @@ public interface DetailedBlogMapper {
     User queryUserById(Long id);
 
     Type queryTypeById(Long id);
+
+    Blog getBlog(Long id);
+
+    List<Comment> queryCommentsByBlogId(Long id);
+
+    List<Tag> queryTagsByBlogId(Long id);
 }

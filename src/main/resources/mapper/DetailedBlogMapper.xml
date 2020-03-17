@@ -2,11 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.test.blog.mapper.DetailedBlogMapper">
 
+
+    <select id="getBlog" parameterType="long" resultMap="blogMap">
+        select * from t_blog where id=#{id} and published = 1 order by update_time
+    </select>
+
     <select id="queryUserById" parameterType="long" resultType="User">
         select * from t_user where id=#{id}
     </select>
     <select id="queryTypeById" parameterType="long" resultType="Type">
         select * from t_type where id=#{id}
+    </select>
+
+    <select id="queryCommentsByBlogId" parameterType="long" resultType="Comment">
+        select * from t_comment where blog_id=#{id}
+    </select>
+
+    <select id="queryTagsByBlogId" parameterType="long" resultType="Tag">
+        select * from t_tag tag,(select * from t_blog_tags where blogs_id = 12) bt
+            where bt.blogs_id=#{id} and tag.id=bt.tags_id;
     </select>
 
     <resultMap id="blogMap" type="Blog">
@@ -23,11 +37,23 @@
         <result property="shareStatement" column="share_statement"/>
         <result property="title" column="title"/>
         <result property="updateTime" column="update_time"/>
-        <association property="user" column="user_id" select="queryUserById"/>
-        <association property="type" column="type_id" select="queryTypeById"/>
+        <association property="user" column="user_id" select="queryUserById">
+            <id property="id" column="id"></id>
+        </association>
+        <association property="type" column="type_id"  select="queryTypeById">
+            <id property="id" column="id"></id>
+        </association>
+        <!--        此处需要id是因为select语句需要参数？-->
+        <collection property="tags" ofType="Tag" column="id" select="queryTagsByBlogId">
+            <id column="id" property="id"></id>
+        </collection>
+        <collection property="comments" ofType="Comment" column="id" select="queryCommentsByBlogId">
+            <id column="id" property="id"/>
+        </collection>
     </resultMap>
+
     <select id="selectDetailsOfAllBlog" resultMap="blogMap">
-        SELECT * from t_blog
+        SELECT * from t_blog where published = 1 order by update_time desc
     </select>
 
     <select id="getBlogById" parameterType="long" resultMap="blogMap">
@@ -35,6 +61,7 @@
     </select>
 
     <select id="selectBlogWithString" parameterType="string" resultMap="blogMap">
+        select * from t_blog where content like #{query} or title like #{query}
         select * from t_blog where (content like #{query} or title like #{query}) and published = 1
     </select>
 

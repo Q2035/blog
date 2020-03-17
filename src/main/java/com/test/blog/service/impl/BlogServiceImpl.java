@@ -33,6 +33,9 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private CommentService commentService;
 
+    @Autowired
+    private DetailedBlogService detailedBlogService;
+
     @Override
     public Blog testGetBlog(Long id) {
         return blogMapper.getBlog(id);
@@ -143,14 +146,14 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     public List<Blog> listAllBlogs(){
-        List<Blog> blogs = blogMapper.listAllBlogs();
-        for (Blog blog : blogs) {
-            blog.setUser(userService.getUserById(blog.getUserId()));
-            blog.setType(typeService.getType(blog.getTypeId()));
-            blog.setTags(tagService.getBlogTagsWithBlogId(blog.getId()));
-            blog.setTags(tagService.listTags(blog.getTagIds()));
-        }
-        return blogs;
+//        List<Blog> blogs = blogMapper.listAllBlogs();
+//        for (Blog blog : blogs) {
+//            blog.setUser(userService.getUserById(blog.getUserId()));
+//            blog.setType(typeService.getType(blog.getTypeId()));
+//            blog.setTags(tagService.getBlogTagsWithBlogId(blog.getId()));
+//            blog.setTags(tagService.listTags(blog.getTagIds()));
+//        }
+        return detailedBlogService.selectDetailsOfAllBlog();
     }
 
     @Override

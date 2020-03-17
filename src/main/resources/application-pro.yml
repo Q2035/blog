@@ -14,7 +14,7 @@ spring:
 logging:
   level:
     root: warn
-    com.test: info
+    com.test: debug
   file:
     path: .
     name: log/blog-pro.log
