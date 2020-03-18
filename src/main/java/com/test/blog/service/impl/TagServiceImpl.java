@@ -57,15 +57,20 @@ public class TagServiceImpl implements TagService {
         return tagMapper.listTags(ids);
     }
 
+    /**
+     * 罪恶源头:导致我index页面加载差不多要10s
+     * @param size
+     * @return
+     */
     @Override
     public List<Tag> listTagTop(Integer size) {
         List<Tag> tags = tagMapper.listTagTop(size);
-        for (Tag tag : tags) {
-            tag.setBlogs(blogMapper.listBlogByTagId(tag.getId()));
-            for (Blog blog : tag.getBlogs()) {
-                blog.setType(typeMapper.getType(blog.getTypeId()));
-            }
-        }
+//        for (Tag tag : tags) {
+//            tag.setBlogs(blogMapper.listBlogByTagId(tag.getId()));
+//            for (Blog blog : tag.getBlogs()) {
+//                blog.setType(typeMapper.getType(blog.getTypeId()));
+//            }
+//        }
         return tags;
     }
 

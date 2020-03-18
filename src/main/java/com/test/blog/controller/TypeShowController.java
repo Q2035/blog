@@ -2,6 +2,7 @@ package com.test.blog.controller;
 
 import com.test.blog.dto.BlogQuery;
 import com.test.blog.pojo.Blog;
+import com.test.blog.pojo.Tag;
 import com.test.blog.pojo.Type;
 import com.test.blog.service.BlogService;
 import com.test.blog.service.TypeService;
@@ -29,12 +30,17 @@ public class TypeShowController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private IndexController indexController;
+
     @GetMapping("/types/{id}")
     public String types(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
                         @PathVariable("id") Long id,
                         Model model){
 
         List<Type> types =typeService.findTop(1000);
+        List<Blog> allBlogs = blogService.listAllBlogs();
+        indexController.addBlogsIntoT(types,allBlogs);
         if (id ==-1){
             id = types.get(0).getId();
         }

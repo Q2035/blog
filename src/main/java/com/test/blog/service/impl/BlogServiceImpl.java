@@ -7,6 +7,7 @@ import com.test.blog.pojo.User;
 import com.test.blog.service.*;
 import com.test.blog.dto.BlogQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -144,6 +145,7 @@ public class BlogServiceImpl implements BlogService {
      * 使用transient标记，暂时存储user_id,type_id
      * @return
      */
+
     @Override
     public List<Blog> listAllBlogs(){
 //        List<Blog> blogs = blogMapper.listAllBlogs();

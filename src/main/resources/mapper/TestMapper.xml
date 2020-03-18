@@ -18,7 +18,7 @@
     </select>
 
     <select id="queryTagsByBlogId" parameterType="long" resultType="Tag">
-        select * from t_tag tag,(select * from t_blog_tags where blogs_id = 12) bt
+        select * from t_tag tag,(select * from t_blog_tags where blogs_id = #{id}) bt
             where bt.blogs_id=#{id} and tag.id=bt.tags_id;
     </select>
 

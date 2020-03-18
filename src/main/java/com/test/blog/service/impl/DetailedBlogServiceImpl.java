@@ -4,6 +4,7 @@ import com.test.blog.mapper.DetailedBlogMapper;
 import com.test.blog.pojo.*;
 import com.test.blog.service.DetailedBlogService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -404,8 +404,8 @@
               </div>
             </div>
             <div class="ui teal segment">
-              <div class="ui fluid vertical menu">
-                <a href="#" class="item" th:each="type : ${types}">
+              <div class="ui fluid vertical menu"  th:each="type : ${types}">
+                <a target="_blank" href="#" class="item" th:href="@{/types/{id}(id=${type.id})}">
                   <span th:text="${type.name}">学习日志</span>
                   <div class="ui teal basic left pointing label" th:text="${#arrays.length(type.blogs)}">13</div>
                 </a>
@@ -427,8 +427,8 @@
               </div>
             </div>
             <div class="ui teal segment">
-              <a href="#" target="_blank" th:each="tag : ${tags }" class="ui teal basic left pointing label m-margin-tb-tiny">
-                <span th:text="${tag.name}">方法论</span>
+              <a href="#" target="_blank" th:each="tag : ${tags}" class="ui teal basic left pointing label m-margin-tb-tiny">
+                <span th:text="${tag.name}"><a href="#" th:href="@{/tags/{id}(id=${tag.id})}"></a>方法论</span>
                  <div class="detail" th:text="${#arrays.length(tag.blogs)}">23</div>
               </a>
             </div>
