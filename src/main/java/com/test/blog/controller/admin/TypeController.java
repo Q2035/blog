@@ -1,8 +1,10 @@
 package com.test.blog.controller.admin;
 
+import com.test.blog.controller.IndexController;
 import com.test.blog.pojo.Type;
 import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
+import com.test.blog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +28,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/admin")
 public class TypeController {
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Autowired
+    private IndexController indexController;
 
     @Autowired
     private TypeService typeService;
@@ -63,8 +71,9 @@ public class TypeController {
             return "admin/types-input";
         }
         try {
-
             typeService.saveType(type);
+//            Redis Types 过期了
+            redisUtil.expire(indexController.REDIS_TOP_TYPES,0);
         }catch (Exception e){
             attributes.addFlashAttribute("message","操作失败");
             e.printStackTrace();

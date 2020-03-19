@@ -1,8 +1,10 @@
 package com.test.blog.controller.admin;
 
+import com.test.blog.controller.IndexController;
 import com.test.blog.pojo.Tag;
 import com.test.blog.service.TagService;
 import com.test.blog.util.PageUtils;
+import com.test.blog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,12 @@ public class TagController {
 
     @Autowired
     private TagService tagService;
+
+    @Autowired
+    private RedisUtil redisUtil;
+
+    @Autowired
+    private IndexController indexController;
 
     @GetMapping("/tags")
     public String tags(@PageableDefault(size = 8,sort = {"id"},direction = Sort.Direction.DESC)
@@ -64,6 +72,8 @@ public class TagController {
         }
         try {
             tagService.saveTag(tag);
+//            Redis tags过期了
+            redisUtil.expire(indexController.REDIS_TOP_TAGS,0);
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("message", "新增失败");

@@ -53,6 +53,10 @@ public class IndexController {
     private Integer MAX_RECOMMEND_BLOG_NUM = 3;
     private Integer MAX_TYPE_INDEX = 6;
     private Integer MAX_TAG_INDEX = 10;
+
+    public String REDIS_BLOGS="blogs";
+    public String REDIS_TOP_TYPES="topTypes";
+    public String REDIS_TOP_TAGS="topTags";
 //
     /**
      * 需要注意，不应该出现为草稿的博客
@@ -61,6 +65,7 @@ public class IndexController {
      *      今天查询所有博客的xml配置文件已经可以正常运行了，Blog里可以包含Comment、User等，但是User内的Blog还未注入？（明天再说）
      * 2020.3.18
      *      很好，加了个addIntoBlogT，index访问时间从10s缩短到5s左右
+     *      很可惜，还是有问题。redis缓存的数据无法更新。也就是缓存功能并不特别完整
      * @param pageable
      * @param model
      * @return
@@ -68,16 +73,30 @@ public class IndexController {
     @RequestMapping({"/index","/"})
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                         Model model){
-        List<Blog> blogs = (List<Blog>) redisUtil.get("blogs");
-        if (blogs==null){
-            List<Blog> blogs1 = blogService.listAllBlogs();
-            redisUtil.set("blogs",blogs1);
-            blogs = blogs1;
+
+        List<Blog> blogs =null;
+        if (!redisUtil.hasKey(REDIS_BLOGS)){
+           blogs = blogService.listAllBlogs();
+            redisUtil.set(REDIS_BLOGS,blogs);
+        }else {
+            blogs = (List<Blog>) redisUtil.get(REDIS_BLOGS);
         }
-        List<Type> top = typeService.findTop(MAX_TYPE_INDEX);
-        addBlogsIntoT(top,blogs);
-        List<Tag> tags = tagService.listTagTop(MAX_TAG_INDEX);
-        addBlogsIntoT(tags,blogs);
+        List<Type> types =null;
+        if (!redisUtil.hasKey(REDIS_TOP_TYPES)){
+            types = typeService.findTop(MAX_TYPE_INDEX);
+            addBlogsIntoT(types,blogs);
+            redisUtil.set(REDIS_TOP_TYPES,types);
+        }else {
+            types = (List<Type>) redisUtil.get(REDIS_TOP_TYPES);
+        }
+        List<Tag> tags = null;
+        if (!redisUtil.hasKey(REDIS_TOP_TAGS)){
+            tags= tagService.listTagTop(MAX_TAG_INDEX);
+            addBlogsIntoT(tags,blogs);
+            redisUtil.set(REDIS_TOP_TAGS,tags);
+        }else{
+            tags = (List<Tag>) redisUtil.get(REDIS_TOP_TAGS);
+        }
 //        List<Blog> recommmendBlogs = blogService.listRecommmendBlogs(8);
         List<Blog> recommmendBlogs = blogs.stream().filter(blog -> blog.isRecommend()).limit(MAX_RECOMMEND_BLOG_NUM).collect(Collectors.toList());
 //        这两个查询肯定不会很耗时间
@@ -85,7 +104,7 @@ public class IndexController {
         List<UsefulTool> usefulTools = usefulToolsMapper.listAllLinks();
         model.addAttribute("tools",usefulTools);
         model.addAttribute("links",links);
-        model.addAttribute("types",top);
+        model.addAttribute("types",types);
         model.addAttribute("tags", tags);
         model.addAttribute("recommendBlogs",recommmendBlogs);
         model.addAttribute("page", listConvertToPage(blogs,pageable));
