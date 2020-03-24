@@ -82,4 +82,7 @@ public interface BlogMapper {
 
     @Select("select count(*) from t_blog where published = 1")
     Long countBlog();
+
+    @Select("select * from t_blog where published = 1 order by update_time desc limit ${begin},${end}")
+    List<Blog> listBlogsWithPages(int begin,int end);
 }

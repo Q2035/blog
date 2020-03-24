@@ -53,7 +53,7 @@
                 <i class="dropdown icon"></i>
                 <div class="default text">分类</div>
                 <div class="menu">
-                  <div class="item" th:each="type : ${types}" th:data-value="${type.id}" th:text="${type.name}" data-value="1">错误日志</div>
+                  <div th:each="type : ${types}"  class="item" th:data-value="${type.id}" th:text="${type.name}" data-value="1" >错误日志</div>
                 </div>
               </div>
               </div>

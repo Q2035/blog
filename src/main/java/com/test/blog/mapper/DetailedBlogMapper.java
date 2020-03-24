@@ -1,6 +1,7 @@
 package com.test.blog.mapper;
 
 import com.test.blog.pojo.*;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface DetailedBlogMapper {
     List<Comment> queryCommentsByBlogId(Long id);
 
     List<Tag> queryTagsByBlogId(Long id);
+
+    List<Blog> listBlogsWithPages(int begin, int end);
 }

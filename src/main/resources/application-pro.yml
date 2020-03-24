@@ -3,7 +3,7 @@ spring:
     mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xx:3306/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://xx3306/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
     password: xx
     initialization-mode: always
@@ -17,7 +17,7 @@ spring:
     password: xx
     jedis:
       pool:
-        max-wait: 30000 #连接池最大阻塞等待时间
+        max-wait: 3000 #连接池最大阻塞等待时间
         max-active: 100 #连接池最大连接数
         max-idle: 20 # 最大空闲连接
     timeout: 10000 # 连接超时

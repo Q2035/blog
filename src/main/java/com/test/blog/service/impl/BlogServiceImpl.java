@@ -158,6 +158,24 @@ public class BlogServiceImpl implements BlogService {
         return detailedBlogService.selectDetailsOfAllBlog();
     }
 
+    /**
+     * 没有使用XML文件，这样处理毕竟方便
+     * 有问题，需要改进
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Override
+    public List<Blog> listBlogsWithPages(int begin, int end) {
+        List<Blog> blogs = blogMapper.listBlogsWithPages(begin, end);
+        User user = userService.getUserById((long) 1);
+        blogs.forEach(b -> {
+            b.setUser(user);
+            b.setType(typeService.getType(b.getTypeId()));
+        });
+        return blogs;
+    }
+
     @Override
     public List<Blog> listRecommmendBlogs(Integer size) {
         return blogMapper.listRecommmendBlogs(size);

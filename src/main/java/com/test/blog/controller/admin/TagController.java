@@ -73,7 +73,6 @@ public class TagController {
         try {
             tagService.saveTag(tag);
 //            Redis tags过期了
-            redisUtil.expire(indexController.REDIS_TOP_TAGS,0);
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("message", "新增失败");

@@ -46,6 +46,11 @@ public class DetailedBlogServiceImpl implements DetailedBlogService {
     }
 
     @Override
+    public List<Blog> listBlogsWithPages(int begin, int end) {
+        return detailedBlogMapper.listBlogsWithPages(begin, end);
+    }
+
+    @Override
     public Blog getBlogById(Long id) {
         return detailedBlogMapper.getBlogById(id);
     }

@@ -9,6 +9,7 @@
     <select id="queryUserById" parameterType="long" resultType="User">
         select * from t_user where id=#{id}
     </select>
+
     <select id="queryTypeById" parameterType="long" resultType="Type">
         select * from t_type where id=#{id}
     </select>
@@ -64,4 +65,7 @@
         select * from t_blog where (content like #{query} or title like #{query}) and published = 1
     </select>
 
+    <select id="listBlogsWithPages" resultMap="blogMap">
+        select * from t_blog where published = 1 order by update_time desc limit ${begin},${end}
+    </select>
 </mapper>

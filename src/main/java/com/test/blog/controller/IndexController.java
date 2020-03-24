@@ -6,6 +6,7 @@ import com.test.blog.mapper.FriendLinksMapper;
 import com.test.blog.mapper.UsefulToolsMapper;
 import com.test.blog.pojo.*;
 import com.test.blog.service.BlogService;
+import com.test.blog.service.DetailedBlogService;
 import com.test.blog.service.TagService;
 import com.test.blog.service.TypeService;
 import static com.test.blog.util.PageUtils.listConvertToPage;
@@ -39,7 +40,7 @@ public class IndexController {
     private TagService tagService;
 
     @Autowired
-    private DetailedBlogMapper detailedBlogMapper;
+    private DetailedBlogService detailedBlogService;
 
     @Autowired
     private FriendLinksMapper friendLinksMapper;
@@ -66,6 +67,8 @@ public class IndexController {
      * 2020.3.18
      *      很好，加了个addIntoBlogT，index访问时间从10s缩短到5s左右
      *      很可惜，还是有问题。redis缓存的数据无法更新。也就是缓存功能并不特别完整
+     * 2020.3.19
+     *      这里不写了，写不下了
      * @param pageable
      * @param model
      * @return
@@ -74,29 +77,14 @@ public class IndexController {
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                         Model model){
 
-        List<Blog> blogs =null;
-        if (!redisUtil.hasKey(REDIS_BLOGS)){
-           blogs = blogService.listAllBlogs();
-            redisUtil.set(REDIS_BLOGS,blogs);
-        }else {
-            blogs = (List<Blog>) redisUtil.get(REDIS_BLOGS);
-        }
-        List<Type> types =null;
-        if (!redisUtil.hasKey(REDIS_TOP_TYPES)){
-            types = typeService.findTop(MAX_TYPE_INDEX);
-            addBlogsIntoT(types,blogs);
-            redisUtil.set(REDIS_TOP_TYPES,types);
-        }else {
-            types = (List<Type>) redisUtil.get(REDIS_TOP_TYPES);
-        }
-        List<Tag> tags = null;
-        if (!redisUtil.hasKey(REDIS_TOP_TAGS)){
-            tags= tagService.listTagTop(MAX_TAG_INDEX);
-            addBlogsIntoT(tags,blogs);
-            redisUtil.set(REDIS_TOP_TAGS,tags);
-        }else{
-            tags = (List<Tag>) redisUtil.get(REDIS_TOP_TAGS);
-        }
+//        List<Blog> blogs = blogService.listAllBlogs();
+        int start =pageable.getPageNumber() * pageable.getPageSize();
+        int pageSize = pageable.getPageSize();
+        List<Blog> blogs = detailedBlogService.listBlogsWithPages( start, start + pageSize);
+        List<Type> top = typeService.findTop(MAX_TYPE_INDEX);
+        addBlogsIntoT(top,blogs);
+        List<Tag> tags = tagService.listTagTop(MAX_TAG_INDEX);
+        addBlogsIntoT(tags,blogs);
 //        List<Blog> recommmendBlogs = blogService.listRecommmendBlogs(8);
         List<Blog> recommmendBlogs = blogs.stream().filter(blog -> blog.isRecommend()).limit(MAX_RECOMMEND_BLOG_NUM).collect(Collectors.toList());
 //        这两个查询肯定不会很耗时间
@@ -104,7 +92,7 @@ public class IndexController {
         List<UsefulTool> usefulTools = usefulToolsMapper.listAllLinks();
         model.addAttribute("tools",usefulTools);
         model.addAttribute("links",links);
-        model.addAttribute("types",types);
+        model.addAttribute("types",top);
         model.addAttribute("tags", tags);
         model.addAttribute("recommendBlogs",recommmendBlogs);
         model.addAttribute("page", listConvertToPage(blogs,pageable));
@@ -141,23 +129,11 @@ public class IndexController {
         }
     }
 
-//    移除不被推荐的blog
-    private List<Blog> removeUnRecommendBlog(List<Blog> blogs){
-        List<Blog> resultBlog =new ArrayList<>();
-        BeanUtils.copyProperties(blogs,resultBlog);
-        for (Blog blog : blogs) {
-            if (!blog.isRecommend()){
-                resultBlog.remove(blog);
-            }
-        }
-        return resultBlog;
-    }
-
     @PostMapping("/search")
     public String search(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
                         @RequestParam("query") String query,
                         Model model){
-        List<Blog> o = detailedBlogMapper.selectBlogWithString("%" + query + "%");
+        List<Blog> o = detailedBlogService.selectBlogWithString("%" + query + "%");
         model.addAttribute("page", listConvertToPage(o,pageable));
         model.addAttribute("query",query);
         return "search";
@@ -166,7 +142,7 @@ public class IndexController {
     @GetMapping("/blog/{id}")
     public String blog(@PathVariable("id")Long id,
                        Model model){
-        Blog blog = detailedBlogMapper.getBlogById(id);
+        Blog blog = detailedBlogService.getBlogById(id);
         List<Tag> tags = tagService.getBlogTagsWithBlogId(blog.getId());
         blog.setTags(tags);
         model.addAttribute("blog", blogConvert(blog));
@@ -177,7 +153,6 @@ public class IndexController {
 
     @GetMapping("/about")
     public String about(){
-
         return "about";
     }
 

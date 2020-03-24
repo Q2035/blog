@@ -39,6 +39,14 @@ public interface BlogService {
      */
     List<Blog> listAllBlogs();
 
+    /**
+     * 从数据库中查找指定的分页数据[)
+     * @param begin
+     * @param end
+     * @return
+     */
+    List<Blog> listBlogsWithPages(int begin,int end);
+
     List<Blog> listRecommmendBlogs(Integer size);
 
     List<Blog> searchBlogWithString(String query);

@@ -427,10 +427,11 @@
               </div>
             </div>
             <div class="ui teal segment">
-              <a href="#" target="_blank" th:each="tag : ${tags}" class="ui teal basic left pointing label m-margin-tb-tiny">
-                <span th:text="${tag.name}"><a href="#" th:href="@{/tags/{id}(id=${tag.id})}"></a>方法论</span>
+              <div th:each="tag : ${tags}" class="ui teal basic left pointing label m-margin-tb-tiny">
+                <a href="#" target="_blank" th:href="@{/tags/{id}(id=${tag.id})}"><span style="color: black" th:text="${tag.name}">方法论</span></a>
+
                  <div class="detail" th:text="${#arrays.length(tag.blogs)}">23</div>
-              </a>
+              </div>
             </div>
           </div>
 

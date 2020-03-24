@@ -73,7 +73,6 @@ public class TypeController {
         try {
             typeService.saveType(type);
 //            Redis Types 过期了
-            redisUtil.expire(indexController.REDIS_TOP_TYPES,0);
         }catch (Exception e){
             attributes.addFlashAttribute("message","操作失败");
             e.printStackTrace();
