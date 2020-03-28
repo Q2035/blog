@@ -16,20 +16,21 @@ public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private transient Integer count;
+
     private String name;
 
     @ManyToMany(mappedBy = "tags")
     private List<Blog> blogs = new ArrayList<>();
 
-    private transient Integer count;
-    private transient Long activeTypeId;
 
-    public Long getActiveTypeId() {
-        return activeTypeId;
+    public Integer getCount() {
+        return count;
     }
 
-    public void setActiveTypeId(Long activeTypeId) {
-        this.activeTypeId = activeTypeId;
+    public void setCount(Integer count) {
+        this.count = count;
     }
 
     public Tag() {

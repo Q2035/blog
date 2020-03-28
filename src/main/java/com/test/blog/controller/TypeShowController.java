@@ -7,6 +7,7 @@ import com.test.blog.pojo.Type;
 import com.test.blog.service.BlogService;
 import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
+import com.test.blog.vo.BlogVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -34,28 +35,21 @@ public class TypeShowController {
     private IndexController indexController;
 
     @GetMapping("/types/{id}")
-    public String types(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
+    public String types(@PageableDefault(size = 10000,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
                         @PathVariable("id") Long id,
                         Model model){
-
         List<Type> types =typeService.findTop(1000);
-        List<Blog> allBlogs = blogService.listAllBlogs();
-        indexController.addBlogsIntoT(types,allBlogs);
+        String typeName ="";
         if (id ==-1){
             id = types.get(0).getId();
         }
-        BlogQuery blogQuery = new BlogQuery();
-        blogQuery.setTypeId(id);
-        List<Blog> blogs = blogService.listBlog(blogQuery);
-        Iterator<Blog> iterator = blogs.iterator();
-        Blog temp;
-        while (iterator.hasNext()){
-            temp = iterator.next();
-            if (!temp.isPublished()){
-                iterator.remove();
+        for (Type type : types) {
+            if (id == type.getId()){
+                typeName = type.getName();
             }
         }
-        Page<Blog> p = PageUtils.listConvertToPage(blogs, pageable);
+        List<BlogVO> blogs = blogService.listBlogVOWithTypeId(typeName);
+        Page<BlogVO> p = PageUtils.listConvertToPage(blogs, pageable);
         model.addAttribute("types",types);
         model.addAttribute("page",p);
         model.addAttribute("activeTypeId",id);

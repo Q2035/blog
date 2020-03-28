@@ -30,8 +30,8 @@ public interface TagMapper {
     @Select("select * from t_tag where id in (${ids})")
     List<Tag> listTags(String ids);
 
-    @Select("select t.id,r.c, t.name from t_tag t," +
-            "(select tags_id tid,count(blogs_id) c from t_blog_tags GROUP BY tags_id DESC) r" +
+    @Select("select t.id,r.count, t.name from t_tag t," +
+            "(select tags_id tid,count(blogs_id) count from t_blog_tags GROUP BY tags_id DESC) r" +
             " where r.tid = t.id limit ${size}")
     List<Tag> listTagTop(Integer size);
 

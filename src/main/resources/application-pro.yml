@@ -3,18 +3,18 @@ spring:
     mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xx3306/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://xxx/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
     username: root
-    password: xx
+    password: xxx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
   mvc:
     favicon:
       enabled: false
   redis:
-    host: xx
-    port: 6379
-    password: xx
+    host: xxx
+    port: xxx
+    password: xxx
     jedis:
       pool:
         max-wait: 3000 #连接池最大阻塞等待时间

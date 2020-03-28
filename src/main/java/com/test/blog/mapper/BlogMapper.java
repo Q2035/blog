@@ -2,6 +2,7 @@ package com.test.blog.mapper;
 
 import com.test.blog.pojo.Blog;
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.vo.BlogVO;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -77,8 +78,8 @@ public interface BlogMapper {
             " year DESC")
     List<String> findGroupYear();
 
-    @Select("select * from t_blog b where date_format(b.update_time,'%Y')=#{year} and published = 1")
-    List<Blog> findByYear(String year);
+    @Select("select * from blog_vo where date_format(update_time,'%Y')=#{year}")
+    List<BlogVO> findByYear(String year);
 
     @Select("select count(*) from t_blog where published = 1")
     Long countBlog();

@@ -11,7 +11,7 @@ public class BlogProvider {
         if (blogQuery==null ||
                 (blogQuery.getTypeId()==null && (blogQuery.getTitle()==null || blogQuery.getTitle().equals("")))){
             return "select * from t_blog b,t_type t where b.type_id" +
-                    "=t.id";
+                    "=t.id order by b.update_time desc";
         }
         StringBuffer sql =new StringBuffer("select * from t_blog blog,t_type type" +
                 " where blog.type_id =type.id and ");
@@ -24,8 +24,7 @@ public class BlogProvider {
         if(blogQuery.getTypeId()!=null){
             sql.append(blogQuery.getTypeId()+"=type.id and ");
         }
-        sql.append(" 1 =1");
-        System.out.println(System.currentTimeMillis()+":"+sql);
+        sql.append(" 1 =1 order by blog.update_time desc");
         return sql.toString();
     }
 }

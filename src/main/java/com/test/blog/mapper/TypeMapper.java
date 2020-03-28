@@ -27,10 +27,10 @@ public interface TypeMapper {
     @Select("select * from t_type")
     List<Type> listType();
 
-    @Select("SELECT DISTINCT t.id ,r.c ,t.name from t_type t," +
-            "(select type_id tid,count(id) c from t_blog GROUP BY type_id" +
-            " HAVING c>=1 ORDER BY c desc) r " +
+    @Select({"SELECT DISTINCT t.id ,r.count ,t.name from t_type t," +
+            "(select type_id tid,count(id) count from t_blog GROUP BY type_id" +
+            " HAVING count>=1 ORDER BY count desc) r " +
             "where r.tid =t.id " +
-            " limit ${size}")
+            " limit ${size}"})
     List<Type> findTop(Integer size);
 }

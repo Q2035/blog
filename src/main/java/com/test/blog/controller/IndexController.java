@@ -13,6 +13,7 @@ import static com.test.blog.util.PageUtils.listConvertToPage;
 
 import com.test.blog.util.MarkdownUtils;
 import com.test.blog.util.RedisUtil;
+import com.test.blog.vo.BlogVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -69,6 +70,8 @@ public class IndexController {
      *      很可惜，还是有问题。redis缓存的数据无法更新。也就是缓存功能并不特别完整
      * 2020.3.19
      *      这里不写了，写不下了
+     * 2020.3.28
+     *      好极了，现在index页面启动可以在1s左右
      * @param pageable
      * @param model
      * @return
@@ -77,16 +80,15 @@ public class IndexController {
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                         Model model){
 
-//        List<Blog> blogs = blogService.listAllBlogs();
-        int start =pageable.getPageNumber() * pageable.getPageSize();
-        int pageSize = pageable.getPageSize();
-        List<Blog> blogs = detailedBlogService.listBlogsWithPages( start, start + pageSize);
+        List<BlogVO> blogs = blogService.listAllBlogVOs();
+//        先留着，万一以后要做分页了
+//        List<Blog> blogs1 = blogService.listAllBlogs();
+//        int start =pageable.getPageNumber() * pageable.getPageSize();
+//        int pageSize = pageable.getPageSize();
+//        List<Blog> blogs = detailedBlogService.listBlogsWithPages( start, start + pageSize);
         List<Type> top = typeService.findTop(MAX_TYPE_INDEX);
-        addBlogsIntoT(top,blogs);
         List<Tag> tags = tagService.listTagTop(MAX_TAG_INDEX);
-        addBlogsIntoT(tags,blogs);
-//        List<Blog> recommmendBlogs = blogService.listRecommmendBlogs(8);
-        List<Blog> recommmendBlogs = blogs.stream().filter(blog -> blog.isRecommend()).limit(MAX_RECOMMEND_BLOG_NUM).collect(Collectors.toList());
+        List<BlogVO> recommmendBlogs = blogs.stream().filter(blog -> blog.isRecommend()).limit(MAX_RECOMMEND_BLOG_NUM).collect(Collectors.toList());
 //        这两个查询肯定不会很耗时间
         List<FriendLinks> links = friendLinksMapper.listAllLinks();
         List<UsefulTool> usefulTools = usefulToolsMapper.listAllLinks();
@@ -101,7 +103,6 @@ public class IndexController {
 
     protected  <T> void addBlogsIntoT(List<T> t,List<Blog> blogs){
         List<Blog> temp = null;
-
         for (T t1 : t) {
             if (t1 instanceof Type){
                 temp = new ArrayList<>();

@@ -74,21 +74,6 @@ public class TypeServiceImpl implements TypeService {
      */
     @Override
     public List<Type> findTop(Integer size) {
-        List<Type> top = typeMapper.findTop(size);
-//        for (Type type : top) {
-//            BlogQuery q = new BlogQuery();
-//            q.setTypeId(type.getId());
-//            List<Blog> blogs = blogMapper.listBlog(q);
-//            Iterator<Blog> iterator = blogs.iterator();
-//            Blog temp;
-//            while (iterator.hasNext()){
-//                temp = iterator.next();
-//                if (!temp.isPublished()){
-//                    iterator.remove();
-//                }
-//            }
-//            type.setBlogs(blogs);
-//        }
-        return top;
+        return typeMapper.findTop(size);
     }
 }

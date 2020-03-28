@@ -64,14 +64,7 @@ public class TagServiceImpl implements TagService {
      */
     @Override
     public List<Tag> listTagTop(Integer size) {
-        List<Tag> tags = tagMapper.listTagTop(size);
-//        for (Tag tag : tags) {
-//            tag.setBlogs(blogMapper.listBlogByTagId(tag.getId()));
-//            for (Blog blog : tag.getBlogs()) {
-//                blog.setType(typeMapper.getType(blog.getTypeId()));
-//            }
-//        }
-        return tags;
+        return tagMapper.listTagTop(size);
     }
 
     @Override

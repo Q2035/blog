@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.test.blog.mapper.BlogVOMapper">
+<!--
+    blog_vo是一个视图
+    create view blog_vo AS
+    select
+    blog.id,blog.title,blog.description,blog.first_picture,blog.update_time,
+    blog.views,type.name,user.nickname,user.avatar,blog.recommend,
+    blog.flag,blog.create_time
+    from t_blog blog,t_type type,t_user user
+    where blog.type_id=type.id and user.id=blog.user_id
+    and blog.published = 1
+    order by blog.update_time DESC;
+-->
+    <select id="listAllBlogVOs" resultMap="blogVOMap">
+        select * from blog_vo
+    </select>
+
+    <select id="listAllBlogVOByTagId" parameterType="long" resultMap="blogVOMap">
+        select * from blog_vo blog_v where blog_v.id in
+        (select blogs_id from blog.t_blog_tags where tags_id = ${id})
+    </select>
+
+    <select id="listAllBlogVOByTypeId" parameterType="string" resultMap="blogVOMap">
+        select * from blog_vo where name = #{typeName}
+    </select>
+
+    <resultMap id="blogVOMap" type="com.test.blog.vo.BlogVO">
+        <id property="id" column="id" />
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="views" column="views"/>
+        <result property="typeName" column="name"/>
+        <result property="nickname" column="nickname"/>
+        <result property="userAvatar" column="avatar"/>
+        <result property="recommend" column="recommend"/>
+    </resultMap>
+
+</mapper>

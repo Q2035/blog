@@ -2,10 +2,12 @@ package com.test.blog.service.impl;
 
 import com.test.blog.exception.BlogNotFoundException;
 import com.test.blog.mapper.BlogMapper;
+import com.test.blog.mapper.BlogVOMapper;
 import com.test.blog.pojo.Blog;
 import com.test.blog.pojo.User;
 import com.test.blog.service.*;
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.vo.BlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -37,23 +39,26 @@ public class BlogServiceImpl implements BlogService {
     @Autowired
     private DetailedBlogService detailedBlogService;
 
+    @Autowired
+    private BlogVOMapper blogVOMapper;
+
     @Override
     public Blog testGetBlog(Long id) {
         return blogMapper.getBlog(id);
     }
 
     @Override
-    public List<Blog> listBlogByTagId(Long id) {
-        List<Blog> blogs = blogMapper.listBlogByTagId(id);
-        if (blogs.isEmpty()){
-            return new ArrayList<>();
-        }
-        User user = userService.getUserById(blogs.get(0).getUserId());
-        blogs.forEach(b-> {
-            b.setUser(user);
-            b.setType(typeService.getType(b.getTypeId()));
-        });
-        return blogs;
+    public List<BlogVO> listBlogByTagId(Long id) {
+        return blogVOMapper.listAllBlogVOByTagId(id);
+//        List<Blog> blogs = blogMapper.listBlogByTagId(id);
+//        if (blogs.isEmpty()){
+//            return new ArrayList<>();
+//        }
+//        User user = userService.getUserById(blogs.get(0).getUserId());
+//        blogs.forEach(b-> {
+//            b.setUser(user);
+//            b.setType(typeService.getType(b.getTypeId()));
+//        });
     }
 
     @Override
@@ -187,9 +192,9 @@ public class BlogServiceImpl implements BlogService {
     }
 
     @Override
-    public Map<String, List<Blog>> archiveBlog() {
+    public Map<String, List<BlogVO>> archiveBlog() {
         List<String> years =blogMapper.findGroupYear();
-        Map<String,List<Blog>> map =new HashMap<>();
+        Map<String,List<BlogVO>> map =new HashMap<>();
         for (String year : years) {
             map.put(year,blogMapper.findByYear(year));
         }
@@ -199,5 +204,19 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Long countBlog() {
         return blogMapper.countBlog();
+    }
+
+    /**
+     * 只展示index页面需要的信息，不展示博客内容等多余的信息
+     * @return
+     */
+    @Override
+    public List<BlogVO> listAllBlogVOs() {
+        return blogVOMapper.listAllBlogVOs();
+    }
+
+    @Override
+    public List<BlogVO> listBlogVOWithTypeId(String typeName) {
+        return blogVOMapper.listAllBlogVOByTypeId(typeName);
     }
 }

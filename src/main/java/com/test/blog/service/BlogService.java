@@ -2,6 +2,7 @@ package com.test.blog.service;
 
 import com.test.blog.pojo.Blog;
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.vo.BlogVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface BlogService {
 
     Blog testGetBlog(Long id);
 
-    List<Blog> listBlogByTagId(Long id);
+    List<BlogVO> listBlogByTagId(Long id);
 
     void updateViews(Long id);
 
@@ -51,7 +52,11 @@ public interface BlogService {
 
     List<Blog> searchBlogWithString(String query);
 
-    Map<String,List<Blog>> archiveBlog();
+    Map<String,List<BlogVO>> archiveBlog();
 
     Long countBlog();
+
+    List<BlogVO> listAllBlogVOs();
+
+    List<BlogVO> listBlogVOWithTypeId(String typeName);
 }
