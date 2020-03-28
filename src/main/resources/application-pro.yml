@@ -8,6 +8,9 @@ spring:
     password: xxx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
+#    tomcat:
+#      time-between-eviction-runs-millis: 18800
+#      test-while-idle: true
   mvc:
     favicon:
       enabled: false
@@ -24,7 +27,7 @@ spring:
 logging:
   level:
     root: warn
-    com.test: debug
+    com.test: info
   file:
     path: .
     name: log/blog-pro.log

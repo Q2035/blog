@@ -159,7 +159,9 @@ public class IndexController {
 
     @GetMapping("/footer/newblog")
     public String newblogs(Model model){
-        model.addAttribute("newblogs",blogService.listRecommmendBlogs(3));
+        List<BlogVO> blogVOS = blogService.listAllBlogVOs();
+        List<BlogVO> recommendBlogVO = blogVOS.stream().filter(blog -> blog.isRecommend()).limit(3).collect(Collectors.toList());
+        model.addAttribute("newblogs",recommendBlogVO);
         return "_fragments :: newblogList";
     }
 

@@ -61,7 +61,6 @@
     </select>
 
     <select id="selectBlogWithString" parameterType="string" resultMap="blogMap">
-        select * from t_blog where content like #{query} or title like #{query}
         select * from t_blog where (content like #{query} or title like #{query}) and published = 1
     </select>
 

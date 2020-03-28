@@ -28,9 +28,6 @@ public class BlogServiceImpl implements BlogService {
     private TypeService typeService;
 
     @Autowired
-    private TagService tagService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
@@ -50,15 +47,6 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<BlogVO> listBlogByTagId(Long id) {
         return blogVOMapper.listAllBlogVOByTagId(id);
-//        List<Blog> blogs = blogMapper.listBlogByTagId(id);
-//        if (blogs.isEmpty()){
-//            return new ArrayList<>();
-//        }
-//        User user = userService.getUserById(blogs.get(0).getUserId());
-//        blogs.forEach(b-> {
-//            b.setUser(user);
-//            b.setType(typeService.getType(b.getTypeId()));
-//        });
     }
 
     @Override
@@ -153,13 +141,6 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> listAllBlogs(){
-//        List<Blog> blogs = blogMapper.listAllBlogs();
-//        for (Blog blog : blogs) {
-//            blog.setUser(userService.getUserById(blog.getUserId()));
-//            blog.setType(typeService.getType(blog.getTypeId()));
-//            blog.setTags(tagService.getBlogTagsWithBlogId(blog.getId()));
-//            blog.setTags(tagService.listTags(blog.getTagIds()));
-//        }
         return detailedBlogService.selectDetailsOfAllBlog();
     }
 
@@ -212,6 +193,7 @@ public class BlogServiceImpl implements BlogService {
      */
     @Override
     public List<BlogVO> listAllBlogVOs() {
+
         return blogVOMapper.listAllBlogVOs();
     }
 
