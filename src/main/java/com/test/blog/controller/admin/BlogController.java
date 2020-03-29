@@ -9,6 +9,7 @@ import com.test.blog.service.TagService;
 import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +46,9 @@ public class BlogController {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private RedisUtil redisUtil;
     
     @GetMapping("/blogs")
     public String list(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
@@ -82,14 +86,6 @@ public class BlogController {
     public String editInput(@PathVariable("id")Long id, Model model){
         setTypeAndTag(model);
         Blog blog = detailedBlogService.getBlogById(id);
-        List<String> tags = blogService.selectTagsWithBlogId(id);
-//        if (!tags.isEmpty()){
-//            List<Tag> t =new ArrayList<>();
-//            for (String tag : tags) {
-//                t.add(new Tag(id,tag));
-//            }
-//            blog.setTags(t);
-//        }
         blog.init();
         model.addAttribute("blog", blog);
         return INPUT;
@@ -101,6 +97,13 @@ public class BlogController {
     }
 
 
+    /**
+     * 新增或者修改博客内容
+     * @param blog
+     * @param session
+     * @param attributes
+     * @return
+     */
     @PostMapping("/blogs")
     public String post(Blog blog,
                        HttpSession session,
@@ -118,6 +121,8 @@ public class BlogController {
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("message","发布失败");
+            return "error/500";
+
         }
         attributes.addFlashAttribute("message","操作成功");
 

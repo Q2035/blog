@@ -1,10 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+    <title>404</title>
 </head>
 <body>
-<h1>500</h1>
+<nav th:replace="_fragments :: menu(1)"></nav>
+<br><br><br><br>
+<div class="m-container-small m-padded-tb-massive">
+    <div class="ui error message m-padded-tb-huge">
+        <div class="ui container">
+            <h2>500</h2>
+            <p>Internal Error</p>
+        </div>
+    </div>
+</div>
+<br><br><br><br>
+<footer th:replace="_fragments :: footer"></footer>
 </body>
 </html>

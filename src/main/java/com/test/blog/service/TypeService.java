@@ -20,5 +20,5 @@ public interface TypeService {
 
     List<Type> listType();
 
-    List<Type> findTop(Integer size);
+    List<Type> findTypeTop(Integer size);
 }

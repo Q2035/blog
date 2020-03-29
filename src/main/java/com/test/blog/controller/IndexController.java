@@ -10,8 +10,10 @@ import com.test.blog.service.DetailedBlogService;
 import com.test.blog.service.TagService;
 import com.test.blog.service.TypeService;
 import static com.test.blog.util.PageUtils.listConvertToPage;
+import static com.test.blog.util.RedisDataName.*;
 
 import com.test.blog.util.MarkdownUtils;
+import com.test.blog.util.RedisDataName;
 import com.test.blog.util.RedisUtil;
 import com.test.blog.vo.BlogVO;
 import org.springframework.beans.BeanUtils;
@@ -79,15 +81,32 @@ public class IndexController {
     @RequestMapping({"/index","/"})
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                         Model model){
-
-        List<BlogVO> blogs = blogService.listAllBlogVOs();
+        List<BlogVO> blogs;
+        List<Type> top;
+        List<Tag> tags;
+        if (redisUtil.exists(ALL_BLOGVOS)){
+            blogs = (List<BlogVO>) redisUtil.get(ALL_BLOGVOS);
+        }else{
+            blogs = blogService.listAllBlogVOs();
+            redisUtil.set(ALL_BLOGVOS,blogs);
+        }
 //        先留着，万一以后要做分页了
 //        List<Blog> blogs1 = blogService.listAllBlogs();
 //        int start =pageable.getPageNumber() * pageable.getPageSize();
 //        int pageSize = pageable.getPageSize();
 //        List<Blog> blogs = detailedBlogService.listBlogsWithPages( start, start + pageSize);
-        List<Type> top = typeService.findTop(MAX_TYPE_INDEX);
-        List<Tag> tags = tagService.listTagTop(MAX_TAG_INDEX);
+        if (redisUtil.exists(TOP_TYPES)){
+            top = (List<Type>) redisUtil.get(TOP_TYPES);
+        }else {
+            top = typeService.findTypeTop(MAX_TYPE_INDEX);
+            redisUtil.set(TOP_TYPES,top);
+        }
+        if (redisUtil.exists(TOP_TAGS)){
+            tags = (List<Tag>) redisUtil.get(TOP_TAGS);
+        }else{
+            tags = tagService.listTagTop(MAX_TAG_INDEX);
+            redisUtil.set(TOP_TAGS,tags);
+        }
         List<BlogVO> recommmendBlogs = blogs.stream().filter(blog -> blog.isRecommend()).limit(MAX_RECOMMEND_BLOG_NUM).collect(Collectors.toList());
 //        这两个查询肯定不会很耗时间
         List<FriendLinks> links = friendLinksMapper.listAllLinks();
@@ -159,8 +178,14 @@ public class IndexController {
 
     @GetMapping("/footer/newblog")
     public String newblogs(Model model){
-        List<BlogVO> blogVOS = blogService.listAllBlogVOs();
-        List<BlogVO> recommendBlogVO = blogVOS.stream().filter(blog -> blog.isRecommend()).limit(3).collect(Collectors.toList());
+        List<BlogVO> blogs;
+        if (redisUtil.exists(ALL_BLOGVOS)){
+            blogs = (List<BlogVO>) redisUtil.get(ALL_BLOGVOS);
+        }else{
+            blogs = blogService.listAllBlogVOs();
+            redisUtil.set(ALL_BLOGVOS,blogs);
+        }
+        List<BlogVO> recommendBlogVO = blogs.stream().filter(blog -> blog.isRecommend()).limit(3).collect(Collectors.toList());
         model.addAttribute("newblogs",recommendBlogVO);
         return "_fragments :: newblogList";
     }

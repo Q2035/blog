@@ -38,7 +38,7 @@ public class TypeShowController {
     public String types(@PageableDefault(size = 10000,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
                         @PathVariable("id") Long id,
                         Model model){
-        List<Type> types =typeService.findTop(1000);
+        List<Type> types =typeService.findTypeTop(1000);
         String typeName ="";
         if (id ==-1){
             id = types.get(0).getId();

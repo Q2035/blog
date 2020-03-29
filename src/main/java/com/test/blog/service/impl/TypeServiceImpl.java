@@ -73,7 +73,7 @@ public class TypeServiceImpl implements TypeService {
      * @return
      */
     @Override
-    public List<Type> findTop(Integer size) {
+    public List<Type> findTypeTop(Integer size) {
         return typeMapper.findTop(size);
     }
 }
