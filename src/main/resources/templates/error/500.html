@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="_fragments :: head(~{::title})">
-    <title>404</title>
+    <title>500</title>
 </head>
 <body>
 <nav th:replace="_fragments :: menu(1)"></nav>
@@ -11,6 +11,7 @@
         <div class="ui container">
             <h2>500</h2>
             <p>Internal Error</p>
+            <p th:text="${exception}">Internal Error</p>
         </div>
     </div>
 </div>

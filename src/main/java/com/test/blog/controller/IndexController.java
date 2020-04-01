@@ -167,6 +167,7 @@ public class IndexController {
         blog.setTags(tags);
         model.addAttribute("blog", blogConvert(blog));
         blogService.updateViews(id);
+        redisUtil.remove(ALL_BLOGVOS);
         return "blog";
     }
 

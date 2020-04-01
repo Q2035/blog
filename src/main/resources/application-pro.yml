@@ -3,7 +3,7 @@ spring:
     mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xx/blog?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    url: jdbc:mysql://xx:3306/blog?useUnicode=true&characterEncoding=UTF-8
     username: xx
     password: xx
     initialization-mode: always
@@ -13,7 +13,7 @@ spring:
 #      test-while-idle: true
   mvc:
     favicon:
-      enabled: false
+      enabled: true
   redis:
     host: xx
     port: xx

@@ -141,4 +141,13 @@ CREATE TABLE `t_user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2020-03-27 23:20:04
+# view
+create view blog_vo AS
+select
+    blog.id,blog.title,blog.description,blog.first_picture,blog.update_time,
+    blog.views,type.name,user.nickname,user.avatar,blog.recommend,
+    blog.flag,blog.create_time
+from t_blog blog,t_type type,t_user user
+where blog.type_id=type.id and user.id=blog.user_id
+  and blog.published = 1
+order by blog.update_time DESC;

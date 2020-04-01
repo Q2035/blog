@@ -33,7 +33,7 @@ public class ControllerExceptionHandler {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("url",request.getRequestURL());
         modelAndView.addObject("exception",e);
-        modelAndView.setViewName("/error/error");
+        modelAndView.setViewName("/error/500");
         return modelAndView;
     }
 }
