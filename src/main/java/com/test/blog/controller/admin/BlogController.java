@@ -27,6 +27,8 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.test.blog.util.RedisDataName.ALL_BLOGVOS;
+
 @Controller
 @RequestMapping("/admin")
 public class BlogController {
@@ -99,6 +101,7 @@ public class BlogController {
 
     /**
      * 新增或者修改博客内容
+     *  此处需要更新Redis内容
      * @param blog
      * @param session
      * @param attributes
@@ -118,14 +121,13 @@ public class BlogController {
             blogService.saveBlog(blog);
             blog.setId(blogService.findByTitle(blog.getTitle()).getId());
             blogService.saveBlogTags(blog);
+            redisUtil.remove(ALL_BLOGVOS);
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("message","发布失败");
             return "error/500";
-
         }
         attributes.addFlashAttribute("message","操作成功");
-
         return REDIRECT_LIST;
     }
 

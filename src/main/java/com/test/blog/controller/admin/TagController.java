@@ -4,6 +4,7 @@ import com.test.blog.controller.IndexController;
 import com.test.blog.pojo.Tag;
 import com.test.blog.service.TagService;
 import com.test.blog.util.PageUtils;
+import com.test.blog.util.RedisDataName;
 import com.test.blog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.test.blog.util.RedisDataName.TOP_TAGS;
+
 /**
  * Created by limi on 2017/10/16.
  */
@@ -35,9 +38,6 @@ public class TagController {
 
     @Autowired
     private RedisUtil redisUtil;
-
-    @Autowired
-    private IndexController indexController;
 
     @GetMapping("/tags")
     public String tags(@PageableDefault(size = 8,sort = {"id"},direction = Sort.Direction.DESC)
@@ -73,6 +73,7 @@ public class TagController {
         try {
             tagService.saveTag(tag);
 //            Redis tags过期了
+            redisUtil.remove(TOP_TAGS);
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("message", "新增失败");
@@ -82,6 +83,14 @@ public class TagController {
     }
 
 
+    /**
+     * 修改tag
+     * @param tag
+     * @param result
+     * @param id
+     * @param attributes
+     * @return
+     */
     @PostMapping("/tags/{id}")
     public String editPost(@Valid Tag tag, BindingResult result,@PathVariable Long id, RedirectAttributes attributes) {
         Tag tag1 = tagService.getTagByName(tag.getName());
@@ -94,6 +103,7 @@ public class TagController {
         int t = tagService.updateTag(id,tag);
         if (t == 0 ) {
             attributes.addFlashAttribute("message", "更新失败");
+            redisUtil.remove(TOP_TAGS);
         } else {
             attributes.addFlashAttribute("message", "更新成功");
         }

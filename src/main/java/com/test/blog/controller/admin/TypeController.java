@@ -4,6 +4,7 @@ import com.test.blog.controller.IndexController;
 import com.test.blog.pojo.Type;
 import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
+import com.test.blog.util.RedisDataName;
 import com.test.blog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.validation.Valid;
 import java.util.List;
 
+import static com.test.blog.util.RedisDataName.TOP_TYPES;
+
 /**
  * updateType 无效
  */
@@ -31,9 +34,6 @@ public class TypeController {
 
     @Autowired
     private RedisUtil redisUtil;
-
-    @Autowired
-    private IndexController indexController;
 
     @Autowired
     private TypeService typeService;
@@ -59,6 +59,13 @@ public class TypeController {
         return "admin/types-input";
     }
 
+    /**
+     * 插入Type
+     * @param type
+     * @param result
+     * @param attributes
+     * @return
+     */
     @PostMapping("/types")
     public String post(@Valid Type type,
                        BindingResult result,
@@ -73,6 +80,7 @@ public class TypeController {
         try {
             typeService.saveType(type);
 //            Redis Types 过期了
+            redisUtil.remove(TOP_TYPES);
         }catch (Exception e){
             attributes.addFlashAttribute("message","操作失败");
             e.printStackTrace();
@@ -81,6 +89,14 @@ public class TypeController {
         return "redirect:/admin/types";
     }
 
+    /**
+     * 修改Type
+     * @param type
+     * @param result
+     * @param id
+     * @param attributes
+     * @return
+     */
     @PostMapping("/types/{id}")
     public String editPost(@Valid Type type,
                        BindingResult result,
@@ -96,6 +112,7 @@ public class TypeController {
         int t =typeService.updateType(id,type);
         if (t ==0){
             attributes.addFlashAttribute("message","更新失败");
+            redisUtil.remove(TOP_TYPES);
         }else{
             attributes.addFlashAttribute("message","更新成功");
         }
