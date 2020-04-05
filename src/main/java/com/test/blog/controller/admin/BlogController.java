@@ -27,7 +27,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.test.blog.util.RedisDataName.ALL_BLOGVOS;
+import static com.test.blog.util.RedisDataName.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -122,6 +122,8 @@ public class BlogController {
             blog.setId(blogService.findByTitle(blog.getTitle()).getId());
             blogService.saveBlogTags(blog);
             redisUtil.remove(ALL_BLOGVOS);
+            redisUtil.remove(TOP_TAGS);
+            redisUtil.remove(TOP_TYPES);
         }catch (Exception e){
             e.printStackTrace();
             attributes.addFlashAttribute("message","发布失败");
