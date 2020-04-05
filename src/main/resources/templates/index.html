@@ -152,8 +152,8 @@
             <div class="ui secondary segment">
               <i class="location arrow icon"></i>小工具
             </div>
-            <div class="ui segment" th:each="link : ${tools}">
-              <a href="#" target="_blank" th:href="@{${tools.link}}" th:text="${link.websiteName}" class="m-black m-text-thin">友情</a>
+            <div class="ui segment" th:each="tool : ${tools}">
+              <a href="#" target="_blank" th:href="@{${tool.link}}" th:text="${tool.websiteName}" class="m-black m-text-thin">友情</a>
             </div>
           </div>
 

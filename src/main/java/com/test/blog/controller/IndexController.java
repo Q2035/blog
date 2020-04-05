@@ -58,10 +58,6 @@ public class IndexController {
     private Integer MAX_TYPE_INDEX = 6;
     private Integer MAX_TAG_INDEX = 10;
 
-    public String REDIS_BLOGS="blogs";
-    public String REDIS_TOP_TYPES="topTypes";
-    public String REDIS_TOP_TAGS="topTags";
-//
     /**
      * 需要注意，不应该出现为草稿的博客
      * 2020年3月17日
