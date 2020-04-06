@@ -21,7 +21,12 @@ public class LoginController {
     private UserService userService;
 
     @GetMapping({"","login"})
-    public String loginPage(){
+    public String loginPage(HttpServletRequest request){
+        HttpSession session = request.getSession();
+//        不同浏览器服务器对应的session不一样，没事儿
+        if (session.getAttribute("user")!=null){
+            return "admin/index";
+        }
         return "admin/login";
     }
 

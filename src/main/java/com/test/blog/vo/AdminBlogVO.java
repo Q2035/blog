@@ -1,12 +1,8 @@
 package com.test.blog.vo;
 
-
 import java.util.Date;
 
-/**
- * 此类用于index页面展示，实际上，Index页面的博客不需要博客内容
- */
-public class BlogVO {
+public class AdminBlogVO {
     private Long id;
     private String title;
     private String description;
@@ -17,32 +13,10 @@ public class BlogVO {
     private String nickname;
     private String userAvatar;
     private boolean recommend;
+//    增加是否发布
+    private boolean published;
     private String flag;
     private Date createTime;
-
-    public String getFlag() {
-        return flag;
-    }
-
-    public void setFlag(String flag) {
-        this.flag = flag;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public boolean isRecommend() {
-        return recommend;
-    }
-
-    public void setRecommend(boolean recommend) {
-        this.recommend = recommend;
-    }
 
     public Long getId() {
         return id;
@@ -114,5 +88,37 @@ public class BlogVO {
 
     public void setUserAvatar(String userAvatar) {
         this.userAvatar = userAvatar;
+    }
+
+    public boolean isRecommend() {
+        return recommend;
+    }
+
+    public void setRecommend(boolean recommend) {
+        this.recommend = recommend;
+    }
+
+    public boolean isPublished() {
+        return published;
+    }
+
+    public void setPublished(boolean published) {
+        this.published = published;
+    }
+
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

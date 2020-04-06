@@ -7,9 +7,9 @@ import com.test.blog.pojo.Blog;
 import com.test.blog.pojo.User;
 import com.test.blog.service.*;
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.vo.AdminBlogVO;
 import com.test.blog.vo.BlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,11 +38,6 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private BlogVOMapper blogVOMapper;
-
-    @Override
-    public Blog testGetBlog(Long id) {
-        return blogMapper.getBlog(id);
-    }
 
     @Override
     public List<BlogVO> listBlogByTagId(Long id) {
@@ -144,32 +139,9 @@ public class BlogServiceImpl implements BlogService {
         return detailedBlogService.selectDetailsOfAllBlog();
     }
 
-    /**
-     * 没有使用XML文件，这样处理毕竟方便
-     * 有问题，需要改进
-     * @param begin
-     * @param end
-     * @return
-     */
-    @Override
-    public List<Blog> listBlogsWithPages(int begin, int end) {
-        List<Blog> blogs = blogMapper.listBlogsWithPages(begin, end);
-        User user = userService.getUserById((long) 1);
-        blogs.forEach(b -> {
-            b.setUser(user);
-            b.setType(typeService.getType(b.getTypeId()));
-        });
-        return blogs;
-    }
-
     @Override
     public List<Blog> listRecommmendBlogs(Integer size) {
         return blogMapper.listRecommmendBlogs(size);
-    }
-
-    @Override
-    public List<Blog> searchBlogWithString(String query) {
-        return blogMapper.searchBlogWithString(query);
     }
 
     @Override
@@ -200,5 +172,15 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<BlogVO> listBlogVOWithTypeId(String typeName) {
         return blogVOMapper.listAllBlogVOByTypeId(typeName);
+    }
+
+    @Override
+    public List<AdminBlogVO> listAllAdminBlogs() {
+        return blogVOMapper.listAllAdminBlogVO();
+    }
+
+    @Override
+    public List<AdminBlogVO> listSpecificAdminBlogs(BlogQuery blog) {
+        return blogVOMapper.listSpecificAdminBlogs(blog);
     }
 }

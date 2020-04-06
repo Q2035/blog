@@ -10,6 +10,7 @@ import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
 import com.test.blog.dto.BlogQuery;
 import com.test.blog.util.RedisUtil;
+import com.test.blog.vo.AdminBlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.test.blog.util.PageUtils.listConvertToPage;
 import static com.test.blog.util.RedisDataName.*;
 
 @Controller
@@ -54,10 +56,11 @@ public class BlogController {
     
     @GetMapping("/blogs")
     public String list(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
-                       BlogQuery blog,
                        Model model){
         model.addAttribute("types",typeService.listType());
-        addTypeForBlog(pageable, blog, model);
+        List<AdminBlogVO> b = blogService.listAllAdminBlogs();
+        Page<AdminBlogVO> blogs = listConvertToPage(b, pageable);
+        model.addAttribute("page", blogs);
         return LIST;
     }
 
@@ -65,17 +68,12 @@ public class BlogController {
     public String search(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                        BlogQuery blog,
                        Model model){
-        addTypeForBlog(pageable, blog, model);
+        List<AdminBlogVO> blogs = blogService.listSpecificAdminBlogs(blog);
+        Page<AdminBlogVO> page = listConvertToPage(blogs, pageable);
+        model.addAttribute("page",page);
         return "admin/blogs :: blogList";
     }
 
-    private void addTypeForBlog(@PageableDefault(size = 8, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
-                                BlogQuery blog,
-                                Model model) {
-        List<Blog> b = blogService.listBlog(blog);
-        Page<Blog> blogs = PageUtils.listConvertToPage(b, pageable);
-        model.addAttribute("page", blogs);
-    }
 
     @GetMapping("/blogs/input")
     public String input(Model model){

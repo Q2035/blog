@@ -1,24 +1,16 @@
 package com.test.blog.pojo;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "t_type")
 public class Type {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank(message = "分类名称部位空")
     private String name;
 
 //    标记博客数
     private transient Integer count;
 
-    @OneToMany(mappedBy = "type")
     private List<Blog> blogs = new ArrayList<>();
 
     public Integer getCount() {

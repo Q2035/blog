@@ -1,14 +1,10 @@
 package com.test.blog.controller;
 
-import com.test.blog.dto.BlogQuery;
-import com.test.blog.pojo.Blog;
-import com.test.blog.pojo.Tag;
 import com.test.blog.pojo.Type;
 import com.test.blog.service.BlogService;
 import com.test.blog.service.TypeService;
 import com.test.blog.util.PageUtils;
 import com.test.blog.vo.BlogVO;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,7 +15,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Iterator;
 import java.util.List;
 
 @Controller
@@ -30,9 +25,6 @@ public class TypeShowController {
 
     @Autowired
     private BlogService blogService;
-
-    @Autowired
-    private IndexController indexController;
 
     @GetMapping("/types/{id}")
     public String types(@PageableDefault(size = 10000,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,

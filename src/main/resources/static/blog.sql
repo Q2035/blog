@@ -151,3 +151,12 @@ from t_blog blog,t_type type,t_user user
 where blog.type_id=type.id and user.id=blog.user_id
   and blog.published = 1
 order by blog.update_time DESC;
+
+create view admin_blog_vo AS
+select
+    blog.id,blog.title,blog.description,blog.first_picture,blog.update_time,
+    blog.views,type.name,user.nickname,user.avatar,blog.recommend,blog.published,
+    blog.flag,blog.create_time
+from t_blog blog,t_type type,t_user user
+where blog.type_id=type.id and user.id=blog.user_id
+order by blog.update_time DESC

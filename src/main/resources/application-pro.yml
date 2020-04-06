@@ -3,9 +3,9 @@ spring:
     mode: HTML
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx:3306/blog?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://xxxx:3306/blog?useUnicode=true&characterEncoding=UTF-8
     username: xxx
-    password: xxx
+    password: xxxx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
 #    tomcat:

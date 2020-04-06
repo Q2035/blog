@@ -116,35 +116,6 @@ public class IndexController {
         return "index";
     }
 
-    protected  <T> void addBlogsIntoT(List<T> t,List<Blog> blogs){
-        List<Blog> temp = null;
-        for (T t1 : t) {
-            if (t1 instanceof Type){
-                temp = new ArrayList<>();
-                for (Blog blog : blogs) {
-                    if (blog.getType().getId() == ((Type) t1).getId()){
-                        temp.add(blog);
-                    }
-                }
-                ((Type) t1).setBlogs(temp);
-            }else if (t1 instanceof Tag){
-//                也就是把blogs插入tag中
-//                存储位置是两张表，那么就需要再查一次数据库？join子句？先来试试
-                temp = new ArrayList<>();
-                for (Blog blog : blogs) {
-                    List<Tag> tags = blog.getTags();
-                    for (Tag tag : tags) {
-                        if (tag.getId() == ((Tag) t1).getId()){
-                            temp.add(blog);
-                            break;
-                        }
-                    }
-                }
-                ((Tag) t1).setBlogs(temp);
-            }
-        }
-    }
-
     @PostMapping("/search")
     public String search(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
                         @RequestParam("query") String query,

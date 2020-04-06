@@ -1,6 +1,5 @@
 package com.test.blog.pojo;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,12 +28,8 @@ import java.util.List;
  *   CONSTRAINT `FK8ky5rrsxh01nkhctmo7d48p82` FOREIGN KEY (`user_id`) REFERENCES `t_user` (`id`)
  * ) ENGINE=InnoDB DEFAULT CHARSET=utf8
  */
-@Entity
-@Table(name = "t_blog")
 public class Blog {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String title;
@@ -48,21 +43,15 @@ public class Blog {
     private boolean commentabled;
     private boolean published;
     private boolean recommend;
-    @Temporal(TemporalType.TIMESTAMP)
     private Date createTime;
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updateTime;
 
-    @ManyToOne
     private Type type;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST})
     private List<Tag> tags = new ArrayList<>();
 
-    @ManyToOne
     private User user;
 
-    @OneToMany(mappedBy = "blog")
     private List<Comment> comments = new ArrayList<>();
 
     private transient String tagIds;

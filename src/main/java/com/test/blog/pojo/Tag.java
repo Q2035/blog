@@ -4,8 +4,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
-@Table(name = "t_tag")
 public class Tag {
 
     public Tag(Long id,String name) {
@@ -13,15 +11,12 @@ public class Tag {
         this.name = name;
     }
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private transient Integer count;
 
     private String name;
 
-    @ManyToMany(mappedBy = "tags")
     private List<Blog> blogs = new ArrayList<>();
 
 

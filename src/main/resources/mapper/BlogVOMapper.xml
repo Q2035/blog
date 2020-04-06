@@ -12,9 +12,23 @@
     where blog.type_id=type.id and user.id=blog.user_id
     and blog.published = 1
     order by blog.update_time DESC;
+
+    admin_blog_vo 也是一个视图
+    create view admin_blog_vo AS
+    select
+        blog.id,blog.title,blog.description,blog.first_picture,blog.update_time,
+        blog.views,type.name,user.nickname,user.avatar,blog.recommend,blog.published,
+        blog.flag,blog.create_time
+    from t_blog blog,t_type type,t_user user
+    where blog.type_id=type.id and user.id=blog.user_id
+    order by blog.update_time DESC
 -->
     <select id="listAllBlogVOs" resultMap="blogVOMap">
         select * from blog_vo
+    </select>
+
+    <select id="listAllAdminBlogVO" resultMap="adminBlogVOMap">
+        select * from admin_blog_vo
     </select>
 
     <select id="listAllBlogVOByTagId" parameterType="long" resultMap="blogVOMap">
@@ -25,6 +39,33 @@
     <select id="listAllBlogVOByTypeId" parameterType="string" resultMap="blogVOMap">
         select * from blog_vo where name = #{typeName}
     </select>
+
+
+    <select id="listSpecificAdminBlogs" parameterType="com.test.blog.dto.BlogQuery" resultMap="adminBlogVOMap">
+        select * from admin_blog_vo where recommend = #{recommend}
+        <if test="title!=null and title!=''">
+            and title like concat('%',#{title},'%')
+        </if>
+        <if test="typeId!=null">
+            and name = (select name from t_type where id = ${typeId})
+        </if>
+
+    </select>
+
+
+    <resultMap id="adminBlogVOMap" type="com.test.blog.vo.AdminBlogVO">
+        <id property="id" column="id" />
+        <result property="title" column="title"/>
+        <result property="description" column="description"/>
+        <result property="firstPicture" column="first_picture"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="views" column="views"/>
+        <result property="typeName" column="name"/>
+        <result property="nickname" column="nickname"/>
+        <result property="userAvatar" column="avatar"/>
+        <result property="published" column="published"/>
+        <result property="recommend" column="recommend"/>
+    </resultMap>
 
     <resultMap id="blogVOMap" type="com.test.blog.vo.BlogVO">
         <id property="id" column="id" />
