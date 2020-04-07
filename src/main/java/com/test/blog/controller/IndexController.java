@@ -1,7 +1,6 @@
 package com.test.blog.controller;
 
 import com.test.blog.exception.BlogNotFoundException;
-import com.test.blog.mapper.DetailedBlogMapper;
 import com.test.blog.mapper.FriendLinksMapper;
 import com.test.blog.mapper.UsefulToolsMapper;
 import com.test.blog.pojo.*;
@@ -12,21 +11,22 @@ import com.test.blog.service.TypeService;
 import static com.test.blog.util.PageUtils.listConvertToPage;
 import static com.test.blog.util.RedisDataName.*;
 
-import com.test.blog.util.MarkdownUtils;
-import com.test.blog.util.RedisDataName;
-import com.test.blog.util.RedisUtil;
+import com.test.blog.util.*;
 import com.test.blog.vo.BlogVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,9 +54,27 @@ public class IndexController {
     @Autowired
     private RedisUtil redisUtil;
 
+    @Autowired
+    private MailUtil mailUtil;
+
     private Integer MAX_RECOMMEND_BLOG_NUM = 3;
     private Integer MAX_TYPE_INDEX = 6;
     private Integer MAX_TAG_INDEX = 10;
+
+    @Value("${about.qq}")
+    private String aboutQQ;
+
+    @Value("${about.wechat}")
+    private String aboutWeChat;
+
+    @Value("${about.github}")
+    private String aboutGithub;
+
+    @Value("${mailRecipient}")
+    private String MAIL_RECIPIENT;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     /**
      * 需要注意，不应该出现为草稿的博客
@@ -74,7 +92,7 @@ public class IndexController {
      * @param model
      * @return
      */
-    @RequestMapping({"/index","/"})
+    @GetMapping({"/index","/"})
     public String index(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                         Model model){
         List<BlogVO> blogs;
@@ -140,7 +158,10 @@ public class IndexController {
 
 
     @GetMapping("/about")
-    public String about(){
+    public String about(Model model){
+        model.addAttribute("aboutQQ",aboutQQ);
+        model.addAttribute("aboutWeChat",aboutWeChat);
+        model.addAttribute("aboutGithub",aboutGithub);
         return "about";
     }
 
@@ -171,5 +192,52 @@ public class IndexController {
         String content =b.getContent();
         b.setContent(MarkdownUtils.markdownToHtmlExtensions(content));
         return b;
+    }
+
+
+    @ResponseBody
+    @PostMapping("contact")
+    public CommonResult contact(@RequestParam("email") String email,
+                                @RequestParam("describe") String describe){
+        CommonResult commonResult = new CommonResult();
+        Date createTime = new Date();
+        SimpleDateFormat format = new SimpleDateFormat("yyMMdd");
+//            设置插入数据库的数据
+        ContactMe contactMe = new ContactMe();
+        contactMe.setCreateTime(createTime);
+        contactMe.setDescription(describe);
+        contactMe.setEmail(email);
+//            插入前先查询
+        ContactMe dbContact = blogService.searchContactInfoByEmail(email);
+//        今日是否已插入过（默认是）
+        boolean ifInserted = true;
+        if (dbContact == null){
+            ifInserted = false;
+        }else {
+            Date dbCreateTime = dbContact.getCreateTime();
+            if (!format.format(createTime).equals(format.format(dbCreateTime))){
+                ifInserted = false;
+            }
+        }
+        if (!ifInserted){
+            blogService.insertContactIntoDB(contactMe);
+            //            邮件发送设置
+            MailBean mailBean = new MailBean();
+            mailBean.setRecipient(MAIL_RECIPIENT);
+            mailBean.setSubject("MyBlog:Contact With Me-"+ format.format(createTime));
+            mailBean.setContent("email:"+email+" description:"+describe+" on "+createTime);
+            mailUtil.sendSimpleMain(mailBean);
+//            消息返回设置
+            commonResult.setSuccess(true);
+            commonResult.setMessage("SUCCESS");
+            commonResult.setCode(StatusCode.SUCCESS.getCode());
+            return commonResult;
+
+        }
+        logger.warn("email:"+email+" 今天插入过数据，尝试再次插入，但是失败了.");
+        commonResult.setSuccess(false);
+        commonResult.setCode(StatusCode.INTERNALFAIL.getCode());
+        commonResult.setMessage("FAILUR");
+        return commonResult;
     }
 }

@@ -16,6 +16,7 @@
 
 <!--导航-->
 <nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small" >
+
   <div class="ui container">
     <div class="ui inverted secondary stackable menu">
       <h2 class="ui teal header item"><a href="#" th:href="@{/}">Blog</a></h2>
@@ -42,6 +43,7 @@
 
 <!--底部footer-->
 <footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
+
   <div class="ui center aligned container">
     <div class="ui inverted divided stackable grid">
       <div class="three wide column">
@@ -63,8 +65,8 @@
       <div class="three wide column">
         <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
         <div class="ui inverted link list">
-          <a href="#" class="item m-text-thin">Email：别联系</a>
-          <a href="#" class="item m-text-thin">OJBK</a>
+          <a href="#" class="item m-text-thin" id="mail">Email</a>
+          <a href="#" class="item m-text-thin">今天过的真不错</a>
         </div>
       </div>
       <div class="seven wide column">
@@ -74,6 +76,31 @@
     </div>
     <div class="ui inverted section divider"></div>
     <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2019 - 2020 Q Designed by Lirenmi</p>
+  </div>
+
+  <div class="ui fullscreen modal">
+    <i class="close icon" id="close"></i>
+    <div class="header">
+      Update Your Settings
+    </div>
+    <div class="content">
+      <div class="ui form">
+        <h4 class="ui dividing header">Give me your feedback</h4>
+        <div class="field">
+          <label>Feedback</label>
+          <textarea id="discribe" placeholder="discribe your problem..."></textarea>
+        </div>
+        <div class="field">
+          <div class="ui left icon input">
+            <i class="envelope icon"></i>
+            <input type="email" id="email" name="email" placeholder="enter your email">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="actions">
+      <div id="send" class="ui green button">Send</div>
+    </div>
   </div>
 
 </footer>
@@ -88,7 +115,57 @@
   <script src="../static/lib/waypoints/jquery.waypoints.min.js" th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
   <script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
   <script>
+
     $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
+
+    $('#mail').click(function () {
+      $('.fullscreen.modal')
+              .modal('show');
+
+    })
+
+    $('#send').click(function () {
+      var emailAddress = document.getElementById('email').value;
+      var discribe = document.getElementById('discribe').value;
+      if (emailAddress == '' || !emailAddress.match("@") || emailAddress.length < 4){
+        document.getElementById("email").value = "email格式不正确";
+        return;
+      }
+      if (discribe == '') {
+        document.getElementById('discribe').value = "描述为空";
+        return;
+      }
+      document.getElementById("close").click()
+      //提交请求
+
+      $.ajax({
+        url: "/contact",
+        dataType: "json",
+        async: true,
+        data: {
+          "email": emailAddress,
+          "describe": discribe
+        },
+        type: 'POST',
+        success: function (data) {
+            console.log(data);
+            var result = eval(data);
+            if (result.success){
+              alert("Successfully Send, I will contact you soon");
+            }else{
+              alert("Sorry, Please try it tomorrow")
+            }
+            return true;
+        },
+        fail: function (data) {
+          console.log(data);
+          alert("Sorry, Please try it tomorrow.");
+          return false;
+        }
+      })
+    })
+
+
   </script>
 </th:block>
 

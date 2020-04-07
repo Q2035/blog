@@ -159,4 +159,12 @@ select
     blog.flag,blog.create_time
 from t_blog blog,t_type type,t_user user
 where blog.type_id=type.id and user.id=blog.user_id
-order by blog.update_time DESC
+order by blog.update_time DESC;
+
+CREATE TABLE `t_contact` (
+     `id` bigint NOT NULL AUTO_INCREMENT,
+     `email` varchar(255) DEFAULT NULL,
+     `discription` varchar(255) DEFAULT NULL,
+     `create_time` datetime DEFAULT NULL,
+     PRIMARY KEY (`id`)
+)

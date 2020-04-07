@@ -24,27 +24,26 @@
           </div>
           <div class="ui attached segment">
             <p class="m-text">Q</p>
-            <p class="m-text">...</p>
+            <p class="m-text">快乐骚年</p>
           </div>
           <div class="ui attached segment">
-            <div class="ui orange basic left pointing label">I</div>
-            <div class="ui orange basic left pointing label">am</div>
-            <div class="ui orange basic left pointing label">so</div>
-            <div class="ui orange basic left pointing label">vegetable</div>
+            <div class="ui orange basic left pointing label">自信</div>
+            <div class="ui orange basic left pointing label">美丽</div>
+            <div class="ui orange basic left pointing label">无所</div>
+            <div class="ui orange basic left pointing label">畏惧</div>
           </div>
           <div class="ui attached segment">
-            <div class="ui teal basic left pointing label m-margin-tb-tiny">我</div>
-            <div class="ui teal basic left pointing label m-margin-tb-tiny">好</div>
-            <div class="ui teal basic left pointing label m-margin-tb-tiny">菜</div>
-            <div class="ui teal basic left pointing label m-margin-tb-tiny">啊</div>
-            <div class="ui teal basic left pointing label m-margin-tb-tiny">啊</div>
+            <div class="ui teal basic left pointing label m-margin-tb-tiny">Java</div>
+            <div class="ui teal basic left pointing label m-margin-tb-tiny">Docker</div>
+            <div class="ui teal basic left pointing label m-margin-tb-tiny">Spring</div>
+            <div class="ui teal basic left pointing label m-margin-tb-tiny">SpringBoot</div>
             <div class="ui teal basic left pointing label m-margin-tb-tiny">...</div>
             <div class="ui teal basic left pointing label m-margin-tb-tiny">...</div>
           </div>
           <div class="ui bottom attached segment">
-            <a href="#" class="ui qq circular icon button" data-content="没有" data-position="bottom center"><i class="qq icon"></i></a>
-            <a href="#" class="ui weixin circular icon button" data-content="也没有" data-position="bottom center"><i class="weixin icon"></i></a>
-            <a href="#" class="ui github circular icon button" data-content="还没有" data-position="bottom center"><i class="github icon"></i></a>
+            <a href="#"  id="qq" class="ui qq circular icon button" th:data-content="${aboutQQ}" data-content="没有" data-position="bottom center"><i class="qq icon"></i></a>
+            <a href="#" class="ui weixin circular icon button" th:data-content="${aboutWeChat}" data-content="也没有" data-position="bottom center"><i class="weixin icon"></i></a>
+            <a href="#" id="github" class="ui github circular icon button" th:data-content="${aboutGithub}" data-content="还没有" data-position="bottom center"><i class="github icon"></i></a>
           </div>
 
           <div class="ui wechat-qr flowing popup transition hidden">
@@ -61,6 +60,8 @@
   <!--底部footer-->
   <footer th:replace="_fragments::footer"></footer>
 
+  <script th:src="@{https://www.layuicdn.com/layui/layui.js}" src="https://www.layuicdn.com/layui/layui.js"></script>
+
   <!--/*/<th:block th:replace="_fragments :: script">/*/-->
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
@@ -74,9 +75,34 @@
       popup : $('.wechat-qr'),
       position: 'bottom center'
     });
+
     $('.qq').popup();
     $('.github').popup();
     $('.weixin').popup();
+
+    $('.github').click(function () {
+      var elementById = document.getElementById("github");
+      var data = elementById.getAttribute("data-content");
+      copyFor(data)
+      elementById.setAttribute("data-content","复制成功");
+    })
+
+    $('.qq').click(function () {
+      var elementById = document.getElementById("qq");
+      var data = elementById.getAttribute("data-content");
+      copyFor(data)
+      elementById.setAttribute("data-content","复制成功");
+    });
+
+    function copyFor(data) {
+      console.log(data)
+      var inp =document.createElement('input'); // create input标签
+      document.body.appendChild(inp) // 添加到body中
+      inp.value =data // 给input设置value属性为需要copy的内容
+      inp.select(); // 选中
+      document.execCommand('copy',false); // copy已经选中的内容
+      inp.remove(); // 删除掉这个dom
+    }
 
   </script>
 </body>

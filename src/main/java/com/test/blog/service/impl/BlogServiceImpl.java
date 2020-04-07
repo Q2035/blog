@@ -3,7 +3,9 @@ package com.test.blog.service.impl;
 import com.test.blog.exception.BlogNotFoundException;
 import com.test.blog.mapper.BlogMapper;
 import com.test.blog.mapper.BlogVOMapper;
+import com.test.blog.mapper.ContactMapper;
 import com.test.blog.pojo.Blog;
+import com.test.blog.pojo.ContactMe;
 import com.test.blog.pojo.User;
 import com.test.blog.service.*;
 import com.test.blog.dto.BlogQuery;
@@ -38,6 +40,9 @@ public class BlogServiceImpl implements BlogService {
 
     @Autowired
     private BlogVOMapper blogVOMapper;
+
+    @Autowired
+    private ContactMapper contactMapper;
 
     @Override
     public List<BlogVO> listBlogByTagId(Long id) {
@@ -182,5 +187,16 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public List<AdminBlogVO> listSpecificAdminBlogs(BlogQuery blog) {
         return blogVOMapper.listSpecificAdminBlogs(blog);
+    }
+
+
+    @Override
+    public void insertContactIntoDB(ContactMe contactMe) {
+        contactMapper.insertContactIntoDB(contactMe);
+    }
+
+    @Override
+    public ContactMe searchContactInfoByEmail(String email) {
+        return contactMapper.searchContactInfoByEmail(email);
     }
 }

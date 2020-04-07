@@ -2,6 +2,7 @@ package com.test.blog.service;
 
 import com.test.blog.pojo.Blog;
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.pojo.ContactMe;
 import com.test.blog.vo.AdminBlogVO;
 import com.test.blog.vo.BlogVO;
 import org.apache.ibatis.annotations.Param;
@@ -52,4 +53,8 @@ public interface BlogService {
     List<AdminBlogVO> listAllAdminBlogs();
 
     List<AdminBlogVO> listSpecificAdminBlogs(BlogQuery blog);
+
+    void insertContactIntoDB(ContactMe contactMe);
+
+    ContactMe searchContactInfoByEmail(String email);
 }

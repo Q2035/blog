@@ -1,19 +1,18 @@
 spring:
   thymeleaf:
     mode: HTML
+# 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx:3306/blog?useUnicode=true&characterEncoding=UTF-8
-    username: xxx
-    password: xxxx
+    url: jdbc:mysql://xxx/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: xx
+    password: xxx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
-#    tomcat:
-#      time-between-eviction-runs-millis: 18800
-#      test-while-idle: true
   mvc:
     favicon:
       enabled: true
+# Redis设置
   redis:
     host: xxx
     port: xxx
@@ -24,6 +23,22 @@ spring:
         max-active: 100 #连接池最大连接数
         max-idle: 20 # 最大空闲连接
     timeout: 10000 # 连接超时
+#  配置邮箱
+  mail:
+    host: smtp.qq.com
+    username: xxx
+    password: xx
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls.enable: true
+          starttls.required: true
+
+mailRecipient: xxx
+
+#日志
 logging:
   level:
     root: warn
@@ -31,10 +46,14 @@ logging:
   file:
     path: .
     name: log/blog-pro.log
+
+#MyBatis
 mybatis:
   configuration:
     map-underscore-to-camel-case: true
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: com.test.blog.pojo
+
+#暴露的端口
 server:
   port: 8081
