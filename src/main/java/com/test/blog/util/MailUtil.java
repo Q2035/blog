@@ -30,7 +30,7 @@ public class MailUtil {
 
             javaMailSender.send(mailMessage);
         }catch (Exception e){
-            logger.error("邮件发送失败",e.getMessage());
+            logger.error("邮件发送失败"+e.getMessage());
         }
     }
 }
