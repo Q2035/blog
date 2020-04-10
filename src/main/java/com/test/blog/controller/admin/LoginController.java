@@ -31,12 +31,12 @@ public class LoginController {
     }
 
     @PostMapping("authentication")
-    public String login(@RequestParam("username")String usernmae,
+    public String login(@RequestParam("username")String username,
                         @RequestParam("password")String password,
                         HttpServletRequest request,
                         RedirectAttributes attributes){
         HttpSession session = request.getSession();
-        User user = userService.checkUser(usernmae, password);
+        User user = userService.checkUser(username, password);
         if (user !=null){
             user.setPassword("");
             session.setAttribute("user",user);

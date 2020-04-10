@@ -139,4 +139,14 @@ public class BlogController {
         attributes.addFlashAttribute("message","删除成功");
         return REDIRECT_LIST;
     }
+
+    /**
+     * 返回页面上传下载界面
+     * @return
+     */
+    @GetMapping("/files")
+    public String files(){
+        return "admin/files";
+    }
+
 }

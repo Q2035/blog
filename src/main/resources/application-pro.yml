@@ -4,8 +4,8 @@ spring:
 # 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
-    username: xxx
+    url: jdbc:mysql://xx/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: xx
     password: xxx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
@@ -15,7 +15,7 @@ spring:
 # Redis设置
   redis:
     host: xx
-    port: xx
+    port: 6379
     password: xx
     jedis:
       pool:
@@ -27,7 +27,7 @@ spring:
   mail:
     host: smtp.qq.com
     username: xx
-    password: xx
+    password: xxx
     default-encoding: UTF-8
     port: 587
     properties:

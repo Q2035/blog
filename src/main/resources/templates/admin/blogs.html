@@ -147,6 +147,7 @@
       $("[name='page']").val(0);
       loaddata();
     });
+
     function loaddata() {
       $("#table-container").load(/*[[@{/admin/blogs/search}]]*/"/admin/blogs/search",{
         title : $("[name='title']").val(),
