@@ -81,8 +81,8 @@
         //拖拽上传
         upload.render({
             elem: '#test10'
-            ,url: '/files' //改成您自己的上传接口
-            ,type: 'post'
+            ,url: '/files/upload' //改成您自己的上传接口
+            ,method: 'post'
             ,done: function(res){
                 layer.msg('上传成功');
                 layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
