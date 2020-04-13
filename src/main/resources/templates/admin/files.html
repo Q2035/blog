@@ -23,23 +23,32 @@
         <div class="ui container">
             <div class="ui stackable grid">
                 <div class="eleven wide column">
-                    <div class="ui segments">
-                        <div class="ui secondary segment">
-                            <div class="ui two column grid">
-                                <div class="column">
-                                    <i class="idea icon"></i>FileList
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui teal segment">
-                            <div class="ui fluid vertical menu">
-                                <a target="_blank" href="#" class="item" >
-                                    <span>学习日志</span>
-                                    <div class="ui teal basic left pointing label">13</div>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>昵称</th>
+                            <th>加入时间</th>
+                            <th>签名</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>贤心</td>
+                            <td>2016-11-29</td>
+                            <td>人生就像是一场修行</td>
+                        </tr>
+                        <tr>
+                            <td>许闲心</td>
+                            <td>2016-11-28</td>
+                            <td>于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="five wide column">
                     <div class="layui-upload-drag" id="test10">
@@ -47,8 +56,12 @@
                         <p>点击上传，或将文件拖拽到此处</p>
                         <div class="layui-hide" id="uploadDemoView">
                             <hr>
-                            <img src="" alt="上传成功后渲染" style="max-width: 196px">
+                            <img src="" alt="上传成功" style="max-width: 196px">
                         </div>
+<!--                        进度条-->
+<!--                        <div class="layui-progress" lay-filter="progress" id="progress" lay-showPercent="true">-->
+<!--                            <div class="layui-progress-bar layui-bg-red" lay-percent="1/3"></div>-->
+<!--                        </div>-->
                     </div>
                 </div>
             </div>
@@ -76,17 +89,25 @@
     });
     layui.use('upload', function(){
         var $ = layui.jquery
-            ,upload = layui.upload;
-
+            ,upload = layui.upload
+            ,element = layui.element;
         //拖拽上传
         upload.render({
             elem: '#test10'
-            ,url: '/files/upload' //改成您自己的上传接口
+            ,url: '/files/upload'
             ,method: 'post'
+            ,accept: 'file'
+            ,progress: function(n, elem) {
+                var percent = 50 + '%' //获取进度百分比
+                element.progress('progress', percent); //可配合 layui 进度条元素使用
+                console.log(elem); //得到当前触发的元素 DOM 对象。可通过该元素定义的属性值匹配到对应的进度条。
+            }
             ,done: function(res){
-                layer.msg('上传成功');
-                layui.$('#uploadDemoView').removeClass('layui-hide').find('img').attr('src', res.files.file);
-                console.log(res)
+                layer.msg(res.message);
+                if (res.success){
+                    layui.$('#uploadDemoView').removeClass('layui-hide').attr('src', res.files.file);
+                    console.log(res)
+                }
             }
         });
     });

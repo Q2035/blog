@@ -4,9 +4,9 @@ spring:
 # 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xxx/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
-    username: xxx
-    password: xxx
+    url: jdbc:mysql://ss/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: ss
+    password: ss
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
   mvc:
@@ -14,9 +14,9 @@ spring:
       enabled: true
 # Redis设置
   redis:
-    host: xx
-    port: xx
-    password: xx
+    host: ss
+    port: ss
+    password: ss
     jedis:
       pool:
         max-wait: 3000 #连接池最大阻塞等待时间
@@ -26,8 +26,8 @@ spring:
 #  配置邮箱
   mail:
     host: smtp.qq.com
-    username: xxx
-    password: xxx
+    username: ss
+    password: ss
     default-encoding: UTF-8
     port: 587
     properties:
@@ -43,7 +43,7 @@ spring:
             enable: true
             required: true
 
-mailRecipient: xx
+mailRecipient: ss
 
 #日志
 logging:

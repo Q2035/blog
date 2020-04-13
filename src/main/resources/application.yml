@@ -8,6 +8,9 @@ comment:
   avatar: /images/avatar.png
 # about页面
 about:
-  qq: 2383862181
+  qq: xx
   github: https://github.com/Q2035/blog
   wechat: 微信就算了
+
+file:
+  basePath: D:\temp\
