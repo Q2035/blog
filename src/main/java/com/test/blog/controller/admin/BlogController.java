@@ -1,6 +1,7 @@
 package com.test.blog.controller.admin;
 
 import com.test.blog.pojo.Blog;
+import com.test.blog.pojo.FileVO;
 import com.test.blog.pojo.Tag;
 import com.test.blog.pojo.User;
 import com.test.blog.service.BlogService;
@@ -12,6 +13,7 @@ import com.test.blog.dto.BlogQuery;
 import com.test.blog.util.RedisUtil;
 import com.test.blog.vo.AdminBlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,7 +27,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.test.blog.util.PageUtils.listConvertToPage;
@@ -34,6 +38,9 @@ import static com.test.blog.util.RedisDataName.*;
 @Controller
 @RequestMapping("/admin")
 public class BlogController {
+
+    @Value("${file.basePath}")
+    private String basePath;
 
     private static final String INPUT ="admin/blogs-input";
     private static final String LIST ="admin/blogs";
@@ -140,8 +147,42 @@ public class BlogController {
         return REDIRECT_LIST;
     }
 
+    /**
+     * 文件下载列表
+     * @param model
+     * @return
+     */
     @GetMapping("/files")
-    public String files(){
+    public String files(Model model){
+        List<FileVO> files = new ArrayList<>();
+        File file = new File(basePath);
+        for (File listFile : file.listFiles()) {
+//            直接跳过文件夹
+            if (listFile.isDirectory()){
+                continue;
+            }
+            FileVO fileVO = new FileVO();
+            fileVO.setFileName(listFile.getName());
+            fileVO.setUpdateDate(new Date(listFile.lastModified()));
+            long totalSpace = listFile.length();
+            fileVO.setFileSize(formatConversion(totalSpace));
+            files.add(fileVO);
+        }
+        model.addAttribute("files",files);
         return "admin/files";
+    }
+
+    public String formatConversion(long size){
+        String result;
+        if (size<1024){
+            result = size  + " B";
+        }else if (size < 1024 * 1024){
+            result  = size / 1024  + " KB";
+        }else if (size < 1024 * 1024 * 1024){
+            result = size / 1024 / 1024 + " MB";
+        }else {
+            result  = size / 1024 /1024 /1024 + " GB";
+        }
+        return result;
     }
 }

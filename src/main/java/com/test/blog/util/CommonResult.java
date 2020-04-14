@@ -37,4 +37,14 @@ public class CommonResult<T> {
     public void setSuccess(boolean success) {
         this.success = success;
     }
+
+    @Override
+    public String toString() {
+        return "CommonResult{" +
+                "code=" + code +
+                ", data=" + data +
+                ", message='" + message + '\'' +
+                ", success=" + success +
+                '}';
+    }
 }
