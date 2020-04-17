@@ -13,12 +13,12 @@
     <div class="ui container">
 
       <div class="ui stackable grid">
-        <div class="eleven wide column">
+        <div class="eight wide column">
           <div class="ui segment">
-            <img src="http://114.55.147.153/image/blog/2020/03/130-800x450.jpg" alt="" class="ui rounded image">
+            <img th:src="@{http://114.55.147.153/image/blog/many/about.png}" alt="" class="ui rounded image">
           </div>
         </div>
-        <div class="five wide column">
+        <div class="eight wide column">
           <div class="ui top attached segment">
             <div class="ui header">关于我</div>
           </div>
@@ -66,7 +66,13 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
   <!--/*/</th:block>/*/-->
+  <script src="https://www.layuicdn.com/layui/layui.js" th:src="@{https://www.layuicdn.com/layui/layui.js}"></script>
   <script>
+
+    layui.use('layer', function(){
+      var layer = layui.layer;
+    });
+
     $('.menu.toggle').click(function () {
       $('.m-item').toggleClass('m-mobile-hide');
     });
@@ -84,14 +90,12 @@
       var elementById = document.getElementById("github");
       var data = elementById.getAttribute("data-content");
       copyFor(data)
-      elementById.setAttribute("data-content","复制成功");
     })
 
     $('.qq').click(function () {
       var elementById = document.getElementById("qq");
       var data = elementById.getAttribute("data-content");
       copyFor(data)
-      elementById.setAttribute("data-content","复制成功");
     });
 
     function copyFor(data) {
@@ -102,6 +106,7 @@
       inp.select(); // 选中
       document.execCommand('copy',false); // copy已经选中的内容
       inp.remove(); // 删除掉这个dom
+      layer.msg("复制成功，b（￣▽￣）d　");
     }
 
   </script>

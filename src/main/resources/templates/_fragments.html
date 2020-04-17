@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
   <link rel="stylesheet" href="../static/lib/tocbot/tocbot.css" th:href="@{/lib/tocbot/tocbot.css}">
   <link rel="stylesheet" href="../static/css/me.css" th:href="@{/css/me.css}">
+  <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
   <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
 </head>
 <body>
@@ -54,7 +55,7 @@
         </div>
       </div>
       <div class="three wide column">
-        <h4 class="ui inverted header m-text-thin m-text-spaced " >最新博客</h4>
+        <h4 class="ui inverted header m-text-thin m-text-spaced " >Newest</h4>
         <div id="newblog-container">
           <div class="ui inverted link list" th:fragment="newblogList">
             <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item m-text-thin" th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
@@ -63,15 +64,16 @@
 
       </div>
       <div class="three wide column">
-        <h4 class="ui inverted header m-text-thin m-text-spaced ">联系我</h4>
+        <h4 class="ui inverted header m-text-thin m-text-spaced ">Contact</h4>
         <div class="ui inverted link list">
           <a href="#" class="item m-text-thin" id="mail">Email</a>
-          <a href="#" class="item m-text-thin">今天过的真不错</a>
+          <p class="item m-text-thin">今天过的真不错</p>
         </div>
       </div>
       <div class="seven wide column">
         <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
-        <p class="m-text-thin m-text-spaced m-opacity-mini">这是我的个人博客</p>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">今天又是美丽的一天！</p>
+        <p class="m-text-thin m-text-spaced m-opacity-mini">有事儿点击Email联系靓仔。诺，左边那个←</p>
       </div>
     </div>
     <div class="ui inverted section divider"></div>

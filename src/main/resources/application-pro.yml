@@ -5,8 +5,8 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://xxx/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
-    username: xx
-    password: xxx
+    username: xxx
+    password: xx
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
   mvc:
@@ -66,4 +66,4 @@ mybatis:
 
 #暴露的端口
 server:
-  port: 8081
+  port: xx

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="_fragments::head(~{::title})">
-  <title>Tags</title>
+  <title th:each="tag:${tags}" th:if="${tag.id==activeTypeId}" th:text="${tag.name}">Tags</title>
 </head>
 <body>
 
@@ -24,7 +24,7 @@
       </div>
 
       <div class="ui attached segment m-padded-tb-large">
-        <a th:each="tag : ${tags}"  th:href="@{/tags/{id}(id=${tag.id})}" href="#" target="_blank" th:classappend="${tag.id==activeTypeId} ?'teal'"  class="ui basic left pointing large label m-margin-tb-tiny">
+        <a th:each="tag : ${tags}"  th:href="@{/tags/{id}(id=${tag.id})}" href="#" th:classappend="${tag.id==activeTypeId} ?'teal'"  class="ui basic left pointing large label m-margin-tb-tiny">
           <span th:text="${tag.name}">方法论</span> <div class="detail" th:text="${tag.count}">23</div>
         </a>
       </div>

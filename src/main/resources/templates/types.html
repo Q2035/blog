@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="_fragments::head(~{::title})">
-  <title>Types</title>
+  <title th:each="type:${types}" th:if="${type.id==activeTypeId}" th:text="${type.name}">Types</title>
 </head>
 <body>
 
