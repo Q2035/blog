@@ -16,7 +16,6 @@ public class BlogTagsProvider {
             sql.append("("+blog.getId()+","+tag.getId()+"),");
         }
         sql.delete(sql.length()-1,sql.length());
-        System.out.println(sql);
         return sql.toString();
     }
 

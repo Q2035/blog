@@ -1,10 +1,8 @@
 package com.test.blog.controller.admin;
 
-import com.test.blog.controller.IndexController;
 import com.test.blog.pojo.Tag;
 import com.test.blog.service.TagService;
 import com.test.blog.util.PageUtils;
-import com.test.blog.util.RedisDataName;
 import com.test.blog.util.RedisUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -69,16 +69,4 @@ public class MarkdownUtils {
             }
         }
     }
-
-
-    public static void main(String[] args) {
-        String table = "| hello | hi   | 哈哈哈   |\n" +
-                "| ----- | ---- | ----- |\n" +
-                "| 斯维尔多  | 士大夫  | f啊    |\n" +
-                "| 阿什顿发  | 非固定杆 | 撒阿什顿发 |\n" +
-                "\n";
-        String a = "[imCoding 爱编程](http://www.lirenmi.cn)";
-        System.out.println(markdownToHtmlExtensions(a));
-    }
-
 }

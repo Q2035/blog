@@ -2,16 +2,16 @@ package com.test.blog.controller.admin;
 
 import com.test.blog.pojo.Blog;
 import com.test.blog.pojo.FileVO;
-import com.test.blog.pojo.Tag;
 import com.test.blog.pojo.User;
 import com.test.blog.service.BlogService;
 import com.test.blog.service.DetailedBlogService;
 import com.test.blog.service.TagService;
 import com.test.blog.service.TypeService;
-import com.test.blog.util.PageUtils;
 import com.test.blog.dto.BlogQuery;
 import com.test.blog.util.RedisUtil;
 import com.test.blog.vo.AdminBlogVO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +61,8 @@ public class BlogController {
 
     @Autowired
     private RedisUtil redisUtil;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     
     @GetMapping("/blogs")
     public String list(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
@@ -156,6 +159,9 @@ public class BlogController {
     public String files(Model model){
         List<FileVO> files = new ArrayList<>();
         File file = new File(basePath);
+        if (!file.exists()){
+            logger.warn("the file {} doesn't exist",basePath);
+        }
         for (File listFile : file.listFiles()) {
 //            直接跳过文件夹
             if (listFile.isDirectory()){

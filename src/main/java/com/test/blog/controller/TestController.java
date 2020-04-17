@@ -66,13 +66,4 @@ public class TestController {
         mailUtil.sendSimpleMain(mailBean);
         return "OK";
     }
-
-
-    public static void main(String[] args) {
-        Date date = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("yyMMdd");
-        String dateString = format.format(date);
-        System.out.println(dateString);
-    }
-
 }

@@ -24,9 +24,6 @@ public class TagServiceImpl implements TagService {
     private TagMapper tagMapper;
 
     @Autowired
-    private TypeMapper typeMapper;
-
-    @Autowired
     private BlogMapper blogMapper;
 
     @Override

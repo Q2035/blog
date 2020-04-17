@@ -13,6 +13,7 @@ about:
   wechat: 微信就算了
 
 # 这边儿需要更改成自己的路径，一个是私有文件夹，一个是公开文件夹
+# 记得最后有个文件分隔符，别省略
 file:
-  basePath: D:\temp\
-  publicBasePath: D:\temp\public\
+  basePath: /root/download/
+  publicBasePath: /nginx_static_data/image/other/
