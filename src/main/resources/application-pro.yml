@@ -15,7 +15,7 @@ spring:
 # Redis设置
   redis:
     host: xx
-    port: 6379
+    port: x
     password: xx
     jedis:
       pool:
@@ -25,7 +25,7 @@ spring:
     timeout: 10000 # 连接超时
 #  配置邮箱
   mail:
-    host: smtp.qq.com
+    host: xx
     username: xx
     password: xx
     default-encoding: UTF-8
@@ -66,4 +66,4 @@ mybatis:
 
 #暴露的端口
 server:
-  port: xx
+  port: 8081

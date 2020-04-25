@@ -46,6 +46,7 @@ public class CommentServiceImpl implements CommentService {
             comment.setParentComment(null);
         }
         comment.setCreateTime(new Date());
+        logger.info(comment.toString() +"is inserted");
         commentMapper.saveComment(comment);
     }
 

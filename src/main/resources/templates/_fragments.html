@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title th:replace="${title}">博客详情</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.css">
+  <link rel="stylesheet" href="https://cdn.bootcss.com/semantic-ui/2.2.4/semantic.min.css">
   <link rel="stylesheet" href="../static/css/typo.css" th:href="@{/css/typo.css}">
   <link rel="stylesheet" href="../static/css/animate.css" th:href="@{/css/animate.css}">
   <link rel="stylesheet" href="../static/lib/prism/prism.css" th:href="@{/lib/prism/prism.css}">
@@ -27,7 +27,7 @@
       <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide" th:classappend="${n==4} ? 'active'"><i class="clone icon"></i>archives</a>
       <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide" th:classappend="${n==5} ? 'active'"><i class="info icon"></i>about</a>
       <div class="right m-item item m-mobile-hide">
-        <form name="search" method="post" action="#" th:action="@{/search}" target="_blank">
+        <form name="search" method="post" action="#" th:action="@{/search}">
           <div class="ui icon inverted transparent input m-margin-tb-tiny">
             <input type="text" name="query" th:value="${query}" placeholder="Search....">
             <i onclick="document.forms['search'].submit()" class="search link icon"></i>
@@ -78,6 +78,7 @@
     </div>
     <div class="ui inverted section divider"></div>
     <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2019 - 2020 Q Designed by Lirenmi</p>
+    <a target="_blank" style="color: #809297;margin-top: 10px" th:href="@{http://www.beian.miit.gov.cn/}">浙ICP备20013225号</a>
   </div>
 
   <div class="ui fullscreen modal">
@@ -166,7 +167,6 @@
         }
       })
     })
-
 
   </script>
 </th:block>

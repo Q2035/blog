@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -135,11 +136,15 @@ public class IndexController {
     }
 
     @PostMapping("/search")
-    public String search(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
+    public String search(@PageableDefault(size = 1000,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
                         @RequestParam("query") String query,
                         Model model){
         List<Blog> o = detailedBlogService.selectBlogWithString("%" + query + "%");
-        model.addAttribute("page", listConvertToPage(o,pageable));
+        if (o==null || o.isEmpty()){
+            logger.info("search |"+query+"| failed");
+        }
+        List<BlogVO> list = transferBlogToBlogVO(o);
+        model.addAttribute("page", listConvertToPage(list,pageable));
         model.addAttribute("query",query);
         return "search";
     }
@@ -239,5 +244,24 @@ public class IndexController {
         commonResult.setCode(StatusCode.INTERNALFAIL.getCode());
         commonResult.setMessage("FAILUR");
         return commonResult;
+    }
+
+    private List<BlogVO> transferBlogToBlogVO(List<Blog> blogs){
+        List<BlogVO> list = new ArrayList<>();
+        for (Blog blog : blogs) {
+            BlogVO blogVO = new BlogVO();
+            blogVO.setId(blog.getId());
+            blogVO.setTitle(blog.getTitle());
+            blogVO.setFirstPicture(blog.getFirstPicture());
+            blogVO.setDescription(blog.getDescription());
+            blogVO.setUpdateTime(blog.getUpdateTime());
+            blogVO.setViews(blog.getViews());
+            blogVO.setTypeName(blog.getType().getName());
+            blogVO.setNickname(blog.getUser().getNickname());
+            blogVO.setUserAvatar(blog.getUser().getAvatar());
+            blogVO.setCreateTime(blog.getCreateTime());
+            list.add(blogVO);
+        }
+        return list;
     }
 }
