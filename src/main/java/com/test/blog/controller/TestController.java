@@ -1,6 +1,7 @@
 package com.test.blog.controller;
 
 import com.test.blog.dto.BlogQuery;
+import com.test.blog.pojo.Blog;
 import com.test.blog.pojo.MailBean;
 import com.test.blog.service.BlogService;
 import com.test.blog.util.CommonResult;
@@ -12,9 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.thymeleaf.util.DateUtils;
-
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -52,7 +50,6 @@ public class TestController {
         return commonResult;
     }
 
-
     @Autowired
     private MailUtil mailUtil;
 
@@ -65,5 +62,23 @@ public class TestController {
         mailBean.setContent("SpringBootMail:send time:"+ new Date());
         mailUtil.sendSimpleMain(mailBean);
         return "OK";
+    }
+
+    /**
+     * 把http连接升级成https连接
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/t4")
+    public List<Blog> t4(){
+        String source = "http://114.55.147.153/";
+        String target = "https://hellooooo.top/";
+        List<Blog> blogs = blogService.listAllBlogs();
+        for (Blog blog : blogs) {
+            String firstPicture = blog.getFirstPicture();
+            blog.setFirstPicture(firstPicture.replaceAll(source,target));
+            blogService.updateBlog(blog.getId(),blog);
+        }
+        return blogs;
     }
 }
