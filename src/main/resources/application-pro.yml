@@ -1,33 +1,33 @@
 spring:
   thymeleaf:
     mode: HTML
-# 数据源
+  # 数据源
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://xx:3306/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
-    username: xx
-    password: x
+    url: jdbc:mysql://114.55.147.153:3306/blog?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+    username: blog
+    password: Caonima1.
     initialization-mode: always
     type: com.zaxxer.hikari.HikariDataSource
   mvc:
     favicon:
       enabled: true
-# Redis设置
+  # Redis设置
   redis:
-    host: localhost
+    host: 114.55.147.153
     port: 6379
-    password: xx
+    password: root1
     jedis:
       pool:
         max-wait: 3000 #连接池最大阻塞等待时间
         max-active: 100 #连接池最大连接数
         max-idle: 20 # 最大空闲连接
     timeout: 10000 # 连接超时
-#  配置邮箱
+  #  配置邮箱
   mail:
     host: smtp.qq.com
-    username: xx
-    password: xx
+    username: 431862144@qq.com
+    password: ffcgkpmamtikbjga
     default-encoding: UTF-8
     port: 465
     properties:
