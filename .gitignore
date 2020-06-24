@@ -39,4 +39,5 @@ build/
 /mvnw
 /mvnw.cmd
 /src/main/resources/META-INF/
+/src/main/resources/application-pro.yml
 /log/

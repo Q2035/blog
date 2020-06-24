@@ -4,6 +4,7 @@ import com.test.blog.dto.BlogQuery;
 import com.test.blog.pojo.Blog;
 import com.test.blog.pojo.MailBean;
 import com.test.blog.service.BlogService;
+import com.test.blog.service.DetailedBlogService;
 import com.test.blog.util.CommonResult;
 import com.test.blog.util.MailUtil;
 import com.test.blog.util.StatusCode;
@@ -25,6 +26,9 @@ public class TestController {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private DetailedBlogService detailedBlogService;
 
     @RequestMapping("t1")
     public List<AdminBlogVO> t1(){
@@ -80,5 +84,11 @@ public class TestController {
             blogService.updateBlog(blog.getId(),blog);
         }
         return blogs;
+    }
+
+    @ResponseBody
+    @RequestMapping("/t5")
+    public Blog t5(){
+        return detailedBlogService.getBlog(Long.valueOf(13));
     }
 }
