@@ -26,7 +26,7 @@
       <th:block th:each="item : ${archiveMap}">
         <h3 class="ui center aligned header" th:text="${item.key}">2020</h3>
         <div class="ui fluid vertical menu">
-          <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank" class="item" th:each="blog : ${item.value}">
+          <a href="#" th:href="@{/blog/{id}(id=${blog.id})}"  class="item" th:each="blog : ${item.value}">
           <span>
             <i class="mini teal circle icon"></i><span th:text="${blog.title}">关于刻意练习的清单</span>
             <div class="ui teal basic left pointing label m-padded-mini " th:text="${#dates.format(blog.createTime,'MMMdd')}">9月03</div>
