@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.test.blog.mapper.BlogVOMapper">
+<mapper namespace="top.hellooooo.blog.mapper.BlogVOMapper">
 <!--
     blog_vo是一个视图
     create view blog_vo AS
@@ -41,7 +41,7 @@
     </select>
 
 
-    <select id="listSpecificAdminBlogs" parameterType="com.test.blog.dto.BlogQuery" resultMap="adminBlogVOMap">
+    <select id="listSpecificAdminBlogs" parameterType="top.hellooooo.blog.dto.BlogQuery" resultMap="adminBlogVOMap">
         select * from admin_blog_vo where recommend = #{recommend}
         <if test="title!=null and title!=''">
             and title like concat('%',#{title},'%')
@@ -53,7 +53,7 @@
     </select>
 
 
-    <resultMap id="adminBlogVOMap" type="com.test.blog.vo.AdminBlogVO">
+    <resultMap id="adminBlogVOMap" type="top.hellooooo.blog.vo.AdminBlogVO">
         <id property="id" column="id" />
         <result property="title" column="title"/>
         <result property="description" column="description"/>
@@ -67,7 +67,7 @@
         <result property="recommend" column="recommend"/>
     </resultMap>
 
-    <resultMap id="blogVOMap" type="com.test.blog.vo.BlogVO">
+    <resultMap id="blogVOMap" type="top.hellooooo.blog.vo.BlogVO">
         <id property="id" column="id" />
         <result property="title" column="title"/>
         <result property="description" column="description"/>
