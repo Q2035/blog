@@ -24,6 +24,7 @@ public class LoginLog {
 
     public int increaseFailLoginCount(){
         this.failLoginCounts++;
+        this.lastLoginTime = new Date();
         return this.failLoginCounts;
     }
 

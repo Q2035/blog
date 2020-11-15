@@ -1,5 +1,6 @@
 package top.hellooooo.blog.controller.admin;
 
+import org.springframework.beans.factory.BeanFactory;
 import top.hellooooo.blog.pojo.User;
 import top.hellooooo.blog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,13 +16,23 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @Controller
 @RequestMapping("/admin")
 public class LoginController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    private final BeanFactory beanFactory;
+
+    public LoginController(UserService userService, BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
+        this.userService = userService;
+    }
+
+    private Lock lock = new ReentrantLock();
 
     @GetMapping({"", "login"})
     public String loginPage(HttpServletRequest request) {
@@ -46,8 +57,14 @@ public class LoginController {
     public String login(@RequestParam("username") String username,
                         @RequestParam("password") String password,
                         HttpServletRequest request,
-                        RedirectAttributes attributes,
-                        LoginLog loginLog) {
+                        RedirectAttributes attributes) {
+        LoginLog loginLog;
+        try {
+            lock.lock();
+            loginLog = beanFactory.getBean(LoginLog.class);
+        }finally {
+            lock.unlock();
+        }
         // 上次尝试登录距现在超过30分钟则刷新LoginLog
         Date lastLoginTime = loginLog.getLastLoginTime();
         Date now = new Date();
@@ -73,6 +90,7 @@ public class LoginController {
             }
         }
         attributes.addFlashAttribute("message", "Too many attempts.");
+        loginLog.increaseFailLoginCount();
         return "redirect:/admin";
     }
 

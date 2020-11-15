@@ -4,6 +4,7 @@ import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import top.hellooooo.blog.util.LoginLog;
 
 @MapperScan("top.hellooooo.blog.mapper")
@@ -18,6 +19,7 @@ public class BlogApplication {
      * 将LoginLog加入容器
      * @return
      */
+    @Scope("singleton")
     @Bean
     public LoginLog loginLog(){
         return new LoginLog();
