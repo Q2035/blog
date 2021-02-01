@@ -41,7 +41,7 @@
     </select>
 
 
-    <select id="listSpecificAdminBlogs" parameterType="top.hellooooo.blog.dto.BlogQuery" resultMap="adminBlogVOMap">
+    <select id="listSpecificAdminBlogs" parameterType="top.hellooooo.blog.pojo.BlogQuery" resultMap="adminBlogVOMap">
         select * from admin_blog_vo where recommend = #{recommend}
         <if test="title!=null and title!=''">
             and title like concat('%',#{title},'%')

@@ -1,7 +1,7 @@
 package top.hellooooo.blog.service;
 
 import top.hellooooo.blog.pojo.Blog;
-import top.hellooooo.blog.dto.BlogQuery;
+import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.pojo.ContactMe;
 import top.hellooooo.blog.vo.AdminBlogVO;
 import top.hellooooo.blog.vo.BlogVO;

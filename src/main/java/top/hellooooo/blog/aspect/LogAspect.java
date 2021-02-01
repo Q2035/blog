@@ -17,35 +17,35 @@ public class LogAspect {
 
     private final Logger logger = LoggerFactory.getLogger(LogAspect.class);
 
-    @Pointcut("execution(* com.test.blog.controller.*.*(..))")
-    public void log(){
+    @Pointcut("execution(* top.hellooooo.blog.controller.*.*(..))")
+    public void log() {
     }
 
     @Before("log()")
-    public void doBefore(JoinPoint joinPoint){
+    public void doBefore(JoinPoint joinPoint) {
         logger.info("-----doBefore------");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletRequest request = attributes.getRequest();
-        String url =request.getRequestURL().toString();
-        String ip =request.getRemoteAddr();
-        String classMethod =joinPoint.getSignature().getDeclaringTypeName()+"."+joinPoint.getSignature().getName();
+        String url = request.getRequestURL().toString();
+        String ip = request.getRemoteAddr();
+        String classMethod = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
-        logger.info("Request IP:{}",request.getRemoteAddr());
-        logger.info("Request : {}",requestLog);
+        logger.info("Request IP:{}", request.getRemoteAddr());
+        logger.info("Request : {}", requestLog);
     }
 
     @After("log()")
-    public void doAfter(){
+    public void doAfter() {
         logger.info("-----doAfter-------");
     }
 
-    @AfterReturning(returning = "result",pointcut = "log()")
-    public void doAfterReturn(Object result){
-        logger.info("Result: {}",result);
+    @AfterReturning(returning = "result", pointcut = "log()")
+    public void doAfterReturn(Object result) {
+        logger.info("Result: {}", result);
     }
 
-    private class RequestLog{
+    private class RequestLog {
         private String url;
         private String ip;
         private String classMethod;

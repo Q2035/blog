@@ -1,6 +1,6 @@
 package top.hellooooo.blog.service.impl;
 
-import top.hellooooo.blog.dto.BlogQuery;
+import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.TypeMapper;
 import top.hellooooo.blog.pojo.Blog;

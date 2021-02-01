@@ -3,6 +3,8 @@ spring:
     mode: HTML
   profiles:
     active: pro
+  jpa:
+    open-in-view: false
 
 comment:
   avatar: /images/avatar.png

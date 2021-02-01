@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import top.hellooooo.blog.util.LoginLog;
 
+
 @MapperScan("top.hellooooo.blog.mapper")
 @SpringBootApplication
 public class BlogApplication {

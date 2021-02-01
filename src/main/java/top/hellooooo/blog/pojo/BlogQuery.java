@@ -1,4 +1,4 @@
-package top.hellooooo.blog.dto;
+package top.hellooooo.blog.pojo;
 
 public class BlogQuery {
     private String title;

@@ -27,24 +27,24 @@ public class TypeShowController {
     private BlogService blogService;
 
     @GetMapping("/types/{id}")
-    public String types(@PageableDefault(size = 10000,sort = {"updateTime"},direction = Sort.Direction.DESC)Pageable pageable,
+    public String types(@PageableDefault(size = 10000, sort = {"updateTime"}, direction = Sort.Direction.DESC) Pageable pageable,
                         @PathVariable("id") Long id,
-                        Model model){
-        List<Type> types =typeService.findTypeTop(1000);
-        String typeName ="";
-        if (id ==-1){
+                        Model model) {
+        List<Type> types = typeService.findTypeTop(1000);
+        String typeName = "";
+        if (id == -1) {
             id = types.get(0).getId();
         }
         for (Type type : types) {
-            if (id == type.getId()){
+            if (id == type.getId()) {
                 typeName = type.getName();
             }
         }
         List<BlogVO> blogs = blogService.listBlogVOWithTypeId(typeName);
         Page<BlogVO> p = PageUtils.listConvertToPage(blogs, pageable);
-        model.addAttribute("types",types);
-        model.addAttribute("page",p);
-        model.addAttribute("activeTypeId",id);
+        model.addAttribute("types", types);
+        model.addAttribute("page", p);
+        model.addAttribute("activeTypeId", id);
         return "types";
     }
 

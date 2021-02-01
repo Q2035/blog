@@ -7,7 +7,7 @@ import top.hellooooo.blog.service.BlogService;
 import top.hellooooo.blog.service.DetailedBlogService;
 import top.hellooooo.blog.service.TagService;
 import top.hellooooo.blog.service.TypeService;
-import top.hellooooo.blog.dto.BlogQuery;
+import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.util.RedisUtil;
 import top.hellooooo.blog.vo.AdminBlogVO;
 import org.slf4j.Logger;

@@ -1,6 +1,6 @@
 package top.hellooooo.blog.mapper;
 
-import top.hellooooo.blog.dto.BlogQuery;
+import top.hellooooo.blog.pojo.BlogQuery;
 
 public class BlogProvider {
     /**

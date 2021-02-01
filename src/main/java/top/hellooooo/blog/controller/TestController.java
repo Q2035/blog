@@ -1,6 +1,6 @@
 package top.hellooooo.blog.controller;
 
-import top.hellooooo.blog.dto.BlogQuery;
+import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.pojo.Blog;
 import top.hellooooo.blog.pojo.MailBean;
 import top.hellooooo.blog.service.BlogService;

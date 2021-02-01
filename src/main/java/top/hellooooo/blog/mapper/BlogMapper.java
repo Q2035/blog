@@ -1,7 +1,7 @@
 package top.hellooooo.blog.mapper;
 
 import top.hellooooo.blog.pojo.Blog;
-import top.hellooooo.blog.dto.BlogQuery;
+import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.vo.BlogVO;
 import org.apache.ibatis.annotations.*;
 
