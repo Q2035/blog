@@ -32,29 +32,21 @@ import java.util.stream.Collectors;
 @Controller
 public class IndexController {
 
-    @Autowired
-    private BlogService blogService;
+    private final BlogService blogService;
 
-    @Autowired
-    private TypeService typeService;
+    private final TypeService typeService;
 
-    @Autowired
-    private TagService tagService;
+    private final TagService tagService;
 
-    @Autowired
-    private DetailedBlogService detailedBlogService;
+    private final DetailedBlogService detailedBlogService;
 
-    @Autowired
-    private FriendLinksMapper friendLinksMapper;
+    private final FriendLinksMapper friendLinksMapper;
 
-    @Autowired
-    private UsefulToolsMapper usefulToolsMapper;
+    private final UsefulToolsMapper usefulToolsMapper;
 
-    @Autowired
-    private RedisUtil redisUtil;
+    private final RedisUtil redisUtil;
 
-    @Autowired
-    private MailUtil mailUtil;
+    private final MailUtil mailUtil;
 
     private Integer MAX_RECOMMEND_BLOG_NUM = 3;
     private Integer MAX_TYPE_INDEX = 6;
@@ -73,6 +65,17 @@ public class IndexController {
     private String MAIL_RECIPIENT;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public IndexController(BlogService blogService, TypeService typeService, TagService tagService, DetailedBlogService detailedBlogService, FriendLinksMapper friendLinksMapper, UsefulToolsMapper usefulToolsMapper, RedisUtil redisUtil, MailUtil mailUtil) {
+        this.blogService = blogService;
+        this.typeService = typeService;
+        this.tagService = tagService;
+        this.detailedBlogService = detailedBlogService;
+        this.friendLinksMapper = friendLinksMapper;
+        this.usefulToolsMapper = usefulToolsMapper;
+        this.redisUtil = redisUtil;
+        this.mailUtil = mailUtil;
+    }
 
 
     /**
@@ -103,11 +106,6 @@ public class IndexController {
             blogs = blogService.listAllBlogVOs();
             redisUtil.set(RedisDataName.ALL_BLOGVOS,blogs);
         }
-//        先留着，万一以后要做分页了
-//        List<Blog> blogs1 = blogService.listAllBlogs();
-//        int start =pageable.getPageNumber() * pageable.getPageSize();
-//        int pageSize = pageable.getPageSize();
-//        List<Blog> blogs = detailedBlogService.listBlogsWithPages( start, start + pageSize);
         if (redisUtil.exists(RedisDataName.TOP_TYPES)){
             top = (List<Type>) redisUtil.get(RedisDataName.TOP_TYPES);
         }else {

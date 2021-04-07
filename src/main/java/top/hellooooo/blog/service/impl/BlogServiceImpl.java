@@ -23,26 +23,29 @@ import java.util.*;
 @Service
 public class BlogServiceImpl implements BlogService {
 
-    @Autowired
-    private BlogMapper blogMapper;
+    private final BlogMapper blogMapper;
 
-    @Autowired
-    private TypeService typeService;
+    private final TypeService typeService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
-    @Autowired
-    private DetailedBlogService detailedBlogService;
+    private final DetailedBlogService detailedBlogService;
 
-    @Autowired
-    private BlogVOMapper blogVOMapper;
+    private final BlogVOMapper blogVOMapper;
 
-    @Autowired
-    private ContactMapper contactMapper;
+    private final ContactMapper contactMapper;
+
+    public BlogServiceImpl(BlogMapper blogMapper, TypeService typeService, UserService userService, CommentService commentService, DetailedBlogService detailedBlogService, BlogVOMapper blogVOMapper, ContactMapper contactMapper) {
+        this.blogMapper = blogMapper;
+        this.typeService = typeService;
+        this.userService = userService;
+        this.commentService = commentService;
+        this.detailedBlogService = detailedBlogService;
+        this.blogVOMapper = blogVOMapper;
+        this.contactMapper = contactMapper;
+    }
 
     @Override
     public List<BlogVO> listBlogByTagId(Long id) {

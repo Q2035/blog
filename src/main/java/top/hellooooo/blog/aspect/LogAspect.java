@@ -1,5 +1,6 @@
 package top.hellooooo.blog.aspect;
 
+import lombok.AllArgsConstructor;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
@@ -31,7 +32,10 @@ public class LogAspect {
         String classMethod = joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName();
         Object[] args = joinPoint.getArgs();
         RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
-        logger.info("Request IP:{}", request.getRemoteAddr());
+        // 此处request.getRemoteAddr()获取到的其实是Nginx的IP，而非真实IP
+        // 参考 https://blog.csdn.net/weixin_30588907/article/details/95146382
+        // 可以通过request.getHeader(“x-forwarded-for”)来获取请求头里边的IP地址
+        logger.info("Request IP:{}", request.getHeader("x-forwarded-for"));
         logger.info("Request : {}", requestLog);
     }
 
@@ -45,14 +49,12 @@ public class LogAspect {
         logger.info("Result: {}", result);
     }
 
+    @AllArgsConstructor
     private class RequestLog {
         private String url;
         private String ip;
         private String classMethod;
         private Object[] args;
-
-        public RequestLog() {
-        }
 
         @Override
         public String toString() {
@@ -62,13 +64,6 @@ public class LogAspect {
                     ", classMethod='" + classMethod + '\'' +
                     ", args=" + Arrays.toString(args) +
                     '}';
-        }
-
-        public RequestLog(String url, String ip, String classMethod, Object[] args) {
-            this.url = url;
-            this.ip = ip;
-            this.classMethod = classMethod;
-            this.args = args;
         }
     }
 }

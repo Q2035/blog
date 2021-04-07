@@ -128,7 +128,7 @@ public class CommentServiceImpl implements CommentService {
                 map.forEach((k,y)->{
                     if (y !=null) {
                         for (int i=0;i<y.size();i++) {
-                            if (y.get(i).getId() == temp.getParentId()) {
+                            if (y.get(i).getId().equals(temp.getParentId())) {
                                 y.add(temp);
                                 break;
                             }
@@ -141,14 +141,14 @@ public class CommentServiceImpl implements CommentService {
         }
         map.forEach((k,v)->{
             for (int i=0;i<comments.size();i++){
-                if (comments.get(i).getId() == k){
+                if (comments.get(i).getId().equals(k)){
                     comments.get(i).setReplyComments(v);
                 }
             }
         });
     }
 
-    //存放迭代找出的所有子代的集合
+    // 存放迭代找出的所有子代的集合
     private List<Comment> tempReplys = new ArrayList<>();
     /**
      * 递归迭代，剥洋葱
@@ -156,7 +156,8 @@ public class CommentServiceImpl implements CommentService {
      * @return
      */
     private void recursively(Comment comment) {
-        tempReplys.add(comment);//顶节点添加到临时存放集合
+        // 顶节点添加到临时存放集合
+        tempReplys.add(comment);
         if (comment.getReplyComments().size()>0) {
             List<Comment> replys = comment.getReplyComments();
             for (Comment reply : replys) {
