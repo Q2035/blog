@@ -61,13 +61,6 @@ public class Blog {
     private transient Long typeId;
     private transient Long userId;
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 
     public void init(){
         this.tagIds =tagsToIds(this.getTags());

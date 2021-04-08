@@ -35,6 +35,7 @@ public class TestController {
     public List<AdminBlogVO> t1(){
         return blogService.listAllAdminBlogs();
     }
+
     @RequestMapping("t2")
     public List<AdminBlogVO> t2(){
         BlogQuery blog = new BlogQuery();

@@ -17,19 +17,21 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class CommentController {
 
-    @Autowired
-    private BlogService blogService;
+    private final BlogService blogService;
 
-    @Autowired
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @Value("${comment.avatar}")
     private String avatar;
 
+    public CommentController(BlogService blogService, CommentService commentService) {
+        this.blogService = blogService;
+        this.commentService = commentService;
+    }
+
     @GetMapping("/comments/{blogId}")
     public String comments(@PathVariable("blogId")Long blogId,
                            Model model){
-
         model.addAttribute("comments",commentService.listCommentByBlogId(blogId));
         return "blog :: commentList";
     }
@@ -40,10 +42,10 @@ public class CommentController {
         Long blogId = comment.getBlog().getId();
         comment.setBlog(blogService.getBlog(blogId));
         User user = (User) session.getAttribute("user");
-        if (user !=null){
+        if (user != null) {
             comment.setAvatar(user.getAvatar());
             comment.setAdminComment(true);
-        }else{
+        } else {
             comment.setAvatar(avatar);
         }
         commentService.saveComment(comment);

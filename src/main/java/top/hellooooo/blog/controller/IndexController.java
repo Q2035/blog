@@ -100,6 +100,7 @@ public class IndexController {
         List<BlogVO> blogs;
         List<Type> top;
         List<Tag> tags;
+        // 优先判断Redis是否存放了首页博客信息
         if (redisUtil.exists(RedisDataName.ALL_BLOGVOS)){
             blogs = (List<BlogVO>) redisUtil.get(RedisDataName.ALL_BLOGVOS);
         }else{
@@ -119,7 +120,7 @@ public class IndexController {
             redisUtil.set(RedisDataName.TOP_TAGS,tags);
         }
         List<BlogVO> recommmendBlogs = blogs.stream().filter(blog -> blog.isRecommend()).limit(MAX_RECOMMEND_BLOG_NUM).collect(Collectors.toList());
-//        这两个查询肯定不会很耗时间
+        // 这两个查询肯定不会很耗时间
         List<FriendLinks> links = friendLinksMapper.listAllLinks();
         List<UsefulTool> usefulTools = usefulToolsMapper.listAllLinks();
         model.addAttribute("tools",usefulTools);

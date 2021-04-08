@@ -14,9 +14,11 @@
     <select id="selectCommentById" parameterType="long" resultType="Comment">
         select * from t_comment where id=#{id} order by create_time desc
     </select>
+
     <select id="listCommentByBlogId" parameterType="long" resultMap="commentMap">
         select * from t_comment where blog_id=#{blogId} order by create_time desc
     </select>
+
     <insert id="saveComment" parameterType="Comment">
         insert into t_comment(avatar, content, create_time, email, nickname, blog_id, parent_comment_id,admin_comment)
         values (#{avatar}, #{content}, #{createTime}, #{email}, #{nickname}, #{blog.id}, #{parentComment.id} ,#{adminComment})
