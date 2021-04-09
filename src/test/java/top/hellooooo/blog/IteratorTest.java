@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -62,5 +63,13 @@ public class IteratorTest {
         } else {
             System.out.println(path);
         }
+    }
+
+    @Test
+    public void testStringTrim(){
+        List<String> list = Arrays.asList("https://www.hellooooo.top/image/1.png", "https://www.hellooooo.top/image/2.png", "https://www.hellooooo.top/image/3.png");
+        list.forEach(url -> {
+            System.out.println(url.trim());
+        });
     }
 }

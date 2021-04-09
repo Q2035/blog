@@ -10,18 +10,23 @@ import com.qiniu.storage.Configuration;
 import com.qiniu.storage.Region;
 import com.qiniu.storage.UploadManager;
 import com.qiniu.storage.model.DefaultPutRet;
-import com.qiniu.storage.model.FileInfo;
 import com.qiniu.util.Auth;
 import com.qiniu.util.StringUtils;
 import lombok.Setter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
-import top.hellooooo.blog.exception.FileUploadException;
 
-import javax.xml.stream.events.Characters;
-import java.nio.charset.StandardCharsets;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * @author Q
@@ -57,67 +62,108 @@ public class QiniuUtil {
 
     BucketManager bucketManager;
 
+    UploadManager uploadManager;
+
+    private final int MAX_IMAGE_COT = 100;
+
     public void init(){
         auth = Auth.create(accessKey, secretKey);
         // 华南机房
         cfg = new Configuration(Region.region2());
         bucketManager = new BucketManager(auth, cfg);
+        uploadManager = new UploadManager(cfg);
     }
-
-
 
     /**
      * 将指定URL的文件上传至七牛云
      * 相同文件不会覆盖上传
      * @param originUrl
-     * @return false 传送失败 true 传送成功
      */
-    public boolean fileUpload(String originUrl) {
-        //构造一个带指定 Region 对象的配置类
-        //...其他参数参考类注释
-        UploadManager uploadManager = new UploadManager(cfg);
-        //...生成上传凭证，然后准备上传
-        // 传输的本地文件路径
-        String localFilePath = "D:\\Tmp\\a.jpg";
-        // String localFilePath = "/home/qiniu/test.png";
-        //默认不指定key的情况下，以文件内容的hash值作为文件名
-        String key = getFilename(originUrl);
-        // 形如 image/a.jpg -> https://cdn.hellooooo.top/image/a.jpg
-        String upToken = auth.uploadToken(bucketName);
-        try {
-            // 此处的key作为上传后的文件名
-            Response response = uploadManager.put(localFilePath, key, upToken);
-            //解析上传成功的结果
-            DefaultPutRet putRet = objectMapper.readValue(response.bodyString(), DefaultPutRet.class);
-            logger.info(putRet.key);
-        } catch (QiniuException ex) {
-            Response r = ex.response;
-            try {
-                logger.error(r.bodyString());
-            } catch (QiniuException ex2) {
-                return false;
-            }
-        } catch (JsonProcessingException e) {
-            return false;
+    public DefaultPutRet singleFileUpload(String originUrl) throws IOException {
+        if (!originUrl.startsWith("http")) {
+            throw new IllegalArgumentException("QiniuUtil#singleFileUpload: Not the supported protocol");
         }
-        return true;
+        // 准备从网络下载图片
+        URL url;
+        InputStream inputStream;
+        HttpURLConnection httpURLConnection;
+        url = new URL(originUrl);
+        httpURLConnection = (HttpURLConnection) url.openConnection();
+        inputStream = httpURLConnection.getInputStream();
+        // String localFilePath = "/home/qiniu/test.png";
+        String key = getFilename(originUrl);
+        return fileUpload(inputStream, key);
     }
 
     /**
-     * 获取文件相关信息
+     * 将输入流的文件上传到七牛
+     * @param inputStream
+     * @param key
      * @return
+     * @throws QiniuException
+     * @throws JsonProcessingException
      */
-    public FileInfo getFileInfo(String key){
-        //构造一个带指定 Region 对象的配置类
-        try {
-            FileInfo fileInfo = bucketManager.stat(bucketName, key);
-            return fileInfo;
-        } catch (QiniuException ex) {
-            logger.error(ex.response.toString());
-        }
-        return null;
+    public DefaultPutRet fileUpload(InputStream inputStream, String key) throws QiniuException, JsonProcessingException {
+        String upToken = auth.uploadToken(bucketName);
+        // 此处的key作为上传后的文件名
+        Response response = uploadManager.put(inputStream, key, upToken, null, null);
+        // 解析上传成功的结果
+        DefaultPutRet putRet = objectMapper.readValue(response.bodyString(), DefaultPutRet.class);
+        return putRet;
     }
 
+    /**
+     * 将所提供的url中的所有图片数据都上传至七牛
+     * @param originUrls
+     */
+    public void fileBatchUpload(List<String> originUrls) throws InterruptedException {
+        ArrayBlockingQueue<String> arrayBlockingQueue = new ArrayBlockingQueue<>(MAX_IMAGE_COT);
+        int urlCot = originUrls.size();
+        AtomicInteger produceCot = new AtomicInteger(0);
+        AtomicInteger consumption = new AtomicInteger(0);
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        // 借助生产者消费者模型
+        Runnable getImageInputStreamTask = () -> {
+            originUrls.forEach(url -> {
+                url = url.trim();
+                logger.info("{} is added into array", url);
+                arrayBlockingQueue.add(url);
+                produceCot.incrementAndGet();
+            });
+            countDownLatch.countDown();
+        };
+        Runnable uploadImageTask = () -> {
+            // 只要完成的任务数少于原始数据数就不断继续
+            while (consumption.get() < urlCot) {
+                String urlStr = null;
+                try {
+                    // 阻塞式获取
+                    urlStr = arrayBlockingQueue.take();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    URL url = new URL(urlStr.trim());
+                    HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                    // Header的Content-Length存放了文件长度，后序可以考虑借此实现上传进度
+                    InputStream inputStream = urlConnection.getInputStream();
+                    String key = getFilename(urlStr);
+                    logger.info("{} will upload", key);
+                    fileUpload(inputStream, key);
+                    consumption.incrementAndGet();
+                    logger.info("{} upload successfully", key);
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            countDownLatch.countDown();
+        };
+        new Thread(getImageInputStreamTask).start();
+        new Thread(uploadImageTask).start();
+        countDownLatch.await();
+    }
 
     /**
      * https://hellooooo.top/image/xxx.jpg -> image/xxx.jpg
