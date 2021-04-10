@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IteratorTest {
     @Test
@@ -71,5 +73,24 @@ public class IteratorTest {
         list.forEach(url -> {
             System.out.println(url.trim());
         });
+    }
+
+
+    @Test
+    public void testRegex(){
+        // 按指定模式在字符串查找
+        String line = "ads![image-20210305105526395](https://cdn.hellooooo.top/image/blog/2021/03/mysql_optimize/image-20210305105526395.png)123fafa\n" +
+                "ad23s![imagsafe-20210305105526395](https://cdn.hellooooo.top/image/blog/2021/03/mysql_optimize/image-20210305105526395.png)2sf23 sa";
+        // String pattern = ".*!\\[.*]\\(";
+        String pattern = "!\\[.*]\\([a-zA-z]+://[^\\s]*\\)";
+        // 创建 Pattern 对象
+        Pattern r = Pattern.compile(pattern);
+        // 现在创建 matcher 对象
+        Matcher m = r.matcher(line);
+        int matcher_start = 0;
+        while (m.find(matcher_start)) {
+            System.out.println(m.group(0));
+            matcher_start = m.end();
+        }
     }
 }

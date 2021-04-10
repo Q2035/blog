@@ -1,5 +1,6 @@
 package top.hellooooo.blog.controller.admin;
 
+import org.springframework.util.StringUtils;
 import top.hellooooo.blog.pojo.Blog;
 import top.hellooooo.blog.pojo.FileVO;
 import top.hellooooo.blog.pojo.User;
@@ -8,6 +9,7 @@ import top.hellooooo.blog.service.DetailedBlogService;
 import top.hellooooo.blog.service.TagService;
 import top.hellooooo.blog.service.TypeService;
 import top.hellooooo.blog.pojo.BlogQuery;
+import top.hellooooo.blog.util.QiniuUtil;
 import top.hellooooo.blog.util.RedisUtil;
 import top.hellooooo.blog.vo.AdminBlogVO;
 import org.slf4j.Logger;
@@ -47,23 +49,29 @@ public class BlogController {
     private static final String LIST ="admin/blogs";
     private static final String REDIRECT_LIST ="redirect:/admin/blogs";
 
-    @Autowired
-    private TypeService typeService;
+    private final TypeService typeService;
 
-    @Autowired
-    private DetailedBlogService detailedBlogService;
+    private final DetailedBlogService detailedBlogService;
 
-    @Autowired
-    private TagService tagService;
+    private final QiniuUtil qiniuUtil;
 
-    @Autowired
-    private BlogService blogService;
+    private final TagService tagService;
 
-    @Autowired
-    private RedisUtil redisUtil;
+    private final BlogService blogService;
+
+    private final RedisUtil redisUtil;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    
+
+    public BlogController(TypeService typeService, DetailedBlogService detailedBlogService, QiniuUtil qiniuUtil, TagService tagService, BlogService blogService, RedisUtil redisUtil) {
+        this.typeService = typeService;
+        this.detailedBlogService = detailedBlogService;
+        this.qiniuUtil = qiniuUtil;
+        this.tagService = tagService;
+        this.blogService = blogService;
+        this.redisUtil = redisUtil;
+    }
+
     @GetMapping("/blogs")
     public String list(@PageableDefault(size = 8,sort = {"updateTime"},direction = Sort.Direction.DESC) Pageable pageable,
                        Model model){
@@ -125,6 +133,7 @@ public class BlogController {
         blog.setUser((User) session.getAttribute("user"));
         blog.setType(typeService.getType(blog.getType().getId()));
         blog.setTags(tagService.listTags(blog.getTagIds()));
+        // TODO 将数据存入数据库前将正文中的图片转存到cdn中
         try {
             blogService.saveBlog(blog);
             blog.setId(blogService.findByTitle(blog.getTitle()).getId());
@@ -134,11 +143,27 @@ public class BlogController {
             redisUtil.remove(TOP_TYPES);
         }catch (Exception e){
             e.printStackTrace();
-            attributes.addFlashAttribute("message","发布失败");
+            attributes.addFlashAttribute("message", "发布失败" + e.getMessage());
             return "error/500";
         }
         attributes.addFlashAttribute("message","操作成功");
         return REDIRECT_LIST;
+    }
+
+    /**
+     * 找出正文中如下格式的字符串，提取其中URL返回
+     * ![image-20210305105526395](https://hellooooo.top/image/blog/2021/03/mysql_optimize/image-20210305105526395.png)
+     * 并替换 hellooooo.top -> cdn.hellooooo.top
+     * @param content
+     * @return
+     */
+    public List<String> getImageUrlsFromContent(String content) {
+        List<String> list = new ArrayList<>();
+        if (StringUtils.isEmpty(content)) {
+            throw new IllegalArgumentException("The blog content can't be empty.");
+        }
+
+        return list;
     }
 
     @GetMapping("/blogs/{id}/delete")
@@ -163,7 +188,7 @@ public class BlogController {
             logger.warn("the file {} doesn't exist",basePath);
         }
         for (File listFile : file.listFiles()) {
-//            直接跳过文件夹
+            // 直接跳过文件夹
             if (listFile.isDirectory()){
                 continue;
             }
