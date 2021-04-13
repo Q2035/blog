@@ -1,38 +1,44 @@
 package top.hellooooo.blog.controller.admin;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.BeanFactory;
 import top.hellooooo.blog.pojo.User;
 import top.hellooooo.blog.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import top.hellooooo.blog.util.LoginLog;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.HashMap;
 
+/**
+ * @author Q
+ */
 @Controller
 @RequestMapping("/admin")
 public class LoginController {
 
     private final UserService userService;
 
-    private final BeanFactory beanFactory;
+    private final String BLACK_LIST_NAME = "blacklist";
+
+    private final String LOGIN_COUNT = "login_count";
+
+    private final Integer LOGIN_MAX_COUNT = 3;
+
+    private final Long ONE_DAY = 24 * 60 * 60 * 1000L;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public LoginController(UserService userService, BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
         this.userService = userService;
     }
-
-    private Lock lock = new ReentrantLock();
 
     @GetMapping({"", "login"})
     public String loginPage(HttpServletRequest request) {
@@ -46,7 +52,6 @@ public class LoginController {
 
     /**
      * 认证
-     *
      * @param username
      * @param password
      * @param request
@@ -54,45 +59,63 @@ public class LoginController {
      * @return
      */
     @PostMapping("authentication")
-    public String login(@RequestParam("username") String username,
-                        @RequestParam("password") String password,
+    public String login(@RequestParam("username")String username,
+                        @RequestParam("password")String password,
                         HttpServletRequest request,
-                        RedirectAttributes attributes) {
-        LoginLog loginLog;
-        try {
-            lock.lock();
-            loginLog = beanFactory.getBean(LoginLog.class);
-        }finally {
-            lock.unlock();
-        }
-        // 上次尝试登录距现在超过30分钟则刷新LoginLog
-        Date lastLoginTime = loginLog.getLastLoginTime();
-        Date now = new Date();
-        if (lastLoginTime == null || now.getTime() - lastLoginTime.getTime() > 30 * 60 * 1000) {
-            loginLog.setFailLoginCounts(0);
-        }
-        // 登录失败错误次数小于3
-        if (loginLog.getFailLoginCounts() <= 3) {
-            HttpSession session = request.getSession();
-            User user = userService.checkUser(username, password);
-            if (user != null) {
-                user.setPassword("");
-                session.setAttribute("user", user);
-                // 登录成功，刷新登录日志
-                loginLog.setLastLoginTime(now);
-                loginLog.setFailLoginCounts(0);
-                return "admin/index";
-            } else {
-                // 如果使用Model，重定向之后页面无法取数据
-                attributes.addFlashAttribute("message", "Password fail to authenticate");
-                loginLog.increaseFailLoginCount();
-                return "redirect:/admin";
+                        RedirectAttributes attributes){
+        HttpSession session = request.getSession();
+        String userIP = request.getHeader("x-forwarded-for");
+        // 先检查用户是否尝试登录多次
+        // 使用用户IP作为唯一凭证
+        Object blackList = session.getAttribute(BLACK_LIST_NAME);
+        if (blackList != null) {
+            HashMap<String, Date> bl = (HashMap<String, Date>) blackList;
+            // 加入黑名单时间
+            Date date = bl.get(userIP);
+            Date now = new Date();
+            if (date != null) {
+                if (now.getTime() - date.getTime() < ONE_DAY) {
+                    logger.info("now:{} date:{} oneday:{}", now.getTime(), date.getTime(), ONE_DAY);
+                    attributes.addFlashAttribute("message", "this ip is blocked");
+                    return "redirect:/admin";
+                } else {
+                    session.removeAttribute(BLACK_LIST_NAME);
+                    session.removeAttribute(LOGIN_COUNT);
+                }
+            }
+        } else {
+            // 判断当前用户是否尝试多次登录
+            Object attribute = session.getAttribute(LOGIN_COUNT);
+            if (attribute != null) {
+                Integer count = (Integer) attribute;
+                // 超过登录尝试上限
+                if (count >= LOGIN_MAX_COUNT) {
+                    HashMap<String, Date> hashMap = new HashMap<>();
+                    hashMap.put(userIP, new Date());
+                    session.setAttribute(BLACK_LIST_NAME, hashMap);
+                    attributes.addFlashAttribute("message", "Too many login attempts");
+                    return "redirect:/admin";
+                }
             }
         }
-        attributes.addFlashAttribute("message", "Too many attempts.");
-        loginLog.increaseFailLoginCount();
-        return "redirect:/admin";
+        User user = userService.checkUser(username, password);
+        if (user != null) {
+            user.setPassword("");
+            session.setAttribute("user", user);
+            return "admin/index";
+        } else {
+            Object attribute = session.getAttribute(LOGIN_COUNT);
+            if (attribute == null) {
+                session.setAttribute(LOGIN_COUNT, 1);
+            } else {
+                session.setAttribute(LOGIN_COUNT, (Integer)attribute + 1);
+            }
+            // 如果使用Model，重定向之后页面无法取数据
+            attributes.addFlashAttribute("message", "password fail to authenticate");
+            return "redirect:/admin";
+        }
     }
+
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
