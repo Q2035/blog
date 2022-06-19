@@ -51,7 +51,7 @@ public class BlogController {
 
     private final DetailedBlogService detailedBlogService;
 
-    private final QiniuUtil qiniuUtil;
+    // private final QiniuUtil qiniuUtil;
 
     private final TagService tagService;
 
@@ -61,10 +61,10 @@ public class BlogController {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public BlogController(TypeService typeService, DetailedBlogService detailedBlogService, QiniuUtil qiniuUtil, TagService tagService, BlogService blogService, RedisUtil redisUtil) {
+    public BlogController(TypeService typeService, DetailedBlogService detailedBlogService, TagService tagService, BlogService blogService, RedisUtil redisUtil) {
         this.typeService = typeService;
         this.detailedBlogService = detailedBlogService;
-        this.qiniuUtil = qiniuUtil;
+        // this.qiniuUtil = qiniuUtil;
         this.tagService = tagService;
         this.blogService = blogService;
         this.redisUtil = redisUtil;

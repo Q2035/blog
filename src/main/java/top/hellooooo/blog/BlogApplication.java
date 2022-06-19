@@ -15,8 +15,8 @@ public class BlogApplication {
         SpringApplication.run(BlogApplication.class, args);
     }
 
-    @Bean(initMethod = "init")
-    public QiniuUtil qiniuUtil(){
-        return new QiniuUtil();
-    }
+    // @Bean(initMethod = "init")
+    // public QiniuUtil qiniuUtil(){
+    //     return new QiniuUtil();
+    // }
 }
