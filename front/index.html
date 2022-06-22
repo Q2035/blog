@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
-<head th:fragment="head(title)">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:replace="${title}">博客详情</title>
+    <title th:replace="${title}">靓仔的学习记录</title>
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
-    <link rel="stylesheet" href="/lib/prism/prism.css}">
-    <link rel="stylesheet" href="/lib/tocbot/tocbot.css}">
+    <link rel="stylesheet" href="/lib/prism/prism.css">
+    <link rel="stylesheet" href="/lib/tocbot/tocbot.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
     <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
     <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
@@ -22,11 +22,9 @@
 
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
-            <h2 class="ui teal header item"><a href="#" th:href="@{/}">Blog</a></h2>
-            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i
+            <h2 class="ui teal header item"><a href="#" th:href="@{/}">靓仔的学习记录</a></h2>
+            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide active" th:classappend="${n==1} ? 'active'"><i
                     class="home icon"></i>index</a>
-            <a href="#" th:href="@{/types/-1}" class="m-item item m-mobile-hide"
-               th:classappend="${n==2} ? 'active'"><i class="idea icon"></i>classify</a>
             <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide"
                th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>tags</a>
             <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"
@@ -40,7 +38,6 @@
                         <i onclick="document.forms['search'].submit()" class="search link icon"></i>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -55,7 +52,7 @@
     <div class="ui container">
         <div class="ui stackable grid">
             <!--左边博客列表-->
-            <div class="eleven wide column">
+            <div id = "blogIntro" class="eleven wide column">
                 <!--header-->
                 <div class="ui top attached segment">
                     <div class="ui middle aligned two column grid">
@@ -64,16 +61,14 @@
                         </div>
                         <div class="right aligned column">
                             共 <h2 class="ui orange header m-inline-block m-text-thin"
-                                   th:text="${page.totalElements}"> 14 </h2> 篇
+                                   th:text="${page.totalElements}"> {{ totalSize }} </h2> 篇
                         </div>
                     </div>
                 </div>
 
                 <!--content-->
-                <div id="blogIntro" class="ui attached segment">
-                    <p>{{ msg }}</p>
-
-                    <div class="ui padded vertical segment m-padded-tb-large" v-for="blog in blogs">
+                <div class="ui attached segment">
+                    <div class="ui padded vertical segment m-padded-tb-large" v-for="blog in data.blogs">
                         <div class="ui middle aligned mobile reversed stackable grid">
                             <div class="eleven wide column">
                                 <h3 class="ui header">
@@ -121,14 +116,14 @@
                 </div>
 
                 <!--footer-->
-                <div class="ui bottom attached segment" th:if="${page.totalPages}>1">
+                <div class="ui bottom attached segment">
                     <div class="ui middle aligned two column grid">
                         <div class="column">
-                            <a href="#" :href="curPage"
+                            <a href="#" v-if="curPage != 0" :href="'?page=' + (curPage - 1)"
                                class="ui mini teal basic button">上一页</a>
                         </div>
                         <div class="right aligned column">
-                            <a href="#" :href="/?page=nextPage"
+                            <a href="#" v-if="hasMore" :href="'?page=' + (curPage + 1)"
                                class="ui mini teal basic button">下一页</a>
                         </div>
                     </div>
@@ -138,64 +133,26 @@
 
             <!--右边的top-->
             <div class="five wide column">
-
-                <!--分类-->
-                <div class="ui segments">
-                    <div class="ui secondary segment">
-                        <div class="ui two column grid">
-                            <div class="column">
-                                <i class="idea icon"></i>分类
-                            </div>
-                            <div class="right aligned column">
-                                <a href="#" th:href="@{/types/-1}">more <i
-                                        class="angle double right icon"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="ui teal segment">
-                        <div class="ui fluid vertical menu" th:each="type : ${types}">
-                            <a href="#" class="item" th:href="@{/types/{id}(id=${type.id})}">
-                                <span th:text="${type.name}">学习日志</span>
-                                <div class="ui teal basic left pointing label" th:text="${type.count}">13</div>
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-
                 <!--标签-->
-                <div class="ui segments m-margin-top-large">
+                <div id = "tagInfo" class="ui segments m-margin-top-large">
                     <div class="ui secondary segment">
                         <div class="ui two column grid">
                             <div class="column">
                                 <i class="tags icon"></i>标签
                             </div>
                             <div class="right aligned column">
-                                <a href="#" th:href="@{/tags/-1}">more <i
+                                <a href="#" v-if="hasMore">more <i
                                         class="angle double right icon"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
-                        <div th:each="tag : ${tags}" class="ui teal basic left pointing label m-margin-tb-tiny">
-                            <a href="#" th:href="@{/tags/{id}(id=${tag.id})}"><span style="color: black"
-                                                                                    th:text="${tag.name}">方法论</span></a>
-
-                            <div class="detail" th:text="${tag.count}">23</div>
+                        <div v-for="tag in data.tags" class="ui teal basic left pointing label m-margin-tb-tiny">
+                            <a href="#" :href="'tag/' + tag.id">
+                                <span style="color: black">{{ tag.name }}</span></a>
+                            <div class="detail">{{ tag.count }}</div>
                         </div>
                     </div>
-                </div>
-
-                <!--最新推荐-->
-                <div class="ui segments m-margin-top-large">
-                    <div class="ui secondary segment ">
-                        <i class="bookmark icon"></i>最新推荐
-                    </div>
-                    <div class="ui segment" th:each="blog : ${recommendBlogs}">
-                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="m-black m-text-thin"
-                           th:text="${blog.title}">用户故事（User Story）</a>
-                    </div>
-
                 </div>
 
                 <div class="ui segments m-margin-top-large">
@@ -235,75 +192,14 @@
 <br>
 <br>
 
+<div>
+
 <!--底部footer-->
-<footer th:fragment="footer" class="ui inverted vertical segment m-padded-tb-massive">
-
-    <div class="ui center aligned container">
-        <div class="ui inverted divided stackable grid">
-            <div class="three wide column">
-                <div class="ui inverted link list">
-                    <div class="item">
-                        <img src="../static/images/wechat.png" th:src="@{/images/wechat.png}"
-                             class="ui rounded image" alt="" style="width: 110px">
-                    </div>
-                </div>
-            </div>
-            <div class="three wide column">
-                <h4 class="ui inverted header m-text-thin m-text-spaced ">Newest</h4>
-                <div id="newblog-container">
-                    <div class="ui inverted link list" th:fragment="newblogList">
-                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" class="item m-text-thin"
-                           th:each="blog : ${newblogs}" th:text="${blog.title}">用户故事（User Story）</a>
-                    </div>
-                </div>
-
-            </div>
-            <div class="three wide column">
-                <h4 class="ui inverted header m-text-thin m-text-spaced ">Contact</h4>
-                <div class="ui inverted link list">
-                    <a href="#" class="item m-text-thin" id="mail">Email</a>
-                    <p class="item m-text-thin">今天过的真不错</p>
-                </div>
-            </div>
-            <div class="seven wide column">
-                <h4 class="ui inverted header m-text-thin m-text-spaced ">Blog</h4>
-                <p class="m-text-thin m-text-spaced m-opacity-mini">今天又是美丽的一天！</p>
-                <p class="m-text-thin m-text-spaced m-opacity-mini">有事儿点击Email联系靓仔</p>
-            </div>
-        </div>
-        <div class="ui inverted section divider"></div>
-        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 2019 - 2020 Q Designed by Lirenmi</p>
-        <a target="_blank" style="color: #809297;margin-top: 10px"
-           th:href="@{http://www.beian.miit.gov.cn/}">浙ICP备20013225号</a>
+    <div id = "footer">
+        <common-footer></common-footer>
     </div>
 
-    <div class="ui fullscreen modal">
-        <i class="close icon" id="close"></i>
-        <div class="header">
-            Update Your Settings
-        </div>
-        <div class="content">
-            <div class="ui form">
-                <h4 class="ui dividing header">Give me your feedback</h4>
-                <div class="field">
-                    <label>Feedback</label>
-                    <textarea id="discribe" placeholder="discribe your problem..."></textarea>
-                </div>
-                <div class="field">
-                    <div class="ui left icon input">
-                        <i class="envelope icon"></i>
-                        <input type="email" id="email" name="email" placeholder="enter your email">
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="actions">
-            <div id="send" class="ui green button">Send</div>
-        </div>
-    </div>
-
-</footer>
-
+</div>
 <!--/*/<th:block th:replace="_fragments :: script">/*/-->
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
@@ -315,48 +211,68 @@
 <script src="../static/lib/waypoints/jquery.waypoints.min.js"
         th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 <script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
+<script src="file:///D:\Private\Github\blog\front\js\template.js"></script>
 <script>
     var v = new Vue({
         el: '#blogIntro',
         data: {
-            msg: "Hello",
             curPage: 0,
-            nextPage: 1,
+            hasMore: true,
             pageSize: 10,
-            blogs: [
-                {
-                    title: "尊老爱幼",
-                    description: "老吾老以及人之老，幼吾幼以及人之幼",
-                    nickname: "刘备",
-                    createTime: "2021-02-18",
-                    views: 20230,
-                    typeName: "德行",
-                    firstPicture: "https://unsplash.it/799/450?image=1005",
-                    detailHref: "https://hellooooo.top/blog/78",
-                    user: {
-                        avatar: "https://unsplash.it/100/100?image=1005"
+            totalSize: 100,
+            data: {
+                blogs: [
+                    {
+                        title: "尊老爱幼",
+                        description: "老吾老以及人之老，幼吾幼以及人之幼",
+                        nickname: "刘备",
+                        createTime: "2021-02-18",
+                        views: 20230,
+                        typeName: "德行",
+                        firstPicture: "https://unsplash.it/799/450?image=1005",
+                        detailHref: "https://hellooooo.top/blog/78",
+                        user: {
+                            avatar: "https://unsplash.it/100/100?image=1005"
+                        }
+                    },
+                    {
+                        title: "尊老爱幼",
+                        description: "老吾老以及人之老，幼吾幼以及人之幼",
+                        nickname: "刘备",
+                        createTime: "2021-02-18",
+                        views: 20230,
+                        typeName: "德行",
+                        firstPicture: "https://unsplash.it/799/450?image=1005",
+                        detailHref: "https://hellooooo.top/blog/78",
+                        user: {
+                            avatar: "https://unsplash.it/100/100?image=1005"
+                        }
                     }
-                },
-                {
-                    title: "尊老爱幼",
-                    description: "老吾老以及人之老，幼吾幼以及人之幼",
-                    nickname: "刘备",
-                    createTime: "2021-02-18",
-                    views: 20230,
-                    typeName: "德行",
-                    firstPicture: "https://unsplash.it/799/450?image=1005",
-                    detailHref: "https://hellooooo.top/blog/78",
-                    user: {
-                        avatar: "https://unsplash.it/100/100?image=1005"
-                    }
-                }
-            ]
+                ]
+            }
         }
-    })
+    });
+
+    var tagInfo = new Vue({
+        el: '#tagInfo',
+        data: {
+            curPage: 0,
+            hasMore: true,
+            pageSize: 10,
+            totalSize: 100,
+            data: {
+                tags: [
+                    {
+                        id: 1,
+                        name: "Java",
+                        count: 23
+                    }
+                ]
+            }
+        }
+    });
 </script>
 <script>
-            $('#newblog-container').load(/*[[@{/footer/newblog}]]*/"/footer/newblog");
-
     $('#mail').click(function () {
       $('.fullscreen.modal')
               .modal('show');
@@ -411,8 +327,6 @@
             $('.menu.toggle').click(function () {
       $('.m-item').toggleClass('m-mobile-hide');
     });
-
-
 </script>
 </body>
 
