@@ -24,13 +24,13 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item"><a href="#" th:href="@{/}">靓仔的学习记录</a></h2>
-            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i
+            <a href="index.html" th:href="@{/}" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i
                     class="home icon"></i>index</a>
-            <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide active"
+            <a href="tag.html" th:href="@{/tags/-1}" class="m-item item m-mobile-hide active"
                th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>tags</a>
-            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"
+            <a href="archive.html" th:href="@{/archives}" class="m-item item m-mobile-hide"
                th:classappend="${n==4} ? 'active'"><i class="archive icon"></i>archives</a>
-            <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide"
+            <a href="about.html" th:href="@{/about}" class="m-item item m-mobile-hide"
                th:classappend="${n==5} ? 'active'"><i class="info icon"></i>about</a>
             <div class="right m-item item m-mobile-hide">
                 <form name="search" method="post" action="#" th:action="@{/search}">
@@ -140,7 +140,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
-<!-- <script src="https://cdn.hellooooo.top/js/template.js"></script> -->
+<script src="https://cdn.hellooooo.top/js/template.js"></script>
 <script>
     $('.menu.toggle').click(function () {
       $('.m-item').toggleClass('m-mobile-hide');

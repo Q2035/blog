@@ -68,9 +68,3 @@ var commonFooter = Vue.component('common-footer', {
 new Vue({
     el: '#footer'
 })
-
-function appendClass(obj,classname){
-    console.log(obj.className);
-    console.log(classname);
-    obj.className += ' '+classname;
-}

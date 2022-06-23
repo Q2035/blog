@@ -23,13 +23,13 @@
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item"><a href="#" th:href="@{/}">靓仔的学习记录</a></h2>
-            <a href="#" th:href="@{/}" class="m-item item m-mobile-hide active" th:classappend="${n==1} ? 'active'"><i
+            <a href="index.html" th:href="@{/}" class="m-item item m-mobile-hide active" th:classappend="${n==1} ? 'active'"><i
                     class="home icon"></i>index</a>
-            <a href="#" th:href="@{/tags/-1}" class="m-item item m-mobile-hide"
+            <a href="tag.html" th:href="@{/tags/-1}" class="m-item item m-mobile-hide"
                th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>tags</a>
-            <a href="#" th:href="@{/archives}" class="m-item item m-mobile-hide"
+            <a href="archive.html" th:href="@{/archives}" class="m-item item m-mobile-hide"
                th:classappend="${n==4} ? 'active'"><i class="archive icon"></i>archives</a>
-            <a href="#" th:href="@{/about}" class="m-item item m-mobile-hide"
+            <a href="about.html" th:href="@{/about}" class="m-item item m-mobile-hide"
                th:classappend="${n==5} ? 'active'"><i class="info icon"></i>about</a>
             <div class="right m-item item m-mobile-hide">
                 <form name="search" method="post" action="#" th:action="@{/search}">
@@ -211,7 +211,7 @@
 <script src="../static/lib/waypoints/jquery.waypoints.min.js"
         th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 <script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
-<script src="file:///D:\Private\Github\blog\front\js\template.js"></script>
+<script src="https://cdn.hellooooo.top/js/template.js"></script>
 <script>
     var v = new Vue({
         el: '#blogIntro',

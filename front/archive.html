@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">靓仔的学习记录</title>
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
+    <link rel="stylesheet" href="/lib/prism/prism.css">
+    <link rel="stylesheet" href="/lib/tocbot/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
+    <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
+</head>
+
+<!--导航-->
+<nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item"><a href="#" th:href="@{/}">靓仔的学习记录</a></h2>
+            <a href="index.html" th:href="@{/}" class="m-item item m-mobile-hide"
+               th:classappend="${n==1} ? 'active'"><i
+                    class="home icon"></i>index</a>
+            <a href="tag.html" th:href="@{/tags/-1}" class="m-item item m-mobile-hide"
+               th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>tags</a>
+            <a href="archive.html" th:href="@{/archives}" class="m-item item m-mobile-hide active"
+               th:classappend="${n==4} ? 'active'"><i class="archive icon"></i>archives</a>
+            <a href="about.html" th:href="@{/about}" class="m-item item m-mobile-hide"
+               th:classappend="${n==5} ? 'active'"><i class="info icon"></i>about</a>
+            <div class="right m-item item m-mobile-hide">
+                <form name="search" method="post" action="#" th:action="@{/search}">
+                    <div class="ui icon inverted transparent input m-margin-tb-tiny">
+                        <input type="text" name="query" th:value="${query}" placeholder="Search....">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div id="archiveInfo" class="ui container">
+        <!--header-->
+        <div class="ui top attached padded segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">归档</h3>
+                </div>
+                <div class="right aligned column">
+                    共 <h2 class="ui orange header m-inline-block m-text-thin">{{blogCount}}</h2> 篇博客
+                </div>
+            </div>
+        </div>
+
+        <div v-for="archive in data.archives">
+            </br>
+            <h3 class="ui center aligned header" th:text="${item.key}">{{archive.year}}</h3>
+            <div class="ui fluid vertical menu">
+                <a href="#" v-for="blog in archive.blogs" class="item">
+                    <span>
+                        <i class="mini teal circle icon"></i>
+                        <span>{{blog.title}}</span>
+                        <div class="ui teal basic left pointing label m-padded-mini ">{{blog.createTime}}</div>
+                    </span>
+                    <div class="ui orange basic left pointing label m-padded-mini ">{{blog.flag}}</div>
+                </a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<br>
+<br>
+
+<div>
+
+    <!--底部footer-->
+    <div id = "footer">
+        <common-footer></common-footer>
+    </div>
+
+</div>
+
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
+<script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
+<script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
+<script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
+<script src="../static/lib/waypoints/jquery.waypoints.min.js"
+        th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
+<script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
+<script src="https://cdn.hellooooo.top/js/template.js"></script>
+<script>
+    var v = new Vue({
+        el: '#archiveInfo',
+        data: {
+            blogCount: 132,
+            data: {
+                archives: [
+                    {
+                        year: 2020,
+                        blogs: [
+                            {
+                                title: "尊老爱幼",
+                                description: "老吾老以及人之老，幼吾幼以及人之幼",
+                                nickname: "刘备",
+                                createTime: "2021-02-18",
+                                views: 20230,
+                                typeName: "德行",
+                                firstPicture: "https://unsplash.it/799/450?image=1005",
+                                detailHref: "https://hellooooo.top/blog/78",
+                                user: {
+                                    avatar: "https://unsplash.it/100/100?image=1005"
+                                }
+                            },
+                            {
+                                title: "尊老爱幼",
+                                description: "老吾老以及人之老，幼吾幼以及人之幼",
+                                nickname: "刘备",
+                                createTime: "2021-02-18",
+                                views: 20230,
+                                typeName: "德行",
+                                firstPicture: "https://unsplash.it/799/450?image=1005",
+                                detailHref: "https://hellooooo.top/blog/78",
+                                user: {
+                                    avatar: "https://unsplash.it/100/100?image=1005"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        year: 2021,
+                        blogs: [
+                            {
+                                title: "尊老爱幼",
+                                description: "老吾老以及人之老，幼吾幼以及人之幼",
+                                nickname: "刘备",
+                                createTime: "2021-02-18",
+                                views: 20230,
+                                typeName: "德行",
+                                firstPicture: "https://unsplash.it/799/450?image=1005",
+                                detailHref: "https://hellooooo.top/blog/78",
+                                user: {
+                                    avatar: "https://unsplash.it/100/100?image=1005"
+                                }
+                            },
+                            {
+                                title: "尊老爱幼",
+                                description: "老吾老以及人之老，幼吾幼以及人之幼",
+                                nickname: "刘备",
+                                createTime: "2021-02-18",
+                                views: 20230,
+                                typeName: "德行",
+                                firstPicture: "https://unsplash.it/799/450?image=1005",
+                                detailHref: "https://hellooooo.top/blog/78",
+                                user: {
+                                    avatar: "https://unsplash.it/100/100?image=1005"
+                                }
+                            }
+                        ]
+                    }
+
+                ]
+            }
+        }
+    });
+
+
+</script>
+<script>
+    $('#mail').click(function () {
+      $('.fullscreen.modal')
+              .modal('show');
+    })
+
+    $('#send').click(function () {
+      var emailAddress = document.getElementById('email').value;
+      var discribe = document.getElementById('discribe').value;
+      if (emailAddress == '' || !emailAddress.match("@") || emailAddress.length < 4){
+        document.getElementById("email").value = "email格式不正确";
+        return;
+      }
+      if (discribe == '') {
+        document.getElementById('discribe').value = "描述为空";
+        return;
+      }
+      document.getElementById("close").click()
+      //提交请求
+
+      $.ajax({
+        url: "/contact",
+        dataType: "json",
+        async: true,
+        data: {
+          "email": emailAddress,
+          "describe": discribe
+        },
+        type: 'POST',
+        success: function (data) {
+            console.log(data);
+            var result = eval(data);
+            if (result.success){
+              alert("Successfully Send, I will contact you soon");
+            }else{
+              alert("Sorry, Please try it tomorrow")
+            }
+            return true;
+        },
+        fail: function (data) {
+          console.log(data);
+          alert("Sorry, Please try it tomorrow.");
+          return false;
+        }
+      })
+    })
+
+
+
+
+
+</script>
+<script>
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+</script>
+</body>
+
+</html>
+
