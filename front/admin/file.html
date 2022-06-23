@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">靓仔的学习记录</title>
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/prism.js">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
+    <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
+</head>
+<body>
+
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="blog.html" class="m-item item m-mobile-hide" th:classappend="${n==1} ? 'active'"><i
+                    class="home icon"></i>博客</a>
+            <a href="tag.html" class="m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
+            <a href="file.html" class="m-item item m-mobile-hide active"><i
+                    class="file icon"></i>文件</a>
+            <div class="right m-item m-mobile-hide menu">
+                <div class="ui dropdown  item">
+                    <div class="text">
+                        <img class="ui avatar image" src="" th:src="@{${session.user.getAvatar()}}">
+                        <span th:text="${session.user.nickname}">Q</span>
+
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+
+
+<!--中间内容-->
+<div  class="m-container-small m-padded-tb-big">
+    <div  class="m-container m-padded-tb-big">
+        <div class="ui container">
+            <div class="ui stackable grid">
+                <div class="eleven wide column">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="150">
+                            <col width="200">
+                            <col>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>fileName</th>
+                            <th>createTime</th>
+                            <th>size</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><a target="_blank" th:href="@{http://114.55.147.153/image/other/}">public file</a></td>
+                            <td>-</td>
+                            <td>public</td>
+                        </tr>
+                        <tr th:each="file: ${files}">
+                            <td><a th:text="${file.fileName}" th:href="@{/admin/files/download/{fileName}(fileName=${file.fileName})}">许闲心</a></td>
+                            <td th:text="${file.fileSize}">2016-11-28</td>
+                            <td th:text="${file.updateDate}">于千万人之中遇见你所遇见的人，于千万年之中，时间的无涯的荒野里…</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="five wide column layui-form">
+                    <div class="layui-upload-drag" id="test10">
+                        <i class="layui-icon"></i>
+                        <p>点击上传，或将文件拖拽到此处</p>
+                        <div class="layui-hide" id="uploadDemoView">
+                            <hr>
+                            <img src="" alt="上传成功" style="max-width: 196px">
+                        </div>
+                    </div>
+                    <div>
+                        <input type="checkbox"  lay-skin="switch" lay-text="公开|私有"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+
+
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+<script src="https://www.layuicdn.com/layui/layui.js" th:src="@{https://www.layuicdn.com/layui/layui.js}"></script>
+
+<script>
+
+    layui.use('form', function(){
+        var form = layui.form;
+        form.render();
+    });
+
+
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+        on : 'hover'
+    });
+
+    layui.use('upload', function(){
+        var $ = layui.jquery
+            ,upload = layui.upload
+        //拖拽上传
+        upload.render({
+            elem: '#test10'
+            ,url: '/admin/files/upload'
+            ,data: {
+                isPublished : function () {
+                    var arr_box = [];
+                    $('input[type=checkbox]:checked').each(function() {
+                        arr_box.push($(this).val());
+                    });
+                    return arr_box.length;
+                }
+            }
+            ,method: 'post'
+            ,accept: 'file'
+            ,done: function(res){
+                console.log(res)
+                layer.msg(res.message);
+                if (res.success){
+                    layui.$('#uploadDemoView').removeClass('layui-hide').attr('src', res.files.file);
+                    console.log(res)
+                }
+            }
+        });
+    });
+
+</script>
+</body>
+</html>
