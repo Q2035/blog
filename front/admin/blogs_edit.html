@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:replace="${title}">靓仔的学习记录</title>
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/prism.js">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/tocbot.css">
+    <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
+    <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
+    <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
+</head>
+<body>
+
+<!--导航-->
+<nav th:fragment="menu(n)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <h2 class="ui teal header item">管理后台</h2>
+            <a href="blog.html" class="m-item item m-mobile-hide active"><i
+                    class="home icon"></i>博客</a>
+            <a href="tag.html" class="m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
+            <a href="file.html" class="m-item item m-mobile-hide"><i
+                    class="file icon"></i>文件</a>
+            <div class="right m-item m-mobile-hide menu">
+                <div class="ui dropdown  item">
+                    <div class="text">
+                        <img class="ui avatar image" src="" th:src="@{${session.user.getAvatar()}}">
+                        <span th:text="${session.user.nickname}">Q</span>
+
+                    </div>
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <a th:href="@{/admin/logout}" class="item">注销</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<div class="ui attached pointing menu">
+    <div class="ui container">
+        <div class="right menu">
+            <a href="#" th:href="@{/admin/blogs/input}" class="teal active item">发布</a>
+            <a href="#" th:href="@{/admin/blogs}" class="item">列表</a>
+        </div>
+    </div>
+</div>
+
+<!--中间内容-->
+<div id="blog_detail" th:object="${blog}" class="m-container m-padded-tb-big">
+    <div class="ui container">
+        <form action="#" id="blog-form" method="post" th:action="@{/admin/blogs}" class="ui form">
+            <input type="hidden" id="published" name="published"/>
+            <input type="hidden" name="id" th:value="*{id}">
+
+          <div class="required field">
+            <div class="ui left labeled input">
+              <label class="ui teal basic label">类别</label>
+              <input type="text" name="firstPicture" :value="flag" placeholder="原创、翻译、转载">
+            </div>
+          </div>
+
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <input type="text" name="title" th:value="*{title}" placeholder="标题" :value="title">
+                </div>
+            </div>
+
+            <div class="required field">
+                <div id="md-content" style="z-index: 1 !important;">
+                    <textarea placeholder="博客内容" name="content" style="display: none"
+                              th:text="*{content}"></textarea>
+                </div>
+            </div>
+
+          <div class="required field">
+            <div class="ui left labeled input">
+              <label class="ui teal basic label">标签</label>
+              <input type="text" name="tags" :value="appendTag()" placeholder="以空格分割（Java Spring）">
+            </div>
+          </div>
+
+            <div class="required field">
+                <div class="ui left labeled input">
+                    <label class="ui teal basic label">首图</label>
+                    <input type="text" id="firstPicture" name="firstPicture" :value="firstPicture"
+                           placeholder="首图引用地址">
+                </div>
+            </div>
+
+          <div class="required field">
+            <div class="ui left labeled input">
+              <label class="ui teal basic label">概要</label>
+              <input type="text" id="" name="description" :value="description"
+                     placeholder="概要">
+            </div>
+          </div>
+
+          <div class="required field">
+                <textarea id="content" name="content" :text="content" placeholder="博客正文..."
+                          maxlength="200"></textarea>
+          </div>
+
+            <div class="inline fields">
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="recommend" name="recommend" th:checked="*{recommend}" checked
+                               class="hidden">
+                        <label for="recommend">推荐</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="shareStatement" name="shareStatement" th:checked="*{shareStatement}"
+                               class="hidden">
+                        <label for="shareStatement">转载声明</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="appreciation" name="appreciation" th:checked="*{appreciation}"
+                               class="hidden">
+                        <label for="appreciation">赞赏</label>
+                    </div>
+                </div>
+                <div class="field">
+                    <div class="ui checkbox">
+                        <input type="checkbox" id="commentabled" name="commentabled" th:checked="*{commentabled}"
+                               class="hidden">
+                        <label for="commentabled">评论</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui error message"></div>
+
+            <div class="ui right aligned container">
+                <button type="button" class="ui button" onclick="window.history.go(-1)">返回</button>
+                <button type="button" id="save-btn" class="ui secondary button">保存</button>
+                <button type="button" id="publish-btn" class="ui teal button">发布</button>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<br>
+<br>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script>
+
+    $('.menu.toggle').click(function () {
+      $('.m-item').toggleClass('m-mobile-hide');
+    });
+
+    $('.ui.dropdown').dropdown({
+      on : 'hover'
+    });
+
+    $('#save-btn').click(function () {
+      $("#published").val(false);
+      $('#blog-form').submit();
+    });
+
+    $('#publish-btn').click(function () {
+      $("#published").val(true);
+      $('#blog-form').submit();
+    });
+
+    $('.ui.form').form({
+      fields : {
+        title : {
+          identifier: 'title',
+          rules: [{
+            type : 'empty',
+            prompt: '标题：请输入博客标题'
+          }]
+        },
+        content : {
+          identifier: 'content',
+          rules: [{
+            type : 'empty',
+            prompt: '标题：请输入博客内容'
+          }]
+        },
+        typeId : {
+          identifier: 'type.id',
+          rules: [{
+            type : 'empty',
+            prompt: '标题：请输入分类'
+          }]
+        },
+        firstPicture : {
+          identifier: 'firstPicture',
+          rules: [{
+            type : 'empty',
+            prompt: '标题：请输入首图地址'
+          }]
+        },
+          description : {
+          identifier: 'description',
+          rules: [{
+            type : 'empty',
+            prompt: '标题：请输入描述'
+          }]
+        }
+      }
+    });
+
+    var blogDetail = new Vue({
+      el: '#blog_detail',
+      data: {
+        id: 1,
+        title: "关于Java的一些事",
+        flag: "原创",
+        firstPicture: "http://a.com/a.png",
+        description: "dddd",
+        content: "cccc",
+        tags: [
+          {
+            name: "Java",
+            id: 1
+          },
+          {
+            name: "Spring",
+            id: 2
+          }
+        ]
+      },
+      methods: {
+        appendTag :function(){
+          if( this.tags.length > 0){
+            let appendRes = "";
+            this.tags.forEach(tag => {
+              appendRes += tag.name;
+              appendRes += " ";
+            });
+            return appendRes;
+          }
+          return "";
+        }
+      }
+    });
+</script>
+</body>
+</html>

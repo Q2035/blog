@@ -54,7 +54,7 @@
 </div>
 <!--中间内容-->
 <div class="m-container-small m-padded-tb-big">
-    <div class="ui container">
+    <div id="tag_tables" class="ui container">
         <div class="ui success message" th:unless="${#strings.isEmpty(message)}">
             <i class="close icon"></i>
             <div class="header">提示：</div>
@@ -69,9 +69,9 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="type,iterStat : ${page.content}">
-                <td th:text="${iterStat.count}">1</td>
-                <td th:text="${type.name}">刻意练习清单</td>
+            <tr v-for="(tag,index) in data.tags" th:each="type,iterStat : ${page.content}">
+                <td th:text="${iterStat.count}">{{index + 1}}</td>
+                <td th:text="${type.name}">{{tag.name}}</td>
                 <td>
                     <a href="#" th:href="@{/admin/tags/{id}/input(id=${type.id})}"
                        class="ui mini teal basic button">编辑</a>
@@ -85,9 +85,9 @@
                 <th colspan="6">
                     <div class="ui mini pagination menu" th:if="${page.totalPages}>1">
                         <a th:href="@{/admin/tags(page=${page.number}-1)}" class="  item"
-                           th:unless="${page.first}">上一页</a>
+                           th:unless="${page.first}" v-if="curPage != 0" :href="'?page=' + (curPage - 1)">上一页</a>
                         <a th:href="@{/admin/tags(page=${page.number}+1)}" class=" item"
-                           th:unless="${page.last}">下一页</a>
+                           th:unless="${page.last}" v-if="hasMore" :href="'?page=' + (curPage + 1)">下一页</a>
                     </div>
                     <a href="#" th:href="@{/admin/tags/input}" class="ui mini right floated teal basic button">新增</a>
                 </th>
@@ -102,6 +102,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+
 <script>
     $('.menu.toggle').click(function () {
       $('.m-item').toggleClass('m-mobile-hide');
@@ -117,6 +119,28 @@
         $(this)
           .closest('.message')
           .transition('fade');
+      });
+
+      var tagTables = new Vue({
+        el: '#tag_tables',
+        data: {
+            curPage: 0,
+            hasMore: true,
+            pageSize: 10,
+            totalSize: 100,
+            data: {
+                tags: [
+                    {
+                        id: 1,
+                        name: "靓仔"
+                    },
+                    {
+                        id: 2,
+                        name: "靓仔2"
+                    }
+                ]
+            }
+        }
       });
 
 </script>
