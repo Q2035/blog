@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TT</title>
+</head>
+<body>
+    <div id="app1"></div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script>
+    var converter = new showdown.Converter();
+    text      = '~~~hello, markdown!~~~\n~~~hello~~~\n ## HELLO';
+    html      = converter.makeHtml(text);
+    console.log(html);
+    document.getElementById("app1").innerHTML = html;
+    
+</script>
+</html>
