@@ -6,13 +6,11 @@
 <body>
     <div id="app1"></div>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
 <script>
-    var converter = new showdown.Converter();
-    text      = '~~~hello, markdown!~~~\n~~~hello~~~\n ## HELLO';
-    html      = converter.makeHtml(text);
-    console.log(html);
-    document.getElementById("app1").innerHTML = html;
-    
+    var md = window.markdownit();
+    var result = md.render('# markdown-it rulezz!\n## HelloWorld\n Java-'); 
+    console.log(result);
+    document.getElementById("app1").innerHTML = result;
 </script>
 </html>
