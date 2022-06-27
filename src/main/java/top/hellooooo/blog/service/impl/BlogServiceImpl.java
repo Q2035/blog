@@ -1,5 +1,6 @@
 package top.hellooooo.blog.service.impl;
 
+import org.apache.commons.collections4.CollectionUtils;
 import top.hellooooo.blog.exception.BlogNotFoundException;
 import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.BlogVOMapper;
@@ -8,7 +9,11 @@ import top.hellooooo.blog.pojo.Blog;
 import top.hellooooo.blog.pojo.ContactMe;
 import top.hellooooo.blog.pojo.User;
 import top.hellooooo.blog.pojo.BlogQuery;
+import top.hellooooo.blog.util.BlogConvertor;
+import top.hellooooo.blog.util.Pageable;
+import top.hellooooo.blog.util.UserConvertor;
 import top.hellooooo.blog.vo.AdminBlogVO;
+import top.hellooooo.blog.vo.BaseBlogInfo;
 import top.hellooooo.blog.vo.BlogVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import top.hellooooo.blog.service.*;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 注释的方法有误
@@ -76,15 +82,15 @@ public class BlogServiceImpl implements BlogService {
     @Transactional
     @Override
     public void saveBlog(Blog blog) {
-        if (blog.getId() ==null){
+        if (blog.getId() == null) {
             blog.setCreateTime(new Date());
             blog.setUpdateTime(new Date());
             blog.setViews(0);
             blogMapper.saveBlog(blog);
-        }else{
+        } else {
             deleteTagsWithBlogId(blog.getId());
             blog.setUpdateTime(new Date());
-            blogMapper.updateBlog(blog.getId(),blog);
+            blogMapper.updateBlog(blog.getId(), blog);
         }
     }
 
@@ -92,15 +98,16 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog updateBlog(Long id, Blog blog) {
         Blog b = blogMapper.findById(id);
-        if (b == null){
+        if (b == null) {
             throw new BlogNotFoundException("该博客不存在");
         }
-        blogMapper.updateBlog(id,blog);
+        blogMapper.updateBlog(id, blog);
         return b;
     }
 
     /**
      * 删除博客之前应该先删除tags
+     *
      * @param id
      */
     @Transactional
@@ -108,7 +115,7 @@ public class BlogServiceImpl implements BlogService {
     public void deleteBlog(Long id) {
 //        删除标签
         List<String> tags = blogMapper.selectTagsWithBlogId(id);
-        if (tags!=null && !tags.isEmpty()){
+        if (tags != null && !tags.isEmpty()) {
             blogMapper.deleteTagsWithBlogId(id);
         }
 //         删除评论
@@ -139,11 +146,12 @@ public class BlogServiceImpl implements BlogService {
     /**
      * 直接select * from t_blog 不会有User Type 以及Tags
      * 使用transient标记，暂时存储user_id,type_id
+     *
      * @return
      */
 
     @Override
-    public List<Blog> listAllBlogs(){
+    public List<Blog> listAllBlogs() {
         return detailedBlogService.selectDetailsOfAllBlog();
     }
 
@@ -154,10 +162,10 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public Map<String, List<BlogVO>> archiveBlog() {
-        List<String> years =blogMapper.findGroupYear();
-        Map<String,List<BlogVO>> map =new HashMap<>();
+        List<String> years = blogMapper.findGroupYear();
+        Map<String, List<BlogVO>> map = new HashMap<>();
         for (String year : years) {
-            map.put(year,blogMapper.findByYear(year));
+            map.put(year, blogMapper.findByYear(year));
         }
         return map;
     }
@@ -169,6 +177,7 @@ public class BlogServiceImpl implements BlogService {
 
     /**
      * 只展示index页面需要的信息，不展示博客内容等多余的信息
+     *
      * @return
      */
     @Override
@@ -201,5 +210,29 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public ContactMe searchContactInfoByEmail(String email) {
         return contactMapper.searchContactInfoByEmail(email);
+    }
+
+    @Override
+    public Pageable<BaseBlogInfo> listBaseBlogInfo(Pageable<BaseBlogInfo> pageable) {
+        List<Blog> blogs = blogMapper.listBlogsWithPagesNoContent(pageable.getStart(), pageable.getEnd());
+        if (CollectionUtils.isEmpty(blogs)) {
+            return pageable;
+        }
+        final List<BaseBlogInfo> collect = blogs.stream()
+                .map(b -> {
+                    BaseBlogInfo convert = BlogConvertor.convert(b);
+                    // 提取作者信息
+                    User userById = userService.getUserById(b.getUserId());
+                    convert.setUser(UserConvertor.convert(userById));
+                    return convert;
+                })
+                .collect(Collectors.toList());
+        if (CollectionUtils.isEmpty(collect) || collect.size() < pageable.getPageSize()) {
+            pageable.setHasMore(false);
+        } else {
+            pageable.setHasMore(true);
+        }
+        pageable.setData(collect);
+        return pageable;
     }
 }

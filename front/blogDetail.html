@@ -8,8 +8,6 @@
   <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
   <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
   <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
-  <link rel="stylesheet" href="/lib/prism/prism.css">
-  <link rel="stylesheet" href="/lib/tocbot/tocbot.css">
   <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
   <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
   <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
@@ -239,12 +237,8 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
-<script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
-<script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
 <script src="https://cdn.hellooooo.top/js/qrcode.min.js"></script>
 <script src="https://cdn.hellooooo.top/js/jquery.waypoints.min.js"></script>
-<script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
-<script src="https://cdn.hellooooo.top/js/template.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/markdown-it/13.0.1/markdown-it.min.js"></script>
 <script>
     $('#mail').click(function () {
@@ -513,6 +507,10 @@
           console.log(result);
           this.content = result;
         }
+      },
+      mounted: function() {
+        alert("Mounted");
+        this.render_markdown();
       }
     });
 

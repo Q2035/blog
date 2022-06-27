@@ -38,6 +38,20 @@ public class CommonResult<T> {
         this.success = success;
     }
 
+    /**
+     * 成功
+     * @param data
+     * @return
+     * @param <T>
+     */
+    public static <T> CommonResult<T> succ(T data) {
+        final CommonResult commonResult = new CommonResult();
+        commonResult.setData(data);
+        commonResult.setCode(StatusCode.SUCCESS.getCode());
+        commonResult.setSuccess(true);
+        return commonResult;
+    }
+
     @Override
     public String toString() {
         return "CommonResult{" +

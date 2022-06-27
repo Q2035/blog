@@ -23,7 +23,6 @@ import top.hellooooo.blog.service.BlogService;
 import top.hellooooo.blog.service.DetailedBlogService;
 import top.hellooooo.blog.service.TagService;
 import top.hellooooo.blog.service.TypeService;
-import top.hellooooo.blog.util.QiniuUtil;
 import top.hellooooo.blog.util.RedisUtil;
 import top.hellooooo.blog.vo.AdminBlogVO;
 
@@ -50,8 +49,6 @@ public class BlogController {
     private final TypeService typeService;
 
     private final DetailedBlogService detailedBlogService;
-
-    // private final QiniuUtil qiniuUtil;
 
     private final TagService tagService;
 

@@ -3,7 +3,9 @@ package top.hellooooo.blog.service;
 import top.hellooooo.blog.pojo.Blog;
 import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.pojo.ContactMe;
+import top.hellooooo.blog.util.Pageable;
 import top.hellooooo.blog.vo.AdminBlogVO;
+import top.hellooooo.blog.vo.BaseBlogInfo;
 import top.hellooooo.blog.vo.BlogVO;
 import org.apache.ibatis.annotations.Param;
 
@@ -57,4 +59,12 @@ public interface BlogService {
     void insertContactIntoDB(ContactMe contactMe);
 
     ContactMe searchContactInfoByEmail(String email);
+
+    /**
+     * 列举基本博客信息
+     *
+     * @param pageable
+     * @return
+     */
+    Pageable<BaseBlogInfo> listBaseBlogInfo(Pageable<BaseBlogInfo> pageable);
 }

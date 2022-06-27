@@ -10,6 +10,7 @@ import java.util.List;
 public interface BlogMapper {
     /**
      * 一个完整的博客应该包括博客内容（Blog）、作者信息（Auther）、评论信息（Comment）、类型信息（Type）、标签信息（Tag）
+     *
      * @param id
      * @return
      */
@@ -85,5 +86,8 @@ public interface BlogMapper {
     Long countBlog();
 
     @Select("select * from t_blog where published = 1 order by update_time desc limit ${begin},${end}")
-    List<Blog> listBlogsWithPages(int begin,int end);
+    List<Blog> listBlogsWithPages(int begin, int end);
+
+    @Select("select id ,appreciation, create_time  ,`description`  ,first_picture  , flag  , published  , recommend  , share_statement  , title  , update_time  , views  , type_id  , user_id from t_blog where published = 1 order by update_time desc limit ${begin},${end}")
+    List<Blog> listBlogsWithPagesNoContent(int begin, int end);
 }
