@@ -1,5 +1,6 @@
 package top.hellooooo.blog.service.impl;
 
+import org.apache.commons.collections4.CollectionUtils;
 import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.TagMapper;
 import top.hellooooo.blog.pojo.Blog;
@@ -9,9 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.hellooooo.blog.vo.BaseTagInfo;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TagServiceImpl implements TagService {
@@ -73,6 +76,22 @@ public class TagServiceImpl implements TagService {
             tags.add(tagMapper.getTag(Long.valueOf(tagId)));
         }
         return tags;
+    }
+
+    @Override
+    public List<BaseTagInfo> listAllTags() {
+        final List<Tag> tags = listTag();
+        if (CollectionUtils.isEmpty(tags)) {
+            return new ArrayList<>();
+        }
+        return tags.stream()
+                .map(t -> {
+                    final BaseTagInfo r = new BaseTagInfo();
+                    r.setName(t.getName());
+                    r.setId(t.getId());
+                    r.setCount(-1);
+                    return r;
+                }).collect(Collectors.toList());
     }
 
     @Override

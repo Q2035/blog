@@ -131,13 +131,13 @@
                                 <i class="tags icon"></i>标签
                             </div>
                             <div class="right aligned column">
-                                <a href="#" v-if="hasMore">more <i
+                                <a href="#">more <i
                                         class="angle double right icon"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="ui teal segment">
-                        <div v-for="tag in data.tags" class="ui teal basic left pointing label m-margin-tb-tiny">
+                        <div v-for="tag in tags" class="ui teal basic left pointing label m-margin-tb-tiny">
                             <a href="#" :href="'tag/' + tag.id">
                                 <span style="color: black">{{ tag.name }}</span></a>
                             <div class="detail">{{ tag.count }}</div>
@@ -242,19 +242,13 @@
     var tagInfo = new Vue({
         el: '#tagInfo',
         data: {
-            curPage: 0,
-            hasMore: true,
-            pageSize: 10,
-            totalSize: 100,
-            data: {
-                tags: [
-                    {
-                        id: 1,
-                        name: "Java",
-                        count: 23
-                    }
-                ]
-            }
+            tags: [
+                {
+                    id: 1,
+                    name: "Java",
+                    count: 23
+                }
+            ]
         }
     });
 
@@ -271,6 +265,14 @@
         v.hasMore = res.data.data.hasMore;
         v.pageSize = res.data.data.pageSize;
         v.data = res.data.data.data;
+    });
+
+    axios({
+        method: 'get',
+        url: '/tag/list',
+    }).then((res) => {
+        console.log(res.data);
+        tagInfo.tags = res.data.data;
     });
 
 </script>
