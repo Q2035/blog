@@ -90,4 +90,14 @@ public interface BlogMapper {
 
     @Select("select id ,appreciation, create_time  ,`description`  ,first_picture  , flag  , published  , recommend  , share_statement  , title  , update_time  , views  , type_id  , user_id from t_blog where published = 1 order by update_time desc limit ${begin},${end}")
     List<Blog> listBlogsWithPagesNoContent(int begin, int end);
+
+    /**
+     * 分页查询对应Tag的Blog
+     * @param tagId
+     * @param begin
+     * @param end
+     * @return
+     */
+    @Select("select id ,appreciation, create_time  ,`description`  ,first_picture  , flag  , published  , recommend  , share_statement  , title  , update_time  , views  , type_id  , user_id from t_blog  b join t_blog_tags t on b.published = 1 and b.id = t.blogs_id and t.tags_id = #{tagId} order by update_time desc limit ${begin} ,${end}")
+    List<Blog> listBlogsWithPagesTags(long tagId, int begin, int end);
 }

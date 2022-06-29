@@ -52,6 +52,21 @@ public class CommonResult<T> {
         return commonResult;
     }
 
+    /**
+     * fail
+     * @param code
+     * @param message
+     * @return
+     * @param <T>
+     */
+    public static <T> CommonResult<T> fail(StatusCode code, String message) {
+        final CommonResult commonResult = new CommonResult();
+        commonResult.setCode(code.getCode());
+        commonResult.setMessage(message);
+        commonResult.setSuccess(true);
+        return commonResult;
+    }
+
     @Override
     public String toString() {
         return "CommonResult{" +

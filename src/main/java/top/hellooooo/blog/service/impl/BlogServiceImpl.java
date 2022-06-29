@@ -218,7 +218,42 @@ public class BlogServiceImpl implements BlogService {
         if (CollectionUtils.isEmpty(blogs)) {
             return pageable;
         }
-        final List<BaseBlogInfo> collect = blogs.stream()
+        List<BaseBlogInfo> collect = convertBlog(blogs);
+        if (CollectionUtils.isEmpty(collect) || collect.size() < pageable.getPageSize()) {
+            pageable.setHasMore(false);
+        } else {
+            pageable.setHasMore(true);
+        }
+        pageable.setData(collect);
+        return pageable;
+    }
+
+    @Override
+    public Pageable<BaseBlogInfo> listBaseBlogInfoByTagId(Pageable<BaseBlogInfo> pageable, Long tagId) {
+        final List<Blog> blogs = blogMapper.listBlogsWithPagesTags(tagId, pageable.getStart(), pageable.getEnd());
+        if (CollectionUtils.isEmpty(blogs)) {
+            return pageable;
+        }
+        final List<BaseBlogInfo> baseBlogInfos = convertBlog(blogs);
+        if (CollectionUtils.isEmpty(baseBlogInfos) || baseBlogInfos.size() < pageable.getPageSize()) {
+            pageable.setHasMore(false);
+        } else {
+            pageable.setHasMore(true);
+        }
+        pageable.setData(baseBlogInfos);
+        return pageable;
+    }
+
+    /**
+     * 批量转换博客信息
+     * @param source
+     * @return
+     */
+    private List<BaseBlogInfo> convertBlog(List<Blog> source) {
+        if (CollectionUtils.isEmpty(source)) {
+            return new ArrayList<>();
+        }
+        final List<BaseBlogInfo> collect = source.stream()
                 .map(b -> {
                     BaseBlogInfo convert = BlogConvertor.convert(b);
                     // 提取作者信息
@@ -227,12 +262,6 @@ public class BlogServiceImpl implements BlogService {
                     return convert;
                 })
                 .collect(Collectors.toList());
-        if (CollectionUtils.isEmpty(collect) || collect.size() < pageable.getPageSize()) {
-            pageable.setHasMore(false);
-        } else {
-            pageable.setHasMore(true);
-        }
-        pageable.setData(collect);
-        return pageable;
+        return collect;
     }
 }

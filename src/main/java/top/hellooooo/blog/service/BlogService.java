@@ -67,4 +67,13 @@ public interface BlogService {
      * @return
      */
     Pageable<BaseBlogInfo> listBaseBlogInfo(Pageable<BaseBlogInfo> pageable);
+
+
+    /**
+     * list
+     * @param pageable
+     * @param tagId
+     * @return
+     */
+    Pageable<BaseBlogInfo> listBaseBlogInfoByTagId(Pageable<BaseBlogInfo> pageable, Long tagId);
 }
