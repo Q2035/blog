@@ -1,5 +1,6 @@
 package top.hellooooo.blog.service;
 
+import top.hellooooo.blog.pojo.ArchiveResult;
 import top.hellooooo.blog.pojo.Blog;
 import top.hellooooo.blog.pojo.BlogQuery;
 import top.hellooooo.blog.pojo.ContactMe;
@@ -76,4 +77,10 @@ public interface BlogService {
      * @return
      */
     Pageable<BaseBlogInfo> listBaseBlogInfoByTagId(Pageable<BaseBlogInfo> pageable, Long tagId);
+
+    /**
+     * list archive
+     * @return
+     */
+    ArchiveResult listArchive();
 }

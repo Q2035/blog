@@ -1,14 +1,12 @@
 package top.hellooooo.blog.service.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
 import top.hellooooo.blog.exception.BlogNotFoundException;
 import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.BlogVOMapper;
 import top.hellooooo.blog.mapper.ContactMapper;
-import top.hellooooo.blog.pojo.Blog;
-import top.hellooooo.blog.pojo.ContactMe;
-import top.hellooooo.blog.pojo.User;
-import top.hellooooo.blog.pojo.BlogQuery;
+import top.hellooooo.blog.pojo.*;
 import top.hellooooo.blog.util.BlogConvertor;
 import top.hellooooo.blog.util.Pageable;
 import top.hellooooo.blog.util.UserConvertor;
@@ -20,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.hellooooo.blog.service.*;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -242,6 +242,32 @@ public class BlogServiceImpl implements BlogService {
         }
         pageable.setData(baseBlogInfos);
         return pageable;
+    }
+
+    @Override
+    public ArchiveResult listArchive() {
+        final SimpleDateFormat formater = new SimpleDateFormat("yyyy");
+        final List<Blog> blogs = blogMapper.listBlogsWithPagesNoContent(0, Integer.MAX_VALUE);
+        final ArchiveResult archiveResult = new ArchiveResult();
+        archiveResult.setBlogCount(blogs.size());
+        Map<String, List<BaseBlogInfo>> maps = new HashMap<>();
+        blogs.forEach(b -> {
+            final String year = formater.format(b.getCreateTime());
+            final List<BaseBlogInfo> orDefault = maps.getOrDefault(year, new ArrayList<>());
+            final BaseBlogInfo convert = BlogConvertor.convert(b);
+            orDefault.add(convert);
+            maps.put(year, orDefault);
+        });
+        List<String> sortedKey = maps.keySet().stream().sorted().collect(Collectors.toList());
+        List<BlogYearArchive> blogYearArchives = new ArrayList<>();
+        for (String key : sortedKey) {
+            final BlogYearArchive blogYearArchive = new BlogYearArchive();
+            blogYearArchive.setYear(key);
+            blogYearArchive.setBlogs(maps.get(key));
+            blogYearArchives.add(blogYearArchive);
+        }
+        archiveResult.setArchives(blogYearArchives);
+        return archiveResult;
     }
 
     /**

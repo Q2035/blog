@@ -8,11 +8,9 @@
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
-    <link rel="stylesheet" href="/lib/prism/prism.css">
-    <link rel="stylesheet" href="/lib/tocbot/tocbot.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
     <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
-    <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
+    <link rel="shortcut icon" href="./favicon.ico" th:href="@{/static/favicon.ico}"/>
 </head>
 
 <!--导航-->
@@ -26,9 +24,9 @@
                     class="home icon"></i>index</a>
             <a href="tag.html" th:href="@{/tags/-1}" class="m-item item m-mobile-hide"
                th:classappend="${n==3} ? 'active'"><i class="tags icon"></i>tags</a>
-            <a href="archive.html" th:href="@{/archives}" class="m-item item m-mobile-hide active"
+            <a href="archive.html" th:href="@{/archives}" class="m-item item m-mobile-hide"
                th:classappend="${n==4} ? 'active'"><i class="archive icon"></i>archives</a>
-            <a href="about.html" th:href="@{/about}" class="m-item item m-mobile-hide"
+            <a href="about.html" th:href="@{/about}" class="m-item item m-mobile-hide active"
                th:classappend="${n==5} ? 'active'"><i class="info icon"></i>about</a>
             <div class="right m-item item m-mobile-hide">
                 <form name="search" method="post" action="#" th:action="@{/search}">
@@ -52,7 +50,7 @@
         <div class="ui stackable grid">
             <div class="eight wide column">
                 <div class="ui segment">
-                    <img th:src="@{https://hellooooo.top/image/blog/many/about.png}" alt="" class="ui rounded image">
+                    <img src="https://hellooooo.top/image/blog/many/about.png" alt="" class="ui rounded image">
                 </div>
             </div>
             <div class="eight wide column">
@@ -109,12 +107,7 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/semantic-ui/2.2.4/semantic.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.2/jquery.scrollTo.min.js"></script>
-<script src="../static/lib/prism/prism.js" th:src="@{/lib/prism/prism.js}"></script>
-<script src="../static/lib/tocbot/tocbot.min.js" th:src="@{/lib/tocbot/tocbot.min.js}"></script>
-<script src="../static/lib/qrcode/qrcode.min.js" th:src="@{/lib/qrcode/qrcode.min.js}"></script>
-<script src="../static/lib/waypoints/jquery.waypoints.min.js"
-        th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
-<script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
+<script src="https://cdn.hellooooo.top/js/jquery.waypoints.min.js"></script>
 <script src="https://cdn.hellooooo.top/js/template.js"></script>
 <script>
     $('#mail').click(function () {

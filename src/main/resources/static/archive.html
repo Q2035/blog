@@ -8,16 +8,13 @@
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/temp.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/typo.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/animate.css">
-    <link rel="stylesheet" href="/lib/prism/prism.css">
-    <link rel="stylesheet" href="/lib/tocbot/tocbot.css">
     <link rel="stylesheet" href="https://cdn.hellooooo.top/static/css/me.css">
     <link rel="stylesheet" href="https://www.layuicdn.com/layui/css/layui.css"/>
-    <link rel="shortcut icon" href="../resources/favicon.ico" th:href="@{/static/favicon.ico}"/>
+    <link rel="shortcut icon" href="./favicon.ico" th:href="@{/static/favicon.ico}"/>
 </head>
 
 <!--导航-->
 <nav class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
-
     <div class="ui container">
         <div class="ui inverted secondary stackable menu">
             <h2 class="ui teal header item"><a href="#" th:href="@{/}">靓仔的学习记录</a></h2>
@@ -60,7 +57,7 @@
             </div>
         </div>
 
-        <div v-for="archive in data.archives">
+        <div v-for="archive in archives">
             </br>
             <h3 class="ui center aligned header" th:text="${item.key}">{{archive.year}}</h3>
             <div class="ui fluid vertical menu">
@@ -102,13 +99,13 @@
         th:src="@{/lib/waypoints/jquery.waypoints.min.js}"></script>
 <script src="../../static/lib/editormd/editormd.min.js" th:src="@{/lib/editormd/editormd.min.js}"></script>
 <script src="https://cdn.hellooooo.top/js/template.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
     var v = new Vue({
         el: '#archiveInfo',
         data: {
-            blogCount: 132,
-            data: {
-                archives: [
+            blogCount: 123,
+            archives: [
                     {
                         year: 2020,
                         blogs: [
@@ -172,9 +169,18 @@
                         ]
                     }
 
-                ]
-            }
+            ]
         }
+    });
+    
+    axios({
+        method: 'get',
+        url: '/blog/archive'
+    }).then((res) => {
+        // res.data => 第一层，包含code、msg等数据， 第二层包含分页数据
+        console.log(res.data.data);
+        v.blogCount = res.data.data.blogCount;
+        v.archives = res.data.data.archives;
     });
 
 

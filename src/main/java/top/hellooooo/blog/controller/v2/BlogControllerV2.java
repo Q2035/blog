@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.hellooooo.blog.common.Constants;
+import top.hellooooo.blog.pojo.ArchiveResult;
 import top.hellooooo.blog.service.BlogService;
 import top.hellooooo.blog.util.CommonResult;
 import top.hellooooo.blog.util.Pageable;
@@ -46,5 +47,10 @@ public class BlogControllerV2 {
         pageable.setCurPage(page_);
         Pageable<BaseBlogInfo> baseBlogInfos = blogService.listBaseBlogInfo(pageable);
         return CommonResult.succ(baseBlogInfos);
+    }
+
+    @GetMapping("/archive")
+    public CommonResult<ArchiveResult> blogArchive() {
+        return CommonResult.succ(blogService.listArchive());
     }
 }
