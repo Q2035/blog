@@ -108,13 +108,13 @@
       <!--博客信息-->
       <div class="ui middle aligned grid">
         <div class="eleven wide column">
-          <ui class="list">
+          <ul class="list">
             <li>作者：<span th:text="${blog.user.nickname}">{{user.nickname}}</span></li>
             <li>发表时间：<span th:text="${#dates.format(blog.createTime,'yyyy-MM-dd HH:mm')}">{{createTime}}</span></li>
             <li>修改时间：<span th:text="${#dates.format(blog.updateTime,'yyyy-MM-dd HH:mm')}">{{updateTime}}</span></li>
             <li>版权声明：自由转载-非商用-非衍生-保持署名（创意共享3.0许可证）</li>
             <li>公众号转载：请在文末添加作者公众号二维码</li>
-          </ui>
+          </ul>
         </div>
         <div class="five wide column">
           <img src="../static/images/wechat.jpg" th:src="@{/images/wechat.png}" class="ui right floated rounded bordered image" style="width: 110px">
@@ -270,7 +270,6 @@
         },
         type: 'POST',
         success: function (data) {
-            console.log(data);
             var result = eval(data);
             if (result.success){
               alert("Successfully Send, I will contact you soon");
@@ -280,7 +279,6 @@
             return true;
         },
         fail: function (data) {
-          console.log(data);
           alert("Sorry, Please try it tomorrow.");
           return false;
         }
@@ -504,12 +502,26 @@
         render_markdown: function (){
           var md = window.markdownit();
           var result = md.render(this.content);
-          console.log(result);
           this.content = result;
+        },
+        get_url_param: function(name) {
+          //构造一个含有目标参数的正则表达式对象
+          var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+          //匹配目标参数
+          var r = window.location.search.substr(1).match(reg);
+          //返回参数值
+          if(r != null) {
+            return decodeURI(r[2]);
+          }
+          return null;
         }
       },
       mounted: function() {
-        alert("Mounted");
+        var id = this.get_url_param('id');
+        console.log(id);
+        if(id == null){
+          console.log("HHH");
+        }
         this.render_markdown();
       }
     });
