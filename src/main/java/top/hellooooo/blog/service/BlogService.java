@@ -9,6 +9,7 @@ import top.hellooooo.blog.vo.AdminBlogVO;
 import top.hellooooo.blog.vo.BaseBlogInfo;
 import top.hellooooo.blog.vo.BlogVO;
 import org.apache.ibatis.annotations.Param;
+import top.hellooooo.blog.vo.DetailBlogInfo;
 
 import java.util.List;
 import java.util.Map;
@@ -83,4 +84,11 @@ public interface BlogService {
      * @return
      */
     ArchiveResult listArchive();
+
+    /**
+     * blog detail
+     * @param id
+     * @return
+     */
+    DetailBlogInfo getDetailBlog(Long id);
 }

@@ -41,11 +41,11 @@ public class Blog {
     private String flag;
     private Integer views;
     private String description;
-    private boolean appreciation;
-    private boolean shareStatement;
-    private boolean commentabled;
-    private boolean published;
-    private boolean recommend;
+    private Boolean appreciation;
+    private Boolean shareStatement;
+    private Boolean commentabled;
+    private Boolean published;
+    private Boolean recommend;
     private Date createTime;
     private Date updateTime;
 

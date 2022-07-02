@@ -3,6 +3,7 @@ package top.hellooooo.blog.vo;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Q
@@ -30,13 +31,16 @@ public class DetailBlogInfo {
 
     private String firstPicture;
 
+    /**
+     * 具体链接，此处可省略
+     */
     private String detailHref;
 
     private String content;
 
-    // TODO: 7/1/2022 User
+    private BaseUserInfo user;
 
-    // TODO: 7/1/2022 tags
+    private List<BaseTagInfo> tags;
 
-    // TODO: 7/1/2022 comments
+    private List<BaseCommentInfo> comments;
 }

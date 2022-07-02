@@ -1,5 +1,6 @@
 package top.hellooooo.blog;
 
+import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.CommentMapper;
 import top.hellooooo.blog.mapper.DetailedBlogMapper;
 import top.hellooooo.blog.pojo.Blog;
@@ -16,6 +17,9 @@ class BlogApplicationTests {
 
     @Autowired
     private DetailedBlogMapper detailedBlogMapper;
+
+    @Autowired
+    private BlogMapper blogMapper;
 
     @Autowired
     private CommentMapper commentMapper;
@@ -76,5 +80,13 @@ class BlogApplicationTests {
     void m4(){
         String reffix ="D:\\temp";
         System.out.println(reffix);
+    }
+
+    @Test
+    void testGetBlog() {
+        // 简单blog
+        final Blog blog = blogMapper.getBlog(71L);
+        // 复杂blog
+        final Blog b = detailedBlogMapper.getBlog(71L);
     }
 }

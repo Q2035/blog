@@ -14,6 +14,7 @@ import top.hellooooo.blog.service.BlogService;
 import top.hellooooo.blog.util.CommonResult;
 import top.hellooooo.blog.util.Pageable;
 import top.hellooooo.blog.vo.BaseBlogInfo;
+import top.hellooooo.blog.vo.DetailBlogInfo;
 
 import java.util.List;
 
@@ -52,5 +53,11 @@ public class BlogControllerV2 {
     @GetMapping("/archive")
     public CommonResult<ArchiveResult> blogArchive() {
         return CommonResult.succ(blogService.listArchive());
+    }
+
+    @GetMapping("/detail")
+    public CommonResult<DetailBlogInfo> blogDetail(@RequestParam Long id) {
+        DetailBlogInfo detailBlogInfo = blogService.getDetailBlog(id);
+        return CommonResult.succ(detailBlogInfo);
     }
 }

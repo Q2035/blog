@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.hellooooo.blog.service.*;
+import top.hellooooo.blog.vo.DetailBlogInfo;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -268,6 +269,13 @@ public class BlogServiceImpl implements BlogService {
         }
         archiveResult.setArchives(blogYearArchives);
         return archiveResult;
+    }
+
+    @Override
+    public DetailBlogInfo getDetailBlog(Long id) {
+        Blog blog = detailedBlogService.getBlog(id);
+        final DetailBlogInfo detailBlogInfo = BlogConvertor.detailConvert(blog);
+        return detailBlogInfo;
     }
 
     /**
