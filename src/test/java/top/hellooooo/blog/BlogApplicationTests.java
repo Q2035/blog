@@ -3,11 +3,13 @@ package top.hellooooo.blog;
 import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.CommentMapper;
 import top.hellooooo.blog.mapper.DetailedBlogMapper;
+import top.hellooooo.blog.mapper.DetailedBlogMapperV2;
 import top.hellooooo.blog.pojo.Blog;
 import top.hellooooo.blog.pojo.Comment;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.hellooooo.blog.pojo.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +19,9 @@ class BlogApplicationTests {
 
     @Autowired
     private DetailedBlogMapper detailedBlogMapper;
+
+    @Autowired
+    private DetailedBlogMapperV2 detailedBlogMapperV2;
 
     @Autowired
     private BlogMapper blogMapper;
@@ -85,8 +90,12 @@ class BlogApplicationTests {
     @Test
     void testGetBlog() {
         // 简单blog
-        final Blog blog = blogMapper.getBlog(71L);
+        // final Blog blog = blogMapper.getBlog(71L);
         // 复杂blog
-        final Blog b = detailedBlogMapper.getBlog(71L);
+        // final Blog b = detailedBlogMapper.getBlog(71L);
+        final Blog blog = detailedBlogMapperV2.getBlog(71L);
+        final User user = detailedBlogMapperV2.getUser(blog.getUserId());
+        blog.setUser(user);
+        System.out.println(user);
     }
 }

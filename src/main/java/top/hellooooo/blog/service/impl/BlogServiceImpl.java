@@ -274,6 +274,7 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public DetailBlogInfo getDetailBlog(Long id) {
         Blog blog = detailedBlogService.getBlog(id);
+
         final DetailBlogInfo detailBlogInfo = BlogConvertor.detailConvert(blog);
         return detailBlogInfo;
     }
