@@ -1,7 +1,6 @@
 package top.hellooooo.blog.service.impl;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.MapUtils;
 import top.hellooooo.blog.exception.BlogNotFoundException;
 import top.hellooooo.blog.mapper.BlogMapper;
 import top.hellooooo.blog.mapper.BlogVOMapper;
@@ -13,14 +12,12 @@ import top.hellooooo.blog.util.UserConvertor;
 import top.hellooooo.blog.vo.AdminBlogVO;
 import top.hellooooo.blog.vo.BaseBlogInfo;
 import top.hellooooo.blog.vo.BlogVO;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.hellooooo.blog.service.*;
 import top.hellooooo.blog.vo.DetailBlogInfo;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,16 +37,19 @@ public class BlogServiceImpl implements BlogService {
 
     private final DetailedBlogService detailedBlogService;
 
+    private final DetailedBlogServiceV2 detailedBlogServiceV2;
+
     private final BlogVOMapper blogVOMapper;
 
     private final ContactMapper contactMapper;
 
-    public BlogServiceImpl(BlogMapper blogMapper, TypeService typeService, UserService userService, CommentService commentService, DetailedBlogService detailedBlogService, BlogVOMapper blogVOMapper, ContactMapper contactMapper) {
+    public BlogServiceImpl(BlogMapper blogMapper, TypeService typeService, UserService userService, CommentService commentService, DetailedBlogService detailedBlogService, DetailedBlogServiceV2 detailedBlogServiceV2, BlogVOMapper blogVOMapper, ContactMapper contactMapper) {
         this.blogMapper = blogMapper;
         this.typeService = typeService;
         this.userService = userService;
         this.commentService = commentService;
         this.detailedBlogService = detailedBlogService;
+        this.detailedBlogServiceV2 = detailedBlogServiceV2;
         this.blogVOMapper = blogVOMapper;
         this.contactMapper = contactMapper;
     }
@@ -273,8 +273,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public DetailBlogInfo getDetailBlog(Long id) {
-        Blog blog = detailedBlogService.getBlog(id);
-
+        Blog blog = detailedBlogServiceV2.getBlog(id);
         final DetailBlogInfo detailBlogInfo = BlogConvertor.detailConvert(blog);
         return detailBlogInfo;
     }

@@ -57,6 +57,7 @@ public class BlogConvertor {
         target.setViews(blog.getViews());
         target.setFlag(blog.getFlag());
         target.setCreateTime(blog.getCreateTime());
+        target.setContent(blog.getContent());
         // 作者信息转换
         target.setUser(UserConvertor.convert(blog.getUser()));
         // tag信息转换

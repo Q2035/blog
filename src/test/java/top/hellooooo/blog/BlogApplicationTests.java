@@ -9,6 +9,7 @@ import top.hellooooo.blog.pojo.Comment;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import top.hellooooo.blog.pojo.Tag;
 import top.hellooooo.blog.pojo.User;
 
 import java.util.ArrayList;
@@ -93,8 +94,11 @@ class BlogApplicationTests {
         // final Blog blog = blogMapper.getBlog(71L);
         // 复杂blog
         // final Blog b = detailedBlogMapper.getBlog(71L);
-        final Blog blog = detailedBlogMapperV2.getBlog(71L);
+        long blogId = 71L;
+        final Blog blog = detailedBlogMapperV2.getBlog(blogId);
         final User user = detailedBlogMapperV2.getUser(blog.getUserId());
+        List<Tag> tags = detailedBlogMapperV2.listTags(blogId);
+        blog.setTags(tags);
         blog.setUser(user);
         System.out.println(user);
     }

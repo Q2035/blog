@@ -22,7 +22,11 @@ public class DetailedBlogServiceV2Impl implements DetailedBlogServiceV2 {
 
     @Override
     public Blog getBlog(Long blogId) {
-        return null;
+        Blog blog = detailedBlogMapper.getBlog(blogId);
+        blog.setTags(detailedBlogMapper.listTags(blogId));
+        blog.setUser(detailedBlogMapper.getUser(blogId));
+        blog.setComments(detailedBlogMapper.listComments(blogId));
+        return blog;
     }
 
     @Override

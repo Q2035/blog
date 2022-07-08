@@ -1,5 +1,6 @@
 package top.hellooooo.blog.util;
 
+import top.hellooooo.blog.common.Constants;
 import top.hellooooo.blog.pojo.Tag;
 import top.hellooooo.blog.vo.BaseTagInfo;
 
@@ -15,7 +16,10 @@ public class TagConvertor {
             return null;
         }
         final BaseTagInfo baseTagInfo = new BaseTagInfo();
-        baseTagInfo.setCount(source.getCount());
+        baseTagInfo.setCount(Constants.DEFAULT_TAG_COUNT);
+        if (Objects.nonNull(source.getCount())) {
+            baseTagInfo.setCount(source.getCount());
+        }
         baseTagInfo.setId(source.getId());
         baseTagInfo.setName(source.getName());
         return baseTagInfo;
