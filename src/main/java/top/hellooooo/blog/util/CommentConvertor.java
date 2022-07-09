@@ -2,11 +2,11 @@ package top.hellooooo.blog.util;
 
 import org.apache.commons.collections4.CollectionUtils;
 import top.hellooooo.blog.pojo.Comment;
+import top.hellooooo.blog.pojo.User;
 import top.hellooooo.blog.vo.BaseCommentInfo;
 import top.hellooooo.blog.vo.BaseUserInfo;
 
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +27,7 @@ public class CommentConvertor {
         target.setId(source.getId());
         target.setContent(source.getContent());
         target.setCreateTime(source.getCreateTime());
-        // TODO: 7/2/2022 评论存在问题
+        target.setIsAuthor(source.isAdminComment());
         // 子评论
         if (CollectionUtils.isNotEmpty(source.getReplyComments())) {
             target.setReplyComments(
@@ -36,10 +36,21 @@ public class CommentConvertor {
                             .map(CommentConvertor::convert)
                             .collect(Collectors.toList()));
         }
+        // 父评论
+        if (Objects.nonNull(source.getParentComment())) {
+            Comment pc = source.getParentComment();
+            BaseCommentInfo parentComment = new BaseCommentInfo();
+            target.setIsAuthor(pc.isAdminComment());
+            BaseUserInfo user = new BaseUserInfo();
+            user.setNickname(pc.getNickname());
+            user.setAvatar(pc.getAvatar());
+            target.setUser(user);
+            target.setParentComment(parentComment);
+        }
         final BaseUserInfo user = new BaseUserInfo();
         user.setAvatar(source.getAvatar());
         user.setNickname(source.getNickname());
-        user.setId(source.getId());
+        // user.setId(source.getId());
         target.setUser(user);
         return target;
     }
@@ -50,7 +61,28 @@ public class CommentConvertor {
      * @return
      */
     public static List<BaseCommentInfo> convertStraightforwardList(List<Comment> comments) {
-        // TODO: 7/8/2022  
-        return null;
+        Map<Long, Comment> commentsMapCache = new HashMap<>();
+        List<Comment> parentComments = new ArrayList<>();
+        if (CollectionUtils.isNotEmpty(comments)) {
+            comments.stream()
+                    .forEach(c -> {
+                        commentsMapCache.put(c.getId(), c);
+                        if (Objects.isNull(c.getParentId()) || c.getParentId() == -1L) {
+                            parentComments.add(c);
+                            return;
+                        }
+                        Comment parentComment = commentsMapCache.get(c.getParentId());
+                        c.setParentComment(parentComment);
+                        List<Comment> replyComments = parentComment.getReplyComments();
+                        if (CollectionUtils.isEmpty(replyComments)) {
+                            replyComments = new ArrayList<>();
+                        }
+                        replyComments.add(c);
+                        parentComment.setReplyComments(replyComments);
+                    });
+        }
+        return parentComments.stream()
+                .map(CommentConvertor::convert)
+                .collect(Collectors.toList());
     }
 }

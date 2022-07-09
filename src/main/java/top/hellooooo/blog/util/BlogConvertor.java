@@ -71,10 +71,7 @@ public class BlogConvertor {
         }
         // 评论信息转换
         if (CollectionUtils.isNotEmpty(blog.getComments())) {
-            target.setComments(blog.getComments()
-                    .stream()
-                    .map(CommentConvertor::convert)
-                    .collect(Collectors.toList()));
+            target.setComments(CommentConvertor.convertStraightforwardList(blog.getComments()));
         }
         return target;
     }

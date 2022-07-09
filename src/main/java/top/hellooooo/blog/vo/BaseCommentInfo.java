@@ -23,5 +23,7 @@ public class BaseCommentInfo {
 
     private List<BaseCommentInfo> replyComments;
 
+    private BaseCommentInfo parentComment;
+
     private BaseUserInfo user;
 }
