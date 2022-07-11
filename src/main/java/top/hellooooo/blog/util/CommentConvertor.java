@@ -44,7 +44,9 @@ public class CommentConvertor {
             BaseUserInfo user = new BaseUserInfo();
             user.setNickname(pc.getNickname());
             user.setAvatar(pc.getAvatar());
-            target.setUser(user);
+            parentComment.setId(pc.getId());
+            parentComment.setIsAuthor(pc.isAdminComment());
+            parentComment.setUser(user);
             target.setParentComment(parentComment);
         }
         final BaseUserInfo user = new BaseUserInfo();
@@ -56,7 +58,7 @@ public class CommentConvertor {
     }
 
     /**
-     * comments convertor
+     * comments convertor 带层级的评论信息
      * @param comments 所有层次的评论平铺展开
      * @return
      */
@@ -67,6 +69,7 @@ public class CommentConvertor {
             comments.stream()
                     .forEach(c -> {
                         commentsMapCache.put(c.getId(), c);
+                        // 无父评论
                         if (Objects.isNull(c.getParentId()) || c.getParentId() == -1L) {
                             parentComments.add(c);
                             return;
@@ -81,8 +84,26 @@ public class CommentConvertor {
                         parentComment.setReplyComments(replyComments);
                     });
         }
-        return parentComments.stream()
+        List<BaseCommentInfo> result = parentComments.stream()
                 .map(CommentConvertor::convert)
                 .collect(Collectors.toList());
+        // 将平铺的评论信息缩减为两层评论信息
+
+        return result;
+    }
+
+    /**
+     * 将多级评论转换为两级
+     * @param source
+     * @return
+     */
+    public static List<BaseCommentInfo> convert2LayerComments(List<BaseCommentInfo> source) {
+        int size = source.size();
+        for (int i = 0; i < size; i++) {
+            BaseCommentInfo baseCommentInfo = source.get(i);
+            List<BaseCommentInfo> replyComments = baseCommentInfo.getReplyComments();
+            // TODO: 7/11/2022  
+        }
+        return null;
     }
 }

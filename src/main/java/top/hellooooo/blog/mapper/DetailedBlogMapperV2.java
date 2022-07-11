@@ -43,6 +43,6 @@ public interface DetailedBlogMapperV2 {
      * @param blogId
      * @return
      */
-    @Select("select `id`, `avatar`, `content` , `create_time`, `email`, `nickname`, `blog_id` , `parent_comment_id` as parent_id , `admin_comment` from t_comment where blog_id = #{blogId}")
+    @Select("select `id`, `avatar`, `content` , `create_time`, `email`, `nickname`, `blog_id` , `parent_comment_id` as parent_id , `admin_comment` from t_comment where blog_id = #{blogId} order by `create_time`")
     List<Comment> listComments(Long blogId);
 }
